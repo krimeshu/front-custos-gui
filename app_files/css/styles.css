@@ -53,23 +53,23 @@ code {
   -webkit-border-radius: 0; }
 
 .shadow-wrap {
-  position: absolute;
+  position: relative;
   width: 100%;
-  height: 100%; }
-  .shadow-wrap .shadow-box {
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    width: auto;
-    height: auto;
-    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    background-color: white; }
+  height: 100%;
+  overflow: hidden; }
+
+.shadow-box {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  width: auto;
+  height: auto;
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5); }
 
 .window-box {
-  color: #45828E;
-  background-color: #A5ECFA; }
+  color: #45828E; }
 
 .window-title {
   -webkit-user-select: none;
@@ -120,6 +120,7 @@ code {
   box-sizing: border-box;
   padding: 10px 20px;
   color: #272822;
+  background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
 
 .log-box {
@@ -130,7 +131,7 @@ code {
   width: 480px;
   height: 100%;
   overflow: auto;
-  background-color: #272822;
+  background-color: rgba(39, 40, 34, 0.95);
   color: #cacaca;
   word-break: break-all;
   font-size: 13px;
@@ -143,5 +144,3 @@ code {
     list-style: none;
     padding: 8px 10px;
     margin: 0; }
-
-/*# sourceMappingURL=styles.css.map */

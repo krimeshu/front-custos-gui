@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 body {
   font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, custom-font, sans-serif;
   padding: 0;
@@ -61,28 +63,26 @@ code {
 }
 
 .shadow-wrap {
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+}
 
-  .shadow-box {
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    width: auto;
-    height: auto;
+.shadow-box {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  width: auto;
+  height: auto;
 
-    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .5);
-    background-color: white;
-  }
-
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .5);
 }
 
 .window-box {
   color: #45828E;
-  background-color: #A5ECFA;
 }
 
 .window-title {
@@ -162,6 +162,7 @@ code {
   box-sizing: border-box;
   padding: 10px 20px;
   color: #272822;
+  background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, .2);
 }
 
@@ -174,7 +175,7 @@ code {
   height: 100%;
   overflow: auto;
 
-  background-color: #272822;
+  background-color: rgba(39, 40, 34, .95);
   color: #cacaca;
 
   .err {
