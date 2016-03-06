@@ -1,0 +1,29 @@
+{
+  "name": "front-custos-gui",
+  "version": "0.1.0",
+  "description": "A graphic user interface of Front Custos.",
+  "productName": "Front Custos GUI",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moonshell/front-custos-gui.git"
+  },
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial"
+  ],
+  "author": "GitHub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Moonshell/front-custos-gui/issues"
+  },
+  "homepage": "https://github.com/Moonshell/front-custos-gui#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^0.36.0"
+  }
+}

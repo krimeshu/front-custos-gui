@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Front Custos GUI</title>
+    <link rel="stylesheet" href="font/custom-font.css"/>
+    <link rel="stylesheet" href="material-lite/google-api/icon.css"/>
+    <link rel="stylesheet" href="material-lite/material.min.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/jquery.jsonFormater.css"/>
+</head>
+<body>
+<script>
+    const version = require("../package.json").version;
+    const electron = require('electron');
+    const remote = electron.remote;
+    const shell = electron.shell;
+
+    var execPath = remote.process.execPath;
+    //    var command = execPath + ' path-to-your-app';
+
+    //    document.onclick = function (e) {
+    //        e.preventDefault();
+    //        if (e.target.tagName == 'A')
+    //            shell.openExternal(e.target.href);
+    //        return false;
+    //    };
+    document.ondragover = document.ondrop = function (e) {
+        e.preventDefault();
+        return false;
+    };
+</script>
+
+<div class="shadow-wrap">
+    <div class="shadow-box window-box">
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="nav mdl-layout__header window-title">
+                <div class="mdl-layout__header-row title-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">
+                        Front Custos GUI
+                        <small>
+                            <script>document.write(' - (Ver ' + version + ')');</script>
+                        </small>
+                    </span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <button class="mdl-button mdl-js-button mdl-button--icon" id="btnAppMenu">
+                        <i class="material-icons">&#xE5CF;</i>
+                    </button>
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                        for="btnAppMenu">
+                        <li class="mdl-menu__item">配置</li>
+                        <li class="mdl-menu__item">关于</li>
+                    </ul>
+                    &nbsp;
+                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect"
+                            onclick="window.close()">
+                        <i class="material-icons">&#xE14C;</i>
+                    </button>
+                </div>
+            </header>
+            <main class="mdl-layout__content window-content">
+                <div class="list-box">
+                    <ul class="proj-list">
+                        <li class="proj-item">
+                            条漫
+                        </li>
+                        <li class="proj-item current">
+                            新版H5
+                        </li>
+                        <li class="proj-item">
+                            动漫人物猜猜看
+                        </li>
+                        <li class="proj-item">
+                            这是一个名字很长很长的项目
+                        </li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>基本信息</h3>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="info"
+                               pattern=".{1,}" id="txtEventInfo"/>
+                        <label class="mdl-textfield__label" for="txtEventInfo">*活动名称（可用中文）</label>
+                        <span class="mdl-textfield__error">请输入活动名称!</span>
+                    </div>
+                    <small>（注：带 * 的项目为必填项。）</small>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="name"
+                               pattern="[0-9a-zA-Z\-_]+" id="txtEventName"/>
+                        <label class="mdl-textfield__label" for="txtEventName">*活动英文名（不要使用中文和空格）</label>
+                        <span class="mdl-textfield__error">名称不合法!</span>
+                    </div>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="uploadName"
+                               pattern="[0-9a-zA-Z\-_]*" id="txtEventUploadName"/>
+                        <label class="mdl-textfield__label" for="txtEventUploadName">上传前缀名（与活动英文名一致时可不填）</label>
+                        <span class="mdl-textfield__error">前缀名不合法!</span>
+                    </div>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="path"
+                               pattern=".{1,}" readonly="readonly" id="txtLocalPath"/>
+                        <label class="mdl-textfield__label" for="txtLocalPath">*本地路径</label>
+                        <span class="mdl-textfield__error">请选择本地路径!</span>
+                    </div>
+                    &nbsp;
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                            id="btnSelectPath" onclick="void(0);">
+                        浏览…
+                    </button>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="index"
+                               id="txtIndexPage"/>
+                        <label class="mdl-textfield__label" for="txtLocalPath">默认页面（如：my-index.html）</label>
+                    </div>
+                    &nbsp;
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                            id="btnOpenIndexPage" onclick="void(0);">
+                        浏览器打开
+                    </button>
+
+                    <p class="mid-btn-box">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnOpenSrcPath" onclick="void(0);">
+                            查看源目录
+                        </button>
+                        &nbsp;
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                id="btnDelDistPath" onclick="void(0);">
+                            删除输出目录
+                        </button>
+                        &nbsp;
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnOpenDistPath" onclick="void(0);">
+                            查看输出目录
+                        </button>
+                        &nbsp;
+                    </p>
+
+                    <p class="mid-btn-box">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnCompile" onclick="void(0);">
+                            仅本地编译
+                        </button>
+                        &nbsp;
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                id="btnFullUpload" onclick="void(0);">
+                            编译全量上传
+                        </button>
+                        &nbsp;
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
+                                id="btnDifferUpload" onclick="void(0);">
+                            编译增量上传
+                        </button>
+                        <br/>
+                        <small>（注：如非必要或无特殊需求时，请优先使用增量上传。）</small>
+                    </p>
+                    <br/>
+
+                    <div class="split-line"></div>
+
+                    <h3>Crafter 配置</h3>
+
+                    <p class="mid-btn-box">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnConfigSC" onclick="void(0);">
+                            雪碧图设置
+                        </button>
+                        &nbsp;
+
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnConfigPC" onclick="void(0);">
+                            样式前缀设置
+                        </button>
+                        &nbsp;
+
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                id="btnSelectImageMin" onclick="void(0);">
+                            图片压缩
+                        </button>
+                        &nbsp;
+                    </p>
+
+                    <p>
+                        <small>（自动处理雪碧图合成、CSS3样式浏览器前缀的相关配置）</small>
+                    </p>
+
+                    <div class="split-line"></div>
+
+                    <h3>其他配置</h3>
+
+                    <p>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkForceMultiRemap">
+                            <input class="mdl-switch__input" type="checkbox" data-prop="checked"
+                                   data-name="forceMultiRemap" id="chkForceMultiRemap"/>
+                            <span class="mdl-switch__label">强制资源文件多层映射</span>
+                        </label>
+                        <br/>
+                        <small>（条漫等目录层级特殊的情况，一般活动不需要）</small>
+                    </p>
+
+                    <p>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepHtmlDepth">
+                            <input class="mdl-switch__input" type="checkbox" data-prop="checked"
+                                   data-name="keepHtmlDepth" id="chkKeepHtmlDepth"/>
+                            <span class="mdl-switch__label">保留Html文件层级</span>
+                        </label>
+                        <br/>
+                        <small>（防止不同目录页面同名的情况，一般都不需要）</small>
+                    </p>
+
+                    <p>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkIsEventOfPC">
+                            <input class="mdl-switch__input" type="checkbox" data-prop="checked"
+                                   data-name="isEventOfPC" id="chkIsEventOfPC"/>
+                            <span class="mdl-switch__label">PC活动页面</span>
+                        </label>
+                        <br/>
+                        <small>（PC活动页面配置不同的默认地址和资源链接，默认为移动端活动页面）</small>
+                    </p>
+
+                    <p>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepLocalUrl">
+                            <input class="mdl-switch__input" type="checkbox" data-prop="checked"
+                                   data-name="keepLocalUrl" id="chkKeepLocalUrl"/>
+                            <span class="mdl-switch__label">保持本地URL</span>
+                        </label>
+                        <br/>
+                        <small>（选中此项时，本地编译将保持所有本地相对地址，不转换成服务器资源地址，方便本地预览）</small>
+                    </p>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" data-prop="value" data-name="specUrlHead"
+                               id="txtSpecUrlHead"/>
+                        <label class="mdl-textfield__label" for="txtSpecUrlHead">特殊资源前缀</label>
+                    </div>
+                    <br/>
+                    <small>（新版H5等情况，可单独自定义资源文件的URL前缀）</small>
+                </div>
+                <div class="log-box">
+                    <ul class="log-list">
+                        <li class="inf">
+                            <script>document.write(require('path').dirname(execPath));</script>
+                        </li>
+                        <li>
+                            这是一条普通的日志。
+                        </li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script src="material-lite/material.min.js"></script>
+<script src="material-lite/material-addition.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.jsonFormater.js"></script>
+
+</html>
