@@ -79,6 +79,11 @@ code {
   .window-title .title-row {
     padding: 0 20px 0 40px; }
 
+.window-content .mdl-switch {
+  display: inline-block;
+  width: auto;
+  padding-right: 28px; }
+
 .list-box {
   position: absolute;
   z-index: 1;
@@ -88,7 +93,30 @@ code {
   height: 100%;
   overflow: auto;
   background-color: #E1E9EC;
-  color: #283940; }
+  color: #283940;
+  /*---滚动条默认显示样式--*/
+  /*---滚动框背景样式--*/ }
+  .list-box::-webkit-scrollbar-thumb {
+    border: 2px solid #E1E9EC; }
+  .list-box::-webkit-scrollbar-track-piece {
+    background-color: #E1E9EC; }
+  .list-box .list-title {
+    margin: 12px 10px 0px 10px;
+    color: #151d20; }
+  .list-box .btn-add-proj {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 150px;
+    transition: opacity 400ms ease;
+    opacity: .8; }
+    .list-box .btn-add-proj:hover {
+      opacity: 1; }
+  .list-box .btn-reload {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 80px; }
   .list-box .proj-list {
     list-style: none;
     margin: 0;
@@ -122,6 +150,8 @@ code {
   color: #272822;
   background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
+  .info-box .indent {
+    padding-left: 24px; }
 
 .log-box {
   position: absolute;
@@ -144,3 +174,5 @@ code {
     list-style: none;
     padding: 8px 10px;
     margin: 0; }
+
+/*# sourceMappingURL=styles.css.map */

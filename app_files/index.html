@@ -61,6 +61,7 @@
         </header>
         <main class="mdl-layout__content window-content">
             <div class="list-box">
+                <!--<h6 class="list-title">项目列表</h6>-->
                 <ul class="proj-list">
                     <li class="proj-item">
                         条漫
@@ -74,41 +75,95 @@
                     <li class="proj-item">
                         这是一个名字很长很长的项目
                     </li>
+                    <li class="proj-item">
+                        条漫
+                    </li>
+                    <li class="proj-item">
+                        新版H5
+                    </li>
+                    <li class="proj-item">
+                        动漫人物猜猜看
+                    </li>
+                    <li class="proj-item">
+                        这是一个名字很长很长的项目
+                    </li>
+                    <li class="proj-item">
+                        条漫
+                    </li>
+                    <li class="proj-item">
+                        新版H5
+                    </li>
+                    <li class="proj-item">
+                        动漫人物猜猜看
+                    </li>
+                    <li class="proj-item">
+                        这是一个名字很长很长的项目
+                    </li>
+                    <li class="proj-item">
+                        条漫
+                    </li>
+                    <li class="proj-item">
+                        新版H5
+                    </li>
+                    <li class="proj-item">
+                        动漫人物猜猜看
+                    </li>
+                    <li class="proj-item">
+                        这是一个名字很长很长的项目
+                    </li>
+                    <li class="proj-item">
+                        条漫
+                    </li>
+                    <li class="proj-item">
+                        新版H5
+                    </li>
+                    <li class="proj-item">
+                        动漫人物猜猜看
+                    </li>
+                    <li class="proj-item">
+                        这是一个名字很长很长的项目
+                    </li>
+                    <li class="proj-item">
+                        条漫
+                    </li>
+                    <li class="proj-item">
+                        新版H5
+                    </li>
+                    <li class="proj-item">
+                        动漫人物猜猜看
+                    </li>
+                    <li class="proj-item">
+                        这是一个名字很长很长的项目
+                    </li>
                 </ul>
+                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored btn-add-proj">
+                    <i class="material-icons">add</i>
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect btn-reload"
+                        onclick="window.location.reload();">
+                    <i class="material-icons">cached</i>
+                </button>
             </div>
             <div class="info-box">
-                <h3>基本信息</h3>
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="info"
-                           pattern=".{1,}" id="txtEventInfo"/>
-                    <label class="mdl-textfield__label" for="txtEventInfo">*活动名称（可用中文）</label>
-                    <span class="mdl-textfield__error">请输入活动名称!</span>
-                </div>
-                <small>（注：带 * 的项目为必填项。）</small>
-                <br/>
-
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="name"
-                           pattern="[0-9a-zA-Z\-_]+" id="txtEventName"/>
-                    <label class="mdl-textfield__label" for="txtEventName">*活动英文名（不要使用中文和空格）</label>
-                    <span class="mdl-textfield__error">名称不合法!</span>
+                    <input class="mdl-textfield__input" id="txtProjName" type="text" pattern=".{1,}"/>
+                    <label class="mdl-textfield__label" for="txtProjName">名称</label>
+                    <span class="mdl-textfield__error">请输入项目名称!</span>
                 </div>
                 <br/>
 
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="uploadName"
-                           pattern="[0-9a-zA-Z\-_]*" id="txtEventUploadName"/>
-                    <label class="mdl-textfield__label" for="txtEventUploadName">上传前缀名（与活动英文名一致时可不填）</label>
-                    <span class="mdl-textfield__error">前缀名不合法!</span>
-                </div>
-                <br/>
+                <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">-->
+                    <!--<input class="mdl-textfield__input" id="txtProjVersion" type="text"/>-->
+                    <!--<label class="mdl-textfield__label" for="txtProjVersion">版本</label>-->
+                <!--</div>-->
+                <!--<br/>-->
 
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="path"
-                           pattern=".{1,}" readonly="readonly" id="txtLocalPath"/>
-                    <label class="mdl-textfield__label" for="txtLocalPath">*本地路径</label>
-                    <span class="mdl-textfield__error">请选择本地路径!</span>
+                    <input class="mdl-textfield__input" id="txtProjPath" type="text" pattern=".{1,}"
+                           readonly="readonly"/>
+                    <label class="mdl-textfield__label" for="txtProjPath">位置</label>
+                    <span class="mdl-textfield__error">请选择项目所在位置!</span>
                 </div>
                 &nbsp;
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
@@ -117,134 +172,111 @@
                 </button>
                 <br/>
 
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="index"
-                           id="txtIndexPage"/>
-                    <label class="mdl-textfield__label" for="txtLocalPath">默认页面（如：my-index.html）</label>
-                </div>
-                &nbsp;
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                        id="btnOpenIndexPage" onclick="void(0);">
-                    浏览器打开
-                </button>
-
                 <p class="mid-btn-box">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnOpenSrcPath" onclick="void(0);">
-                        查看源目录
+                            id="btnBuildLocal" onclick="void(0);">
+                        本地构建
                     </button>
                     &nbsp;
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                            id="btnDelDistPath" onclick="void(0);">
-                        删除输出目录
+                            id="btnBuildUpload" onclick="void(0);">
+                        构建上传
                     </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnOpenDistPath" onclick="void(0);">
-                        查看输出目录
-                    </button>
-                    &nbsp;
-                </p>
-
-                <p class="mid-btn-box">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnCompile" onclick="void(0);">
-                        仅本地编译
-                    </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                            id="btnFullUpload" onclick="void(0);">
-                        编译全量上传
-                    </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored"
-                            id="btnDifferUpload" onclick="void(0);">
-                        编译增量上传
-                    </button>
-                    <br/>
-                    <small>（注：如非必要或无特殊需求时，请优先使用增量上传。）</small>
-                </p>
-                <br/>
-
-                <div class="split-line"></div>
-
-                <h3>Crafter 配置</h3>
-
-                <p class="mid-btn-box">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnConfigSC" onclick="void(0);">
-                        雪碧图设置
-                    </button>
-                    &nbsp;
-
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnConfigPC" onclick="void(0);">
-                        样式前缀设置
-                    </button>
-                    &nbsp;
-
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnSelectImageMin" onclick="void(0);">
-                        图片压缩
-                    </button>
-                    &nbsp;
-                </p>
-
-                <p>
-                    <small>（自动处理雪碧图合成、CSS3样式浏览器前缀的相关配置）</small>
+                    &nbsp;&nbsp;
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkUploadAll">
+                        <input class="mdl-switch__input" id="chkUploadAll" type="checkbox"/>
+                        <span class="mdl-switch__label">全量</span>
+                    </label>
                 </p>
 
                 <div class="split-line"></div>
 
-                <h3>其他配置</h3>
+                <h4>任务配置</h4>
 
-                <p>
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkForceMultiRemap">
-                        <input class="mdl-switch__input" type="checkbox" data-prop="checked"
-                               data-name="forceMultiRemap" id="chkForceMultiRemap"/>
-                        <span class="mdl-switch__label">强制资源文件多层映射</span>
-                    </label>
+                <!----------------------------------------------------------------------------------------------------->
+
+                <h6>雪碧图合成</h6>
+
+                <div class="indent">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtSpritesRatio" type="text" pattern="[0-9.]+"/>
+                        <label class="mdl-textfield__label" for="txtSpritesRatio">像素密度（1=普通，大于1=Retina）</label>
+                        <span class="mdl-textfield__error">请输入一个普通数值!</span>
+                    </div>
                     <br/>
-                    <small>（条漫等目录层级特殊的情况，一般活动不需要）</small>
-                </p>
 
-                <p>
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepHtmlDepth">
-                        <input class="mdl-switch__input" type="checkbox" data-prop="checked"
-                               data-name="keepHtmlDepth" id="chkKeepHtmlDepth"/>
-                        <span class="mdl-switch__label">保留Html文件层级</span>
-                    </label>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtSpritesRem" type="text" pattern=".{1,}"/>
+                        <label class="mdl-textfield__label" for="txtSpritesRem">Rem像素比（1=不转为Rem，其它=1rem与px的换算值）</label>
+                        <span class="mdl-textfield__error">请输入一个普通数值!</span>
+                    </div>
                     <br/>
-                    <small>（防止不同目录页面同名的情况，一般都不需要）</small>
-                </p>
-
-                <p>
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkIsEventOfPC">
-                        <input class="mdl-switch__input" type="checkbox" data-prop="checked"
-                               data-name="isEventOfPC" id="chkIsEventOfPC"/>
-                        <span class="mdl-switch__label">PC活动页面</span>
-                    </label>
-                    <br/>
-                    <small>（PC活动页面配置不同的默认地址和资源链接，默认为移动端活动页面）</small>
-                </p>
-
-                <p>
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepLocalUrl">
-                        <input class="mdl-switch__input" type="checkbox" data-prop="checked"
-                               data-name="keepLocalUrl" id="chkKeepLocalUrl"/>
-                        <span class="mdl-switch__label">保持本地URL</span>
-                    </label>
-                    <br/>
-                    <small>（选中此项时，本地编译将保持所有本地相对地址，不转换成服务器资源地址，方便本地预览）</small>
-                </p>
-
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" data-prop="value" data-name="specUrlHead"
-                           id="txtSpecUrlHead"/>
-                    <label class="mdl-textfield__label" for="txtSpecUrlHead">特殊资源前缀</label>
                 </div>
-                <br/>
-                <small>（新版H5等情况，可单独自定义资源文件的URL前缀）</small>
+
+                <!----------------------------------------------------------------------------------------------------->
+
+                <h6>样式前缀</h6>
+
+                <div class="indent">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtPrefixBrowser" type="text"/>
+                        <label class="mdl-textfield__label" for="txtPrefixBrowser">
+                            目标浏览器范围（参考autoprefixer文档）</label>
+                    </div>
+                    <br/>
+                </div>
+
+                <!----------------------------------------------------------------------------------------------------->
+
+                <h6>文件分发</h6>
+
+                <div class="indent">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtAllotPageDir" type="text"/>
+                        <label class="mdl-textfield__label" for="txtAllotPageDir">页面文件分发目录</label>
+                    </div>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtAllotStaticDir" type="text"/>
+                        <label class="mdl-textfield__label" for="txtAllotStaticDir">静态文件分发目录</label>
+                    </div>
+                    <br/>
+
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkAllotFlatten">
+                        <input class="mdl-switch__input" id="chkAllotFlatten" type="checkbox"/>
+                        <span class="mdl-switch__label">简化目录结构</span>
+                    </label>
+                    <br/>
+
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" id="txtAllotStaticUrlHead" type="text"/>
+                        <label class="mdl-textfield__label" for="txtAllotStaticUrlHead">静态文件链接前缀</label>
+                    </div>
+                    <br/>
+
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkAllotHashLink">
+                        <input class="mdl-switch__input" id="chkAllotHashLink" type="checkbox"/>
+                        <span class="mdl-switch__label">添加链接指纹参数后缀</span>
+                    </label>
+                    <br/>
+                    <br/>
+                </div>
+
+                <!----------------------------------------------------------------------------------------------------->
+
+                <!--<h6>输出</h6>-->
+
+                <!--<div class="indent">-->
+                    <!--<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepOldCopy">-->
+                        <!--<input class="mdl-switch__input" id="chkKeepOldCopy" type="checkbox"/>-->
+                        <!--<span class="mdl-switch__label">根据版本号保留副本</span>-->
+                    <!--</label>-->
+                    <!--<br/>-->
+                <!--</div>-->
+
+                <!----------------------------------------------------------------------------------------------------->
+
             </div>
             <div class="log-box">
                 <ul class="log-list">

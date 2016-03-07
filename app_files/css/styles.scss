@@ -100,6 +100,11 @@ code {
 
 .window-content {
   //display: flex;
+  .mdl-switch {
+    display: inline-block;
+    width: auto;
+    padding-right: 28px;
+  }
 }
 
 .list-box {
@@ -114,6 +119,42 @@ code {
 
   background-color: #E1E9EC;
   color: darken(#E1E9EC, 70);
+
+  /*---滚动条默认显示样式--*/
+  &::-webkit-scrollbar-thumb {
+    border: 2px solid #E1E9EC;
+  }
+
+  /*---滚动框背景样式--*/
+  &::-webkit-scrollbar-track-piece {
+    background-color: #E1E9EC;
+  }
+
+  .list-title {
+    margin: 12px 10px 0px 10px;
+
+    color: darken(#E1E9EC, 80);
+  }
+
+  .btn-add-proj {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 150px;
+
+    transition: opacity 400ms ease;
+    opacity: .8;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .btn-reload {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 80px;
+  }
 
   .proj-list {
     list-style: none;
@@ -164,6 +205,10 @@ code {
   color: #272822;
   background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+
+  .indent {
+    padding-left: 24px;
+  }
 }
 
 .log-box {
