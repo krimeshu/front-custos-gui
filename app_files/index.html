@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="FrontCustosGUI">
 <head>
     <meta charset="utf-8"/>
     <title>Front Custos GUI</title>
     <link rel="stylesheet" href="font/custom-font.css"/>
-    <link rel="stylesheet" href="material-lite/google-api/icon.css"/>
-    <link rel="stylesheet" href="material-lite/material.min.css"/>
-    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="font/material-icons.css"/>
+
+    <link rel="stylesheet" href="../node_modules/angular-material/angular-material.min.css"/>
+
     <link rel="stylesheet" href="css/jquery.jsonFormater.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body class="shadow-wrap">
 <script>
@@ -17,14 +19,7 @@
     const shell = electron.shell;
 
     var execPath = remote.process.execPath;
-    //    var command = execPath + ' path-to-your-app';
 
-    //    document.onclick = function (e) {
-    //        e.preventDefault();
-    //        if (e.target.tagName == 'A')
-    //            shell.openExternal(e.target.href);
-    //        return false;
-    //    };
     document.ondragover = document.ondrop = function (e) {
         e.preventDefault();
         return false;
@@ -32,271 +27,217 @@
 </script>
 
 <div class="window-box shadow-box">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <header class="nav mdl-layout__header window-title">
-            <div class="mdl-layout__header-row title-row">
-                <!-- Title -->
-                    <span class="mdl-layout-title">
-                        Front Custos GUI
-                        <small>
-                            <script>document.write(' - (Ver ' + version + ')');</script>
-                        </small>
-                    </span>
-                <!-- Add spacer, to align navigation to the right -->
-                <div class="mdl-layout-spacer"></div>
-                <button class="mdl-button mdl-js-button mdl-button--icon" id="btnAppMenu">
-                    <i class="material-icons">&#xE5CF;</i>
-                </button>
-                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-                    for="btnAppMenu">
-                    <li class="mdl-menu__item">配置</li>
-                    <li class="mdl-menu__item">关于</li>
-                </ul>
-                &nbsp;
-                <button class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect"
-                        onclick="window.close()">
-                    <i class="material-icons">&#xE14C;</i>
-                </button>
-            </div>
-        </header>
-        <main class="mdl-layout__content window-content">
-            <div class="list-box">
-                <!--<h6 class="list-title">项目列表</h6>-->
-                <ul class="proj-list">
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item current">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                    <li class="proj-item">
-                        条漫
-                    </li>
-                    <li class="proj-item">
-                        新版H5
-                    </li>
-                    <li class="proj-item">
-                        动漫人物猜猜看
-                    </li>
-                    <li class="proj-item">
-                        这是一个名字很长很长的项目
-                    </li>
-                </ul>
-                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored btn-add-proj">
-                    <i class="material-icons">add</i>
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect btn-reload"
-                        onclick="window.location.reload();">
-                    <i class="material-icons">cached</i>
-                </button>
-            </div>
-            <div class="info-box">
+    <header class="window-header" ng-controller="HeaderCtrl as ctrl">
+        <div class="header-row">
+            <!-- Title -->
+            <span class="title">
+                Front Custos GUI
+                <small>
+                    <script>document.write(' - (Ver ' + version + ')');</script>
+                </small>
+            </span>
+            <div class="spacer"></div>
 
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" id="txtProjName" type="text" pattern=".{1,}"/>
-                    <label class="mdl-textfield__label" for="txtProjName">名称</label>
-                    <span class="mdl-textfield__error">请输入项目名称!</span>
-                </div>
-                <br/>
+            <section class="ctrl-btns" layout="row" layout-align="center center" layout-wrap ng-cloak>
+                <md-menu md-position-mode="target-right target">
+                    <md-button class="clickable md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+                        <md-icon md-menu-origin class="material-icons">&#xE5CF;</md-icon>
+                    </md-button>
+                    <md-menu-content width="3">
+                        <md-menu-item>
+                            <md-button>
+                                配置
+                                <span md-menu-align-target style="float: right;"></span>
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-divider></md-menu-divider>
+                        <md-menu-item>
+                            <md-button>
+                                关于
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+                <md-menu>
+                    <md-button class="clickable md-icon-button" ng-click="ctrl.closeWindow()">
+                        <md-icon class="material-icons">&#xE14C;</md-icon>
+                    </md-button>
+                    <md-menu-content></md-menu-content>
+                </md-menu>
+            </section>
+        </div>
+    </header>
+    <main class="window-content" ng-controller="ListBoxCtrl">
+        <md-content class="list-box">
+            <section>
+                <!--<md-subheader>项目列表</md-subheader>-->
+                <md-list class="proj-list">
+                    <md-list-item class="proj-item" ng-repeat="item in projList">
+                        <span ng-bind="item.projName" title="{{item.projName}}"></span>
+                    </md-list-item>
+                </md-list>
+            </section>
+            <md-button class="md-fab btn-add-proj">
+                <md-icon class="material-icons">add</md-icon>
+            </md-button>
+            <md-button class="md-fab md-primary btn-reload"
+                       onclick="window.location.reload();">
+                <md-icon class="material-icons">cached</md-icon>
+            </md-button>
+        </md-content>
 
-                <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">-->
-                    <!--<input class="mdl-textfield__input" id="txtProjVersion" type="text"/>-->
-                    <!--<label class="mdl-textfield__label" for="txtProjVersion">版本</label>-->
-                <!--</div>-->
-                <!--<br/>-->
+        <md-content class="info-box" ng-controller="InfoBoxCtrl as ctrl">
+            <md-tabs md-border-bottom>
+                <form name="currentProjForm">
+                    <md-tab label="基本信息">
+                        <md-content layout-padding>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>名称</label>
+                                    <input ng-model="currentProj.projName" name="projName" required
+                                           placeholder="为将要处理的项目取个好记的名字"/>
+                                    <div ng-messages="currentProjForm.projName.$error">
+                                        <div ng-message="required">请输入项目名称</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>位置</label>
+                                    <input ng-model="currentProj.srcPath" name="srcPath" required
+                                           placeholder="这个项目所在的本地目录"/>
+                                    <div ng-messages="currentProjForm.srcPath.$error">
+                                        <div ng-message="required">请选择项目所在位置</div>
+                                    </div>
+                                </md-input-container>
 
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" id="txtProjPath" type="text" pattern=".{1,}"
-                           readonly="readonly"/>
-                    <label class="mdl-textfield__label" for="txtProjPath">位置</label>
-                    <span class="mdl-textfield__error">请选择项目所在位置!</span>
-                </div>
-                &nbsp;
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                        id="btnSelectPath" onclick="void(0);">
-                    浏览…
-                </button>
-                <br/>
+                                <md-button class="md-raised md-primary" flex="20">浏览…</md-button>
+                            </div>
 
-                <p class="mid-btn-box">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                            id="btnBuildLocal" onclick="void(0);">
-                        本地构建
-                    </button>
-                    &nbsp;
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                            id="btnBuildUpload" onclick="void(0);">
-                        构建上传
-                    </button>
-                    &nbsp;&nbsp;
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkUploadAll">
-                        <input class="mdl-switch__input" id="chkUploadAll" type="checkbox"/>
-                        <span class="mdl-switch__label">全量</span>
-                    </label>
-                </p>
+                            <!--<h5>开始操作</h5>-->
 
-                <div class="split-line"></div>
+                            <div layout-gt-sm="row">
+                                <md-button class="md-raised" flex="20">本地构建</md-button>
+                                <md-button class="md-raised md-primary" flex="20">构建上传</md-button>
+                                <div flex></div>
+                                <md-switch ng-model="currentProj.uploadAll" flex="30">全量上传</md-switch>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="任务列表">
+                        <md-content layout-padding>
+                            <div flex="30" ng-repeat="item in allTasks">
+                                <md-checkbox ng-checked="exists(item, currentProj.tasks)"
+                                             ng-click="toggle(item, currentProj.tasks)">
+                                    <span ng-bind="item"></span>
+                                </md-checkbox>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="任务配置">
+                        <md-content layout-padding>
+                            <h5>雪碧图合成</h5>
 
-                <h4>任务配置</h4>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>像素密度</label>
+                                    <input ng-model="currentProj.scOpt.ratio" name="scRatio" pattern="^[0-9\.]+$"
+                                           placeholder="1=普通，大于1=Retina"/>
+                                    <div ng-messages="currentProjForm.scRatio.$error">
+                                        <div ng-message="pattern">请输入一个普通数值</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>Rem像素比</label>
+                                    <input ng-model="currentProj.scOpt.rem" name="scRem" pattern="^[0-9\.]+$"
+                                           placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
+                                    <div ng-messages="currentProjForm.scRem.$error">
+                                        <div ng-message="pattern">请输入一个普通数值</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
 
-                <!----------------------------------------------------------------------------------------------------->
+                            <!------------------------------------------------------------------------------------------>
 
-                <h6>雪碧图合成</h6>
+                            <h5>样式前缀</h5>
 
-                <div class="indent">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtSpritesRatio" type="text" pattern="[0-9.]+"/>
-                        <label class="mdl-textfield__label" for="txtSpritesRatio">像素密度（1=普通，大于1=Retina）</label>
-                        <span class="mdl-textfield__error">请输入一个普通数值!</span>
-                    </div>
-                    <br/>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>目标浏览器范围</label>
+                                    <input ng-model="currentProj.pcOpt.browser" name="pcBrowser" required
+                                           placeholder="参数形式可参考 autoprefixer 相关文档"/>
+                                    <div ng-messages="currentProjForm.srcPath.$error">
+                                        <div ng-message="required">请输入目标浏览器范围</div>
+                                    </div>
+                                </md-input-container>
+                            </div>
 
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtSpritesRem" type="text" pattern=".{1,}"/>
-                        <label class="mdl-textfield__label" for="txtSpritesRem">Rem像素比（1=不转为Rem，其它=1rem与px的换算值）</label>
-                        <span class="mdl-textfield__error">请输入一个普通数值!</span>
-                    </div>
-                    <br/>
-                </div>
+                            <!------------------------------------------------------------------------------------------>
 
-                <!----------------------------------------------------------------------------------------------------->
+                            <h5>文件分发</h5>
 
-                <h6>样式前缀</h6>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>页面文件分发目录</label>
+                                    <input ng-model="currentProj.alOpt.pageDir" name="alPageDir"
+                                           placeholder="html, php 等页面文件分发到此目录下"/>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>静态文件分发目录</label>
+                                    <input ng-model="currentProj.alOpt.staticDir" name="alStaticDir"
+                                           placeholder="非页面的静态文件分发到此目录下"/>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-switch ng-model="currentProj.alOpt.flatten" flex="30">简化目录结构</md-switch>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>静态文件链接前缀</label>
+                                    <input ng-model="currentProj.alOpt.staticUrlHead" name="alStaticUrlHead"
+                                           placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-switch ng-model="currentProj.alOpt.hashLink" flex="30">添加链接指纹参数后缀</md-switch>
+                            </div>
 
-                <div class="indent">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtPrefixBrowser" type="text"/>
-                        <label class="mdl-textfield__label" for="txtPrefixBrowser">
-                            目标浏览器范围（参考autoprefixer文档）</label>
-                    </div>
-                    <br/>
-                </div>
+                            <!------------------------------------------------------------------------------------------>
+                        </md-content>
+                    </md-tab>
+                </form>
+            </md-tabs>
+        </md-content>
 
-                <!----------------------------------------------------------------------------------------------------->
-
-                <h6>文件分发</h6>
-
-                <div class="indent">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtAllotPageDir" type="text"/>
-                        <label class="mdl-textfield__label" for="txtAllotPageDir">页面文件分发目录</label>
-                    </div>
-                    <br/>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtAllotStaticDir" type="text"/>
-                        <label class="mdl-textfield__label" for="txtAllotStaticDir">静态文件分发目录</label>
-                    </div>
-                    <br/>
-
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkAllotFlatten">
-                        <input class="mdl-switch__input" id="chkAllotFlatten" type="checkbox"/>
-                        <span class="mdl-switch__label">简化目录结构</span>
-                    </label>
-                    <br/>
-
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" id="txtAllotStaticUrlHead" type="text"/>
-                        <label class="mdl-textfield__label" for="txtAllotStaticUrlHead">静态文件链接前缀</label>
-                    </div>
-                    <br/>
-
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkAllotHashLink">
-                        <input class="mdl-switch__input" id="chkAllotHashLink" type="checkbox"/>
-                        <span class="mdl-switch__label">添加链接指纹参数后缀</span>
-                    </label>
-                    <br/>
-                    <br/>
-                </div>
-
-                <!----------------------------------------------------------------------------------------------------->
-
-                <!--<h6>输出</h6>-->
-
-                <!--<div class="indent">-->
-                    <!--<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="chkKeepOldCopy">-->
-                        <!--<input class="mdl-switch__input" id="chkKeepOldCopy" type="checkbox"/>-->
-                        <!--<span class="mdl-switch__label">根据版本号保留副本</span>-->
-                    <!--</label>-->
-                    <!--<br/>-->
-                <!--</div>-->
-
-                <!----------------------------------------------------------------------------------------------------->
-
-            </div>
-            <div class="log-box">
-                <ul class="log-list">
-                    <li class="inf">
-                        <script>document.write(require('path').dirname(execPath));</script>
-                    </li>
-                    <li>
-                        这是一条普通的日志。
-                    </li>
-                </ul>
-            </div>
-        </main>
-    </div>
+        <div class="log-box">
+            <ul class="log-list">
+                <li class="inf">
+                    <script>document.write(require('path').dirname(execPath));</script>
+                </li>
+                <li>
+                    这是一条普通的日志。
+                </li>
+            </ul>
+        </div>
+    </main>
 </div>
 
 </body>
 
-<script src="material-lite/material.min.js"></script>
-<script src="material-lite/material-addition.js"></script>
+<script src="../node_modules/angular/angular.min.js"></script>
+<script src="../node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="../node_modules/angular-route/angular-route.min.js"></script>
+<script src="../node_modules/angular-aria/angular-aria.min.js"></script>
+<script src="../node_modules/angular-messages/angular-messages.min.js"></script>
+<script src="../node_modules/angular-material/angular-material.min.js"></script>
+
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.jsonFormater.js"></script>
+
+<script src="js/scripts.js"></script>
 
 </html>
