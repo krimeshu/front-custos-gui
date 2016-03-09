@@ -262,6 +262,23 @@ code {
   md-button, button {
     height: 48px;
   }
+
+  .editor {
+    position: relative;
+    //width: auto;
+    height: 200px;
+
+    /*---滚动条默认显示样式--*/
+    ::-webkit-scrollbar-thumb {
+      border: 2px solid #272822;
+    }
+
+    /*---滚动框背景样式--*/
+    ::-webkit-scrollbar-track-piece {
+      background-color: #272822;
+    }
+
+  }
 }
 
 .log-box {

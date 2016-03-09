@@ -46,11 +46,22 @@ var model = {
         scOpt: {},
         pcOpt: {},
         alOpt: {},
-        tasks: []
+        tasks: [],
+        uploadForm: function uploadForm(fileStream, relativeName, projectName) {
+            var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),
+                prefix = (relativeName.split('/').slice(0, -1));
+            (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();
+            prefix.splice(0, 0, projectName);
+            return {
+                'fileName': relativeName,
+                'prefix': prefix.join('/'),
+                'myfile': fileStream
+            };
+        }
     }
 };
 
-angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages'])
+angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
     .controller('HeaderCtrl', function HeaderMenuCtrl($scope) {
         $scope.version = require("../package.json").version;
 
@@ -88,4 +99,15 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages'])
             //'do_dist',
             //'do_upload'
         ];
+
+        $scope.currentProj._uploadForm = $scope.currentProj.uploadForm.toString();
+        $scope.aceChanged = function () {
+            try {
+                var uploadForm = new Function('return ' + $scope.currentProj._uploadForm)();
+                $scope.currentProj.uploadForm = uploadForm;
+                console.log(uploadForm);
+            } catch (e) {
+                console.log(e);
+            }
+        };
     });

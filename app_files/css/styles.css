@@ -177,6 +177,15 @@ code {
     padding-left: 24px; }
   .info-box md-button, .info-box button {
     height: 48px; }
+  .info-box .editor {
+    position: relative;
+    height: 200px;
+    /*---滚动条默认显示样式--*/
+    /*---滚动框背景样式--*/ }
+    .info-box .editor ::-webkit-scrollbar-thumb {
+      border: 2px solid #272822; }
+    .info-box .editor ::-webkit-scrollbar-track-piece {
+      background-color: #272822; }
 
 .log-box {
   position: absolute;
