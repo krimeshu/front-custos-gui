@@ -70,8 +70,8 @@
     <main class="window-content" ng-controller="ListBoxCtrl">
         <md-content class="list-box">
             <section>
-                <!--<md-subheader>项目列表</md-subheader>-->
-                <md-list class="proj-list">
+                <!--<md-subheader class="list-title">项目列表</md-subheader>-->
+                <md-list class="proj-list not-selectable">
                     <md-list-item class="proj-item" ng-repeat="item in projList">
                         <span ng-bind="item.projName" title="{{item.projName}}"></span>
                     </md-list-item>
@@ -114,7 +114,7 @@
                                 <md-button class="md-raised md-primary" flex="20">浏览…</md-button>
                             </div>
 
-                            <!--<h5>开始操作</h5>-->
+                            <!--<h4>开始操作</h4>-->
 
                             <div layout-gt-sm="row">
                                 <md-button class="md-raised" flex="20">本地构建</md-button>
@@ -136,12 +136,12 @@
                     </md-tab>
                     <md-tab label="任务配置">
                         <md-content layout-padding>
-                            <h5>雪碧图合成</h5>
+                            <h4>雪碧图合成</h4>
 
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>像素密度</label>
-                                    <input ng-model="currentProj.scOpt.ratio" name="scRatio" pattern="^[0-9\.]+$"
+                                    <input ng-model="currentProj.scOpt.ratio" name="scRatio" ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=普通，大于1=Retina"/>
                                     <div ng-messages="currentProjForm.scRatio.$error">
                                         <div ng-message="required">请输入一个普通数值</div>
@@ -152,7 +152,7 @@
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Rem像素比</label>
-                                    <input ng-model="currentProj.scOpt.rem" name="scRem" pattern="^[0-9\.]+$"
+                                    <input ng-model="currentProj.scOpt.rem" name="scRem" ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
                                     <div ng-messages="currentProjForm.scRem.$error">
                                         <div ng-message="required">请输入一个普通数值</div>
@@ -163,7 +163,7 @@
 
                             <!------------------------------------------------------------------------------------------>
 
-                            <h5>样式前缀</h5>
+                            <h4>样式前缀</h4>
 
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
@@ -178,7 +178,7 @@
 
                             <!------------------------------------------------------------------------------------------>
 
-                            <h5>文件分发</h5>
+                            <h4>文件分发</h4>
 
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>

@@ -104,10 +104,8 @@ code {
   position: relative;
   z-index: 1;
   flex: 1; }
-  .window-content .mdl-switch {
-    display: inline-block;
-    width: auto;
-    padding-right: 28px; }
+  .window-content .not-selectable, .window-content md-tabs-wrapper {
+    -webkit-user-select: none; }
 
 .list-box {
   position: absolute;
@@ -127,22 +125,8 @@ code {
   .list-box::-webkit-scrollbar-track-piece {
     background-color: #e4eaec; }
   .list-box .list-title {
-    margin: 12px 10px 0px 10px;
+    background-color: #d5dee2;
     color: #171e21; }
-  .list-box .btn-add-proj {
-    position: fixed;
-    z-index: 5;
-    bottom: 20px;
-    left: 150px;
-    transition: opacity 400ms ease;
-    opacity: .8; }
-    .list-box .btn-add-proj:hover {
-      opacity: 1; }
-  .list-box .btn-reload {
-    position: fixed;
-    z-index: 5;
-    bottom: 20px;
-    left: 80px; }
   .list-box .proj-list {
     margin: 0;
     padding: 5px 0;
@@ -159,6 +143,20 @@ code {
       .list-box .proj-list .proj-item.current {
         background-color: #a8bac3;
         color: #fff; }
+  .list-box .btn-add-proj {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 150px;
+    transition: opacity 400ms ease;
+    opacity: .8; }
+    .list-box .btn-add-proj:hover {
+      opacity: 1; }
+  .list-box .btn-reload {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 80px; }
 
 .info-box {
   position: absolute;

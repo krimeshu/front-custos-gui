@@ -139,10 +139,14 @@ code {
   position: relative;
   z-index: 1;
   flex: 1;
-  .mdl-switch {
-    display: inline-block;
-    width: auto;
-    padding-right: 28px;
+  //.mdl-switch {
+  //  display: inline-block;
+  //  width: auto;
+  //  padding-right: 28px;
+  //}
+
+  .not-selectable, md-tabs-wrapper {
+    -webkit-user-select: none;
   }
 }
 
@@ -171,29 +175,8 @@ code {
   }
 
   .list-title {
-    margin: 12px 10px 0px 10px;
-
+    background-color: lighten($baseThemeColor, 40);
     color: darken(lighten($baseThemeColor, 45), 80);
-  }
-
-  .btn-add-proj {
-    position: fixed;
-    z-index: 5;
-    bottom: 20px;
-    left: 150px;
-
-    transition: opacity 400ms ease;
-    opacity: .8;
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .btn-reload {
-    position: fixed;
-    z-index: 5;
-    bottom: 20px;
-    left: 80px;
   }
 
   .proj-list {
@@ -226,6 +209,26 @@ code {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+
+  .btn-add-proj {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 150px;
+
+    transition: opacity 400ms ease;
+    opacity: .8;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .btn-reload {
+    position: fixed;
+    z-index: 5;
+    bottom: 20px;
+    left: 80px;
   }
 }
 
