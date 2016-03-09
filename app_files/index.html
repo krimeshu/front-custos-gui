@@ -101,14 +101,14 @@
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>位置</label>
-                                    <input ng-model="currentProj.srcPath" name="srcPath" required
+                                    <input ng-model="currentProj.srcDir" name="srcDir" required readonly
                                            placeholder="这个项目所在的本地目录"/>
-                                    <div ng-messages="currentProjForm.srcPath.$error">
+                                    <div ng-messages="currentProjForm.srcDir.$error">
                                         <div ng-message="required">请选择项目所在位置</div>
                                     </div>
                                 </md-input-container>
 
-                                <md-button class="md-raised md-primary" flex="20">浏览…</md-button>
+                                <md-button class="md-raised" flex="15">选择</md-button>
                             </div>
 
                             <!--<h4>开始操作</h4>-->
@@ -117,7 +117,7 @@
                                 <md-button class="md-raised" flex="20">本地构建</md-button>
                                 <md-button class="md-raised md-primary" flex="20">构建上传</md-button>
                                 <div flex></div>
-                                <md-switch ng-model="currentProj.uploadAll" flex="30">全量上传</md-switch>
+                                <md-switch ng-model="currentProj.upOpt.delta" flex="30">增量上传</md-switch>
                             </div>
                         </md-content>
                     </md-tab>
@@ -138,7 +138,7 @@
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>像素密度</label>
-                                    <input ng-model="currentProj.scOpt.ratio" name="scRatio"
+                                    <input ng-model="currentProj.scOpt.useRatio" name="scRatio"
                                            ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=普通，大于1=Retina"/>
                                     <div ng-messages="currentProjForm.scRatio.$error">
@@ -150,7 +150,7 @@
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Rem像素比</label>
-                                    <input ng-model="currentProj.scOpt.rem" name="scRem"
+                                    <input ng-model="currentProj.scOpt.useRem" name="scRem"
                                            ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
                                     <div ng-messages="currentProjForm.scRem.$error">
@@ -167,9 +167,9 @@
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>目标浏览器范围</label>
-                                    <input ng-model="currentProj.pcOpt.browser" name="pcBrowser" required
+                                    <input ng-model="currentProj.pcOpt.browsers" name="pcBrowsers" required
                                            placeholder="参数形式可参考 autoprefixer 相关文档"/>
-                                    <div ng-messages="currentProjForm.pcBrowser.$error">
+                                    <div ng-messages="currentProjForm.pcBrowsers.$error">
                                         <div ng-message="required">请输入目标浏览器范围</div>
                                     </div>
                                 </md-input-container>
@@ -207,9 +207,16 @@
 
                             <!------------------------------------------------------------------------------------------>
 
-                            <h4>上传表单</h4>
+                            <h4>上传页面与表单</h4>
 
-                            <div class="editor" ng-model="currentProj._uploadForm" flex-grow
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>上传页面</label>
+                                    <input ng-model="currentProj.upOpt.page" name="uploadPage"
+                                           placeholder="处理项目文件上传的页面地址"/>
+                                </md-input-container>
+                            </div>
+                            <div class="editor" ng-model="currentProj.upOpt.form" flex-grow
                                  ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
                         </md-content>
                     </md-tab>

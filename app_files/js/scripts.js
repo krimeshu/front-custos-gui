@@ -3,61 +3,23 @@
  */
 var model = {
     projList: [{
-        projName: '条漫'
+        projName: '条漫',
+        srcDir: ''
     }, {
-        projName: '新版H5'
+        projName: '新版H5',
+        srcDir: ''
     }, {
-        projName: '动漫人物猜猜看'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
-    }, {
-        projName: '让我占个位'
+        projName: '动漫人物猜猜看',
+        srcDir: ''
     }],
     currentProj: {
         projName: '',
-        srcPath: '',
-        uploadAll: false,
+        srcDir: '',
         scOpt: {},
         pcOpt: {},
         alOpt: {},
-        tasks: [],
-        uploadForm: function uploadForm(fileStream, relativeName, projectName) {
-            var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),
-                prefix = (relativeName.split('/').slice(0, -1));
-            (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();
-            prefix.splice(0, 0, projectName);
-            return {
-                'fileName': relativeName,
-                'prefix': prefix.join('/'),
-                'myfile': fileStream
-            };
-        }
+        upOpt: {},
+        tasks: []
     }
 };
 
@@ -100,14 +62,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
             //'do_upload'
         ];
 
-        $scope.currentProj._uploadForm = $scope.currentProj.uploadForm.toString();
         $scope.aceChanged = function () {
-            try {
-                var uploadForm = new Function('return ' + $scope.currentProj._uploadForm)();
-                $scope.currentProj.uploadForm = uploadForm;
-                console.log(uploadForm);
-            } catch (e) {
-                console.log(e);
-            }
+            //
         };
     });
