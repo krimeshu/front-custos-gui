@@ -51,7 +51,9 @@ var model = {
 };
 
 angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages'])
-    .controller('HeaderCtrl', function HeaderMenuCtrl() {
+    .controller('HeaderCtrl', function HeaderMenuCtrl($scope) {
+        $scope.version = require("../package.json").version;
+
         var originatorEv;
         this.openMenu = function ($mdOpenMenu, ev) {
             originatorEv = ev;

@@ -13,10 +13,10 @@
 </head>
 <body class="shadow-wrap">
 <script>
-    const version = require("../package.json").version;
+//    const version = require("../package.json").version;
     const electron = require('electron');
     const remote = electron.remote;
-    const shell = electron.shell;
+//    const shell = electron.shell;
 
     var execPath = remote.process.execPath;
 
@@ -31,10 +31,7 @@
         <div class="header-row">
             <!-- Title -->
             <span class="title">
-                Front Custos GUI
-                <small>
-                    <script>document.write(' - (Ver ' + version + ')');</script>
-                </small>
+                Front Custos GUI - (Ver <span ng-bind="version">...</span>)
             </span>
             <div class="spacer"></div>
 
@@ -90,7 +87,7 @@
             <form class="info-form" name="currentProjForm">
                 <md-tabs md-border-bottom>
                     <md-tab label="基本信息">
-                        <md-content layout-padding>
+                        <md-content layout-margin>
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>名称</label>
@@ -125,7 +122,7 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="任务列表">
-                        <md-content layout-padding>
+                        <md-content layout-margin>
                             <div flex="30" ng-repeat="item in allTasks">
                                 <md-checkbox ng-checked="exists(item, currentProj.tasks)"
                                              ng-click="toggle(item, currentProj.tasks)">
@@ -135,7 +132,7 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="任务配置">
-                        <md-content layout-padding>
+                        <md-content layout-margin>
                             <h4>雪碧图合成</h4>
 
                             <div layout-gt-sm="row">
@@ -195,7 +192,8 @@
                                 </md-input-container>
                             </div>
                             <div layout-gt-sm="row">
-                                <md-switch ng-model="currentProj.alOpt.flatten" flex="30">简化目录结构</md-switch>
+                                <md-switch ng-model="currentProj.alOpt.flatten" flex="50">简化目录结构</md-switch>
+                                <md-switch ng-model="currentProj.alOpt.hashLink" flex="50">链接追加指纹参数</md-switch>
                             </div>
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
@@ -203,9 +201,6 @@
                                     <input ng-model="currentProj.alOpt.staticUrlHead" name="alStaticUrlHead"
                                            placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
-                                <md-switch ng-model="currentProj.alOpt.hashLink" flex="30">链接追加指纹参数</md-switch>
                             </div>
 
                             <!------------------------------------------------------------------------------------------>
