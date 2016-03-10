@@ -12,24 +12,6 @@ input {
   -webkit-user-select: text;
   user-select: text; }
 
-pre, code {
-  font-family: 'Menlo', 'Lucida Console', monospace;
-  border: 1px solid #076274;
-  background-color: #076274;
-  color: #C5F3FC;
-  border-radius: 3px; }
-
-pre {
-  white-space: pre-wrap;
-  font-size: 13px;
-  line-height: 19px;
-  overflow: auto;
-  padding: 6px 10px; }
-
-code {
-  padding: 1px 4px 1px 4px;
-  font-size: 13px; }
-
 /*---滚动条默认显示样式--*/
 ::-webkit-scrollbar-thumb {
   background-color: #bbb;
@@ -104,7 +86,7 @@ code {
   position: relative;
   z-index: 1;
   flex: 1; }
-  .window-content .not-selectable, .window-content md-tabs-wrapper {
+  .window-content .not-selectable, .window-content .md-tab {
     -webkit-user-select: none; }
 
 .list-box {
@@ -115,7 +97,6 @@ code {
   width: 220px;
   height: 100%;
   overflow: auto;
-  /* background-color: #E1E9EC; */
   background-color: #e4eaec;
   color: #2c3940;
   /*---滚动条默认显示样式--*/
@@ -124,9 +105,6 @@ code {
     border: 2px solid #e4eaec; }
   .list-box::-webkit-scrollbar-track-piece {
     background-color: #e4eaec; }
-  .list-box .list-title {
-    background-color: #d5dee2;
-    color: #171e21; }
   .list-box .proj-list {
     margin: 0;
     padding: 5px 0;

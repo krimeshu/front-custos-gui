@@ -13,7 +13,7 @@ var model = {
         srcDir: ''
     }],
     currentProj: {
-        projName: '',
+        projName: '新版H5',
         srcDir: '',
         scOpt: {},
         pcOpt: {},
@@ -24,6 +24,11 @@ var model = {
 };
 
 angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
+    .config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue-grey')
+            .accentPalette('red');
+    })
     .controller('HeaderCtrl', function HeaderMenuCtrl($scope) {
         $scope.version = require("../package.json").version;
 
@@ -38,7 +43,30 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         };
     })
     .controller('ListBoxCtrl', function ListBoxCtrl($scope) {
+        $scope.currentProj = model.currentProj;
         $scope.projList = model.projList;
+        $scope.isCurrent = function (projName) {
+            return projName === $scope.currentProj.projName ? 'current' : '';
+        };
+
+        this.setCurrent = function (projName) {
+            console.log('projName:', projName);
+            var srcDir = null;
+            $scope.projList.forEach(function (item) {
+                if (projName === item.projName) {
+                    srcDir = item.srcDir;
+                }
+            });
+
+            var proj = {
+                projName: projName
+            };
+            for (var p in proj) {
+                if (proj.hasOwnProperty(p)) {
+                    $scope.currentProj[p] = proj[p];
+                }
+            }
+        };
     })
     .controller('InfoBoxCtrl', function InfoBoxCtrl($scope) {
         $scope.currentProj = model.currentProj;

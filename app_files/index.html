@@ -26,7 +26,7 @@
     };
 </script>
 
-<div class="window-box shadow-box">
+<div class="window-box shadow-box theme-default">
     <header class="window-header" ng-controller="HeaderCtrl as ctrl">
         <div class="header-row">
             <!-- Title -->
@@ -47,7 +47,7 @@
                                 <span md-menu-align-target style="float: right;"></span>
                             </md-button>
                         </md-menu-item>
-                        <md-menu-divider></md-menu-divider>
+                        <!--<md-menu-divider></md-menu-divider>-->
                         <md-menu-item>
                             <md-button>
                                 关于
@@ -64,12 +64,13 @@
             </section>
         </div>
     </header>
-    <main class="window-content" ng-controller="ListBoxCtrl">
+    <main class="window-content" ng-controller="ListBoxCtrl as ctrl">
         <md-content class="list-box">
             <section>
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable">
-                    <md-list-item class="proj-item" ng-repeat="item in projList">
+                    <md-list-item class="proj-item {{isCurrent(item.projName)}}" ng-repeat="item in projList"
+                                  ng-click="ctrl.setCurrent(item.projName, $event)">
                         <span ng-bind="item.projName" title="{{item.projName}}"></span>
                     </md-list-item>
                 </md-list>

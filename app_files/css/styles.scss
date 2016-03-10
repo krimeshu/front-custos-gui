@@ -1,6 +1,29 @@
 @charset "utf-8";
 
-$baseThemeColor: #607D8B;
+$themeNames: default;
+
+$colorRed: #F44235;
+$colorPink: #E91C63;
+$colorPurple: #9C27B0;
+$colorDeepPurple: #673AB7;
+$colorIndigo: #3F51B5;
+$colorBlue: #2296F3;
+$colorLightBlue: #00A9F4;
+$colorCyan: #00BCD4;
+$colorTeal: #009688;
+$colorGreen: #4CAF50;
+$colorLightGreen: #8BC349;
+$colorLime: #CDDC39;
+$colorYellow: #FFEB3B;
+$colorAmber: #FFC10D;
+$colorOrange: #FF9800;
+$colorBrown: #795549;
+$colorBlueGrey: #607D8B;
+$colorGrey: #9E9E9E;
+$colorDeepOrange: #FF5622;
+
+$primaryThemeColor: $colorBlueGrey;
+$accentThemeColor: $colorRed;
 
 html, body {
   background: transparent;
@@ -16,27 +39,6 @@ input {
   font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, custom-font, sans-serif;
   -webkit-user-select: text;
   user-select: text;
-}
-
-pre, code {
-  font-family: 'Menlo', 'Lucida Console', monospace;
-  border: 1px solid #076274;
-  background-color: #076274;
-  color: #C5F3FC;
-  border-radius: 3px;
-}
-
-pre {
-  white-space: pre-wrap;
-  font-size: 13px;
-  line-height: 19px;
-  overflow: auto;
-  padding: 6px 10px;
-}
-
-code {
-  padding: 1px 4px 1px 4px;
-  font-size: 13px;
 }
 
 /*---滚动条默认显示样式--*/
@@ -98,7 +100,7 @@ code {
   position: relative;
   z-index: 2;
 
-  background: $baseThemeColor;
+  background: $primaryThemeColor;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .5);
 
   -webkit-user-select: none;
@@ -139,13 +141,8 @@ code {
   position: relative;
   z-index: 1;
   flex: 1;
-  //.mdl-switch {
-  //  display: inline-block;
-  //  width: auto;
-  //  padding-right: 28px;
-  //}
 
-  .not-selectable, md-tabs-wrapper {
+  .not-selectable, .md-tab {
     -webkit-user-select: none;
   }
 }
@@ -160,23 +157,17 @@ code {
   height: 100%;
   overflow: auto;
 
-  /* background-color: #E1E9EC; */
-  background-color: lighten($baseThemeColor, 45);
-  color: darken($baseThemeColor, 25);
+  background-color: lighten($primaryThemeColor, 45%);
+  color: darken($primaryThemeColor, 25%);
 
   /*---滚动条默认显示样式--*/
   &::-webkit-scrollbar-thumb {
-    border: 2px solid lighten($baseThemeColor, 45);
+    border: 2px solid lighten($primaryThemeColor, 45%);
   }
 
   /*---滚动框背景样式--*/
   &::-webkit-scrollbar-track-piece {
-    background-color: lighten($baseThemeColor, 45);
-  }
-
-  .list-title {
-    background-color: lighten($baseThemeColor, 40);
-    color: darken(lighten($baseThemeColor, 45), 80);
+    background-color: lighten($primaryThemeColor, 45%);
   }
 
   .proj-list {
@@ -188,17 +179,17 @@ code {
     font-size: 14px;
 
     .proj-item {
-      //padding: 8px 20px;
+      //padding: 0 20px;
       //margin: 5px 0;
 
       transition: background 400ms ease;
 
       &:hover {
-        background-color: lighten($baseThemeColor, 40);
+        background-color: lighten($primaryThemeColor, 40%);
       }
 
       &.current {
-        background-color: lighten($baseThemeColor, 25);
+        background-color: lighten($primaryThemeColor, 25%);
         color: #fff;
       }
 
