@@ -11,13 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Moonshell/front-custos-gui.git"
   },
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial"
-  ],
-  "author": "GitHub",
+  "author": "krimeshu",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Moonshell/front-custos-gui/issues"

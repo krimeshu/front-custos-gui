@@ -1,6 +1,4 @@
 {
-  "projName": "PC项目模板",
-  "srcDir": "",
   "scOpt": {
     "useRatio": 1,
     "useRem": 1
@@ -16,10 +14,10 @@
     "flatten": true,
     "hashLink": true
   },
-  "upload": {
+  "upOpt": {
     "delta": true,
     "page": "http://admin.ac.oa.com/uploadDevFile.php",
-    "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n            var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),\r\n                prefix = (relativeName.split('/').slice(0, -1));\r\n            (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();\r\n            prefix.splice(0, 0, projectName);\r\n            return {\r\n                'fileName': relativeName,\r\n                'prefix': prefix.join('/'),\r\n                'myfile': fileStream\r\n            };\r\n        }"
+    "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),\r\n        prefix = (relativeName.split('/').slice(0, -1));\r\n    (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();\r\n    prefix.splice(0, 0, projectName);\r\n    return {\r\n        'fileName': relativeName,\r\n        'prefix': prefix.join('/'),\r\n        'myfile': fileStream\r\n    };\r\n}"
   },
   "tasks": [
     "prepare_build",
