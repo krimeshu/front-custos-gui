@@ -7,7 +7,7 @@ var mainWindow = require('electron').remote.getCurrentWindow(),
 var _fs = require('fs'),
     _path = require('path');
 
-// 加载模板列表
+// 读取模板列表
 function getTemplates() {
     var templates = [{name: '空白模板', path: null}],
         templateDir = _path.resolve(__dirname, 'template');
@@ -25,7 +25,7 @@ function getTemplates() {
 
 // 加载默认配置
 function loadConfig() {
-    var configPath = _path.resolve(__dirname, '..', 'config.json'),
+    var configPath = _path.resolve(__dirname, 'config.json'),
         config = {
             "outputDir": "D:\\FC_Output",
             "htmlEnhanced": false,
@@ -42,7 +42,7 @@ function loadConfig() {
             },
             "concurrentLimit": 1
         };
-    if (_fs.existsSync(configPath)) {
+    if (!_fs.existsSync(configPath)) {
         saveConfig(config);
     } else {
         try {
@@ -58,7 +58,7 @@ function loadConfig() {
 
 // 保存默认配置
 function saveConfig(config) {
-    var configPath = _path.resolve(__dirname, '..', 'config.json'),
+    var configPath = _path.resolve(__dirname, 'config.json'),
         content = JSON.stringify(config);
     try {
         _fs.writeFileSync(configPath, content);
@@ -69,9 +69,9 @@ function saveConfig(config) {
 
 // 加载项目列表
 function loadProjList() {
-    var listPath = _path.resolve(__dirname, '..', 'project-list.json'),
+    var listPath = _path.resolve(__dirname, 'project-list.json'),
         list = [];
-    if (_fs.existsSync(listPath)) {
+    if (!_fs.existsSync(listPath)) {
         saveProjList(list);
     } else {
         try {
@@ -87,7 +87,7 @@ function loadProjList() {
 
 // 保存项目列表
 function saveProjList(projList) {
-    var listPath = _path.resolve(__dirname, '..', 'project-list.json'),
+    var listPath = _path.resolve(__dirname, 'project-list.json'),
         content = JSON.stringify(projList);
     try {
         _fs.writeFileSync(listPath, content);
@@ -104,7 +104,7 @@ function loadProjPackage(projName, srcDir) {
             version: '0.1.0',
             fcOpt: null
         };
-    if (_fs.existsSync(configPath)) {
+    if (!_fs.existsSync(configPath)) {
         saveProjPackage(config, srcDir);
     } else {
         try {
@@ -134,7 +134,7 @@ function saveProjPackage(config, srcDir) {
 // 获取默认项目配置
 function getInitOpt() {
     return {
-        _id: null,
+        id: null,
         projName: '',
         srcDir: '',
         version: '',
@@ -155,7 +155,7 @@ var model = {
     curProj: getInitOpt()
 };
 
-//console.log(templates);
+//console.log(_path.resolve('./'));
 
 angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
     .config(function ($mdThemingProvider) {
@@ -172,6 +172,11 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         $scope.openMenu = function ($mdOpenMenu, ev) {
             originatorEv = ev;
             $mdOpenMenu(ev);
+        };
+
+        // 关闭窗口
+        $scope.closeWindow = function () {
+            window.close();
         };
 
         // 显示配置对话框
@@ -253,6 +258,8 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
                 pkg = loadProjPackage(projName, srcDir),
                 opts = pkg.fcOpt || {};
 
+            model.curProj.version = pkg.version;
+
             for (var p in opts) {
                 if (opts.hasOwnProperty(p)) {
                     model.curProj[p] = opts[p];
@@ -261,7 +268,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         };
 
         // 显示打开项目路径对话框
-        $scope.showOpenDialog = function () {
+        $scope.showOpenDialog = function (ev) {
             dialog.showOpenDialog(mainWindow, {
                 title: '选择项目所在的文件夹',
                 properties: [
@@ -269,21 +276,25 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
                 ]
             }, function (files) {
                 if (files && files.length) {
-                    $scope.importProj(files[0]);
+                    $scope.importProj(files[0], ev);
                 }
             });
         };
 
         // 导入项目
-        $scope.importProj = function (srcDir) {
+        $scope.importProj = function (srcDir, ev) {
             var projName = _path.basename(srcDir),
                 pkg = loadProjPackage(projName, srcDir),
-                opts = pkg.fcOpt || getInitOpt();
-
+                opts = pkg.fcOpt;
+            if (!opts) {
+                $scope.showTemplates(projName, srcDir, ev);
+            } else {
+                $scope.addProj(projName, srcDir);
+            }
         };
 
         // 显示模板选择对话框
-        $scope.showTemplates = function (ev) {
+        $scope.showTemplates = function (projName, srcDir, ev) {
             $mdDialog.show({
                 controller: function templatesDialogController($scope, $mdDialog) {
                     $scope.templates = model.templates;
@@ -307,8 +318,39 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
                 clickOutsideToClose: true,
                 targetEvent: ev
             }).then(function (tempPath) {
-                console.log(tempPath);
+                //console.log(tempPath);
+                var content = _fs.readFileSync(tempPath).toString(),
+                    opts = JSON.parse(content),
+                    pkg = loadProjPackage(projName, srcDir);
+                pkg.fcOpt = opts;
+                saveProjPackage(pkg, srcDir);
+                $scope.addProj(projName, srcDir);
             });
+        };
+
+        $scope.addProj = function (projName, srcDir) {
+            var projList = $scope.projList,
+                getId = function () {
+                    return new Date().getTime() + '_' + String(Math.random()).substr(2)
+                },
+                isIdUniq = function (id) {
+                    for (var i = 0, len = projList.length; i < len; i++) {
+                        if (projList[i].id === id) {
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                id = getId();
+            while (!isIdUniq(id)) {
+                id = getId();
+            }
+            projList.push({
+                id: id,
+                projName: projName,
+                srcDir: srcDir
+            });
+            saveProjList(projList);
         };
     })
     .controller('InfoBoxCtrl', function InfoBoxCtrl($scope) {

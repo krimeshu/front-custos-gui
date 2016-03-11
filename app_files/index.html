@@ -35,7 +35,7 @@
             </span>
             <div class="spacer"></div>
 
-            <section class="ctrl-btns" layout="row" layout-align="center center" layout-wrap ng-cloak>
+            <section class="ctrl-btns" layout="row" layout-align="center center" layout-wrap>
                 <md-menu md-position-mode="target-right target">
                     <md-button class="clickable md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                         <md-icon md-menu-origin class="material-icons">&#xE5CF;</md-icon>
@@ -56,7 +56,8 @@
                     </md-menu-content>
                 </md-menu>
                 <md-menu>
-                    <md-button class="clickable md-icon-button" onclick="window.close();">
+                    <md-button class="clickable md-icon-button"
+                               ng-click="closeWindow();">
                         <md-icon class="material-icons">&#xE14C;</md-icon>
                     </md-button>
                     <md-menu-content></md-menu-content>
@@ -69,14 +70,14 @@
             <section>
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable">
-                    <md-list-item class="proj-item {{isCurrent(item._id)}}" ng-repeat="item in projList"
-                                  ng-click="setCurrent(item._id, $event)">
+                    <md-list-item class="proj-item {{isCurrent(item.id)}}" ng-repeat="item in projList"
+                                  ng-click="setCurrent(item.id, $event)">
                         <span ng-bind="item.projName" title="{{item.projName}}"></span>
                     </md-list-item>
                 </md-list>
             </section>
             <md-button class="md-fab btn-add-proj"
-                        ng-click="showOpenDialog($event)">
+                       ng-click="showOpenDialog($event)">
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
             <md-button class="md-fab md-primary btn-reload"
@@ -133,7 +134,8 @@
                     <md-tab label="任务列表">
                         <md-content layout-margin>
                             <div flex="30" ng-repeat="item in allTasks">
-                                <md-checkbox ng-checked="exists(item, curProj.tasks)"
+                                <md-checkbox aria-label="{{item}}"
+                                             ng-checked="exists(item, curProj.tasks)"
                                              ng-click="toggle(item, curProj.tasks)">
                                     <span ng-bind="item"></span>
                                 </md-checkbox>
