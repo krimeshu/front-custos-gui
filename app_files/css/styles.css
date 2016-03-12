@@ -50,7 +50,8 @@ input {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: transparent; }
+  background: transparent;
+  perspective: 800px; }
 
 .shadow-box {
   position: absolute;
@@ -60,7 +61,18 @@ input {
   right: 5px;
   width: auto;
   height: auto;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5); }
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  transition: transform 500ms ease, opacity 500ms ease;
+  transform: translateZ(0) rotateX(180deg) scale(0.1);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  opacity: 0; }
+  .shadow-box.in {
+    transform: translateZ(0) rotateX(0deg) scale(1);
+    opacity: 1; }
+  .shadow-box.out {
+    transform: translateZ(0) rotateX(180deg) scale(0.1);
+    opacity: 0; }
 
 .window-box {
   display: flex;

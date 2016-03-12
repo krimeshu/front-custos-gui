@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="FrontCustosGUI">
+<html ng-app="FrontCustosGUI" style="background: transparent;">
 <head>
     <meta charset="utf-8"/>
     <title>Front Custos GUI</title>
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/jquery.jsonFormater.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="shadow-wrap">
+<body class="shadow-wrap" style="background: transparent;">
 <script>
     //    const version = require("../package.json").version;
     const electron = require('electron');
@@ -350,6 +350,21 @@
 
 <script>
     require('./js/entry.js');
+
+    var windowCtrl = {
+        open: function () {
+            document.querySelector('.shadow-box').classList.add('in');
+        },
+        close: function () {
+            document.querySelector('.shadow-box').classList.remove('in');
+            document.querySelector('.shadow-box').classList.add('out');
+            window.setTimeout(function () {
+                window.close();
+            }, 600);
+        }
+    };
+
+    windowCtrl.open();
 </script>
 
 </html>

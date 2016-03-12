@@ -21,7 +21,7 @@ module.exports = function HeaderMenuCtrl($scope, $mdDialog) {
 
     // 关闭窗口
     $scope.closeWindow = function () {
-        window.close();
+        windowCtrl.close();
     };
 
     // 显示配置对话框
