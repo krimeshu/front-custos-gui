@@ -41,6 +41,17 @@ input {
   user-select: text;
 }
 
+%float-btn {
+  position: absolute;
+  z-index: 5;
+
+  transition: opacity 400ms ease;
+  opacity: .8;
+  &:hover {
+    opacity: 1;
+  }
+}
+
 /*---滚动条默认显示样式--*/
 ::-webkit-scrollbar-thumb {
   background-color: #bbb;
@@ -155,18 +166,23 @@ input {
 
   width: 220px;
   height: 100%;
-  overflow: auto;
 
   background-color: lighten($primaryThemeColor, 45%);
   color: darken($primaryThemeColor, 25%);
 
+  .list-scroll {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
   /*---滚动条默认显示样式--*/
-  &::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     border: 2px solid lighten($primaryThemeColor, 45%);
   }
 
   /*---滚动框背景样式--*/
-  &::-webkit-scrollbar-track-piece {
+  ::-webkit-scrollbar-track-piece {
     background-color: lighten($primaryThemeColor, 45%);
   }
 
@@ -203,23 +219,15 @@ input {
   }
 
   .btn-add-proj {
-    position: fixed;
-    z-index: 5;
+    @extend %float-btn;
     bottom: 20px;
-    left: 150px;
-
-    transition: opacity 400ms ease;
-    opacity: .8;
-    &:hover {
-      opacity: 1;
-    }
+    right: 10px;
   }
 
   .btn-reload {
-    position: fixed;
-    z-index: 5;
+    @extend %float-btn;
     bottom: 20px;
-    left: 80px;
+    right: 80px;
   }
 }
 
@@ -252,6 +260,24 @@ input {
 
   md-button, button {
     height: 48px;
+  }
+
+  .btn-save {
+    @extend %float-btn;
+    bottom: 20px;
+    right: 10px;
+  }
+
+  .btn-delete {
+    @extend %float-btn;
+    bottom: 20px;
+    right: 80px;
+  }
+
+  .btn-open {
+    @extend %float-btn;
+    bottom: 20px;
+    left: 10px;
   }
 }
 

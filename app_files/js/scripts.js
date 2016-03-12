@@ -179,7 +179,17 @@ var model = {
     templates: getTemplates(),
     config: loadConfig(),
     projList: loadProjList(),
-    curProj: getInitOpt()
+    curProj: getInitOpt(),
+    getProjById: function (id) {
+        var proj = null;
+        this.projList && this.projList.forEach &&
+        this.projList.forEach(function (_proj) {
+            if (_proj.id === id) {
+                proj = _proj;
+            }
+        });
+        return proj;
+    }
 };
 
 //console.log(_path.resolve('./'));
@@ -263,12 +273,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         // 选中某项，更改当前的项目
         $scope.setCurrent = function (id) {
             //console.log('projName:', projName);
-            var proj = null;
-            $scope.projList.forEach(function (item) {
-                if (id === item.id) {
-                    proj = item;
-                }
-            });
+            var proj = model.getProjById(id);
 
             if (!proj) {
                 console.log('ListBoxCtrl.setCurrent 选择的项目异常，找不到对应数据！');
@@ -374,6 +379,10 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         };
     })
     .controller('InfoBoxCtrl', function InfoBoxCtrl($scope) {
+        var self = this;
+        self.isOpenExpanded = false;
+        self.openDialMode = 'md-fling';
+
         $scope.curProj = model.curProj;
         $scope.toggle = function (item, list) {
             var idx = list.indexOf(item);

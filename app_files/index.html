@@ -34,11 +34,14 @@
                 Front Custos GUI - (Ver <span ng-bind="version">...</span>)
             </span>
             <div class="spacer"></div>
-
+            <!-- Top Bar Buttons -->
             <section class="ctrl-btns" layout="row" layout-align="center center" layout-wrap>
                 <md-menu md-position-mode="target-right target">
                     <md-button class="clickable md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
-                        <md-icon md-menu-origin class="material-icons">&#xE5CF;</md-icon>
+                        <md-tooltip md-direction="bottom">
+                            展开菜单
+                        </md-tooltip>
+                        <md-icon md-menu-origin class="material-icons">arrow_drop_down</md-icon>
                     </md-button>
                     <md-menu-content width="3">
                         <md-menu-item>
@@ -58,7 +61,10 @@
                 <md-menu>
                     <md-button class="clickable md-icon-button"
                                ng-click="closeWindow();">
-                        <md-icon class="material-icons">&#xE14C;</md-icon>
+                        <md-tooltip md-direction="bottom">
+                            关闭窗口
+                        </md-tooltip>
+                        <md-icon class="material-icons">close</md-icon>
                     </md-button>
                     <md-menu-content></md-menu-content>
                 </md-menu>
@@ -66,8 +72,9 @@
         </div>
     </header>
     <main class="window-content" ng-controller="ListBoxCtrl as ctrl">
+        <!-- Project List -->
         <md-content class="list-box">
-            <section>
+            <section class="list-scroll">
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable">
                     <md-list-item class="proj-item {{isCurrent(item.id)}}" ng-repeat="item in projList"
@@ -76,18 +83,66 @@
                     </md-list-item>
                 </md-list>
             </section>
-            <md-button class="md-fab btn-add-proj"
+            <md-button class="md-fab float-btn btn-add-proj"
                        ng-click="showOpenDialog($event)">
+                <md-tooltip md-direction="bottom">
+                    添加项目
+                </md-tooltip>
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
-            <md-button class="md-fab md-primary btn-reload"
+            <md-button class="md-fab md-primary float-btn btn-reload"
                        onclick="window.location.reload();">
+                <md-tooltip md-direction="bottom">
+                    刷新窗口
+                </md-tooltip>
                 <md-icon class="material-icons">refresh</md-icon>
             </md-button>
         </md-content>
 
+        <!-- Current Project Info -->
         <md-content class="info-box" ng-controller="InfoBoxCtrl as ctrl">
             <form class="info-form" name="curProjForm">
+                <md-fab-speed-dial class="btn-open"
+                                   md-open="ctrl.isOpenExpanded"
+                                   md-direction="up"
+                                   ng-class="ctrl.openDialMode" ng-cloak>
+                    <md-fab-trigger>
+                        <md-button aria-label="打开…" class="md-fab md-primary">
+                            <md-tooltip md-direction="bottom">
+                                打开…
+                            </md-tooltip>
+                            <md-icon class="material-icons">folder</md-icon>
+                        </md-button>
+                    </md-fab-trigger>
+                    <md-fab-actions>
+                        <md-button aria-label="打开源目录" class="md-fab md-raised md-mini">
+                            <md-tooltip md-direction="bottom">
+                                打开源目录
+                            </md-tooltip>
+                            <md-icon class="material-icons">assignment_return</md-icon>
+                        </md-button>
+                        <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini">
+                            <md-tooltip md-direction="bottom">
+                                打开输出目录
+                            </md-tooltip>
+                            <md-icon class="material-icons">assignment_returned</md-icon>
+                        </md-button>
+                    </md-fab-actions>
+                </md-fab-speed-dial>
+                <md-button class="md-fab btn-delete"
+                           onclick="window.location.reload();">
+                    <md-tooltip md-direction="bottom">
+                        删除项目配置
+                    </md-tooltip>
+                    <md-icon class="material-icons">delete</md-icon>
+                </md-button>
+                <md-button class="md-fab md-primary btn-save"
+                           onclick="window.location.reload();">
+                    <md-tooltip md-direction="bottom">
+                        保存项目配置
+                    </md-tooltip>
+                    <md-icon class="material-icons">save</md-icon>
+                </md-button>
                 <md-tabs md-border-bottom>
                     <md-tab label="基本信息">
                         <md-content layout-margin>
