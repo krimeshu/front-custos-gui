@@ -102,10 +102,10 @@
         <!-- Current Project Info -->
         <md-content class="info-box" ng-controller="InfoBoxCtrl as ctrl">
             <form class="info-form" name="curProjForm">
-                <md-fab-speed-dial class="btn-open"
+                <md-fab-speed-dial class="btn-open" ng-cloak
                                    md-open="ctrl.isOpenExpanded"
                                    md-direction="up"
-                                   ng-class="ctrl.openDialMode" ng-cloak>
+                                   ng-class="ctrl.openDialMode">
                     <md-fab-trigger>
                         <md-button aria-label="打开…" class="md-fab md-primary">
                             <md-tooltip md-direction="bottom">
@@ -116,13 +116,13 @@
                     </md-fab-trigger>
                     <md-fab-actions>
                         <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini">
-                            <md-tooltip md-direction="bottom">
+                            <md-tooltip md-direction="right">
                                 打开输出目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_returned</md-icon>
                         </md-button>
                         <md-button aria-label="打开源目录" class="md-fab md-raised md-mini">
-                            <md-tooltip md-direction="bottom">
+                            <md-tooltip md-direction="right">
                                 打开源目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_return</md-icon>
@@ -273,8 +273,9 @@
 
                             <!------------------------------------------------------------------------------------------>
 
-                            <h4>上传页面与表单</h4>
-
+                            <h4>上传表单与页面</h4>
+                            <div class="editor" ng-model="curProj.upOpt.form" flex-grow
+                                 ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>上传页面</label>
@@ -282,8 +283,6 @@
                                            placeholder="处理项目文件上传的页面地址"/>
                                 </md-input-container>
                             </div>
-                            <div class="editor" ng-model="curProj.upOpt.form" flex-grow
-                                 ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
                         </md-content>
                     </md-tab>
                 </md-tabs>
