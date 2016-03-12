@@ -1,16 +1,1 @@
-{
-  "outputDir": "D:\\FC_Output",
-  "htmlEnhanced": false,
-  "delUnusedFiles": true,
-  "uploadCallback": "function uploadCallback(response) {\n    return /^上传成功/.test(response);\n}",
-  "flattenMap": {
-    "page": "",
-    "style": "css",
-    "script": "js",
-    "image": "images",
-    "font": "font",
-    "audio": "audio",
-    "other": "raw"
-  },
-  "concurrentLimit": 1
-}
+{"outputDir":"D:\\FC_Output","htmlEnhanced":false,"delUnusedFiles":true,"uploadCallback":"function uploadCallback(response) {\n    return /^上传成功/.test(response);\n}","flattenMap":{"page":"","style":"css","script":"js","image":"images","font":"font","audio":"audio","other":"raw"},"concurrentLimit":1}

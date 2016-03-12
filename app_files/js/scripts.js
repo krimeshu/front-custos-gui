@@ -210,7 +210,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         $scope.showConfig = function (ev) {
             $mdDialog.show({
                 controller: function configDialogController($scope, $mdDialog) {
-                    $scope.config = angular.fromJson(angular.toJson(model.config));
+                    $scope.config = deepCopyObj(model.config);
 
                     $scope.hide = function () {
                         $mdDialog.hide();
@@ -219,6 +219,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
                     $scope.save = function (config) {
                         saveConfig(config);
                         model.config = config;
+                        $mdDialog.hide();
                     };
 
                     $scope.cancel = function () {
