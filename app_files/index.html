@@ -107,7 +107,8 @@
                                    md-direction="up"
                                    ng-class="ctrl.openDialMode">
                     <md-fab-trigger>
-                        <md-button aria-label="打开…" class="md-fab md-primary">
+                        <md-button aria-label="打开…" class="md-fab md-primary"
+                                   ng-disabled="curProj.id === null">
                             <md-tooltip md-direction="bottom">
                                 打开…
                             </md-tooltip>
@@ -115,29 +116,35 @@
                         </md-button>
                     </md-fab-trigger>
                     <md-fab-actions>
-                        <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini">
+                        <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini"
+                                   ng-disabled="curProj.id === null"
+                                   ng-click="openDistDir()">
                             <md-tooltip md-direction="right">
-                                打开输出目录
+                                打开项目生成目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_returned</md-icon>
                         </md-button>
-                        <md-button aria-label="打开源目录" class="md-fab md-raised md-mini">
+                        <md-button aria-label="打开源目录" class="md-fab md-raised md-mini"
+                                   ng-disabled="curProj.id === null"
+                                   ng-click="openSrcDir()">
                             <md-tooltip md-direction="right">
-                                打开源目录
+                                打开项目源目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_return</md-icon>
                         </md-button>
                     </md-fab-actions>
                 </md-fab-speed-dial>
                 <md-button class="md-fab btn-delete"
-                           onclick="window.location.reload();">
+                           ng-disabled="curProj.id === null"
+                           ng-click="removeProj()">
                     <md-tooltip md-direction="bottom">
                         删除项目配置
                     </md-tooltip>
                     <md-icon class="material-icons">delete</md-icon>
                 </md-button>
                 <md-button class="md-fab md-primary btn-save"
-                           onclick="window.location.reload();">
+                           ng-disabled="curProj.id === null"
+                           ng-click="saveProj()">
                     <md-tooltip md-direction="bottom">
                         保存项目配置
                     </md-tooltip>
@@ -150,6 +157,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>名称</label>
                                     <input ng-model="curProj.projName" name="projName" required
+                                           ng-disabled="curProj.id === null"
                                            placeholder="为将要处理的项目取个好记的名字"/>
                                     <div ng-messages="curProjForm.projName.$error">
                                         <div ng-message="required">请输入项目名称</div>
@@ -160,6 +168,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>版本</label>
                                     <input ng-model="curProj.version" name="version"
+                                           ng-disabled="curProj.id === null"
                                            placeholder="项目目前的版本号"/>
                                 </md-input-container>
                             </div>
@@ -167,22 +176,31 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>位置</label>
                                     <input ng-model="curProj.srcDir" name="srcDir" required readonly
+                                           ng-disabled="curProj.id === null"
                                            placeholder="这个项目所在的本地目录"/>
                                     <div ng-messages="curProjForm.srcDir.$error">
                                         <div ng-message="required">请选择项目所在位置</div>
                                     </div>
                                 </md-input-container>
 
-                                <md-button class="md-raised" flex="15">选择</md-button>
+                                <md-button class="md-raised" flex="15"
+                                           ng-disabled="curProj.id === null">选择
+                                </md-button>
                             </div>
 
                             <!--<h4>开始操作</h4>-->
 
                             <div layout-gt-sm="row">
-                                <md-button class="md-raised" flex="20">本地构建</md-button>
-                                <md-button class="md-raised md-primary" flex="20">构建上传</md-button>
+                                <md-button class="md-raised" flex="20"
+                                           ng-disabled="curProj.id === null">本地构建
+                                </md-button>
+                                <md-button class="md-raised md-primary" flex="20"
+                                           ng-disabled="curProj.id === null">构建上传
+                                </md-button>
                                 <div flex></div>
-                                <md-switch ng-model="curProj.upOpt.delta" flex="30">增量上传</md-switch>
+                                <md-switch ng-model="curProj.upOpt.delta" flex="30"
+                                           ng-disabled="curProj.id === null">增量上传
+                                </md-switch>
                             </div>
                         </md-content>
                     </md-tab>
@@ -191,7 +209,8 @@
                             <div flex="30" ng-repeat="item in allTasks">
                                 <md-checkbox aria-label="{{item}}"
                                              ng-checked="exists(item, curProj.tasks)"
-                                             ng-click="toggle(item, curProj.tasks)">
+                                             ng-click="toggle(item, curProj.tasks)"
+                                             ng-disabled="curProj.id === null">
                                     <span ng-bind="item"></span>
                                 </md-checkbox>
                             </div>
@@ -205,6 +224,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>像素密度</label>
                                     <input ng-model="curProj.scOpt.useRatio" name="scRatio"
+                                           ng-disabled="curProj.id === null"
                                            ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=普通，大于1=Retina"/>
                                     <div ng-messages="curProjForm.scRatio.$error">
@@ -217,6 +237,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Rem像素比</label>
                                     <input ng-model="curProj.scOpt.useRem" name="scRem"
+                                           ng-disabled="curProj.id === null"
                                            ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
                                            required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
                                     <div ng-messages="curProjForm.scRem.$error">
@@ -234,6 +255,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>目标浏览器范围</label>
                                     <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
+                                           ng-disabled="curProj.id === null"
                                            placeholder="参数形式可参考 autoprefixer 相关文档"/>
                                     <div ng-messages="curProjForm.pcBrowsers.$error">
                                         <div ng-message="required">请输入目标浏览器范围</div>
@@ -249,6 +271,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>页面文件分发目录</label>
                                     <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
+                                           ng-disabled="curProj.id === null"
                                            placeholder="html, php 等页面文件分发到此目录下"/>
                                 </md-input-container>
                             </div>
@@ -256,17 +279,23 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>静态文件分发目录</label>
                                     <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
+                                           ng-disabled="curProj.id === null"
                                            placeholder="非页面的静态文件分发到此目录下"/>
                                 </md-input-container>
                             </div>
                             <div layout-gt-sm="row">
-                                <md-switch ng-model="curProj.alOpt.flatten" flex="50">简化目录结构</md-switch>
-                                <md-switch ng-model="curProj.alOpt.hashLink" flex="50">链接追加指纹参数</md-switch>
+                                <md-switch ng-model="curProj.alOpt.flatten" flex="50"
+                                           ng-disabled="curProj.id === null">简化目录结构
+                                </md-switch>
+                                <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
+                                           ng-disabled="curProj.id === null">链接追加指纹参数
+                                </md-switch>
                             </div>
                             <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>静态文件链接前缀</label>
                                     <input ng-model="curProj.alOpt.staticUrlHead" name="alStaticUrlHead"
+                                           ng-disabled="curProj.id === null"
                                            placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
                                 </md-input-container>
                             </div>
@@ -280,6 +309,7 @@
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>上传页面</label>
                                     <input ng-model="curProj.upOpt.page" name="uploadPage"
+                                           ng-disabled="curProj.id === null"
                                            placeholder="处理项目文件上传的页面地址"/>
                                 </md-input-container>
                             </div>

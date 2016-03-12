@@ -12,7 +12,12 @@ module.exports = function InfoBoxCtrl($scope) {
     self.openDialMode = 'md-fling';
 
     $scope.curProj = Model.curProj;
+
+    // 任务勾选相关
     $scope.toggle = function (item, list) {
+        if ($scope.curProj.id === null) {
+            return;
+        }
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
         else list.push(item);
@@ -32,7 +37,28 @@ module.exports = function InfoBoxCtrl($scope) {
         //'do_upload'
     ];
 
+    // 编辑器相关
     $scope.aceChanged = function () {
-        //
+        // 暂无
+    };
+
+    // 保存项目配置
+    $scope.saveProj = function () {
+
+    };
+
+    // 删除项目配置
+    $scope.removeProj = function () {
+
+    };
+
+    // 打开项目源目录
+    $scope.openSrcDir = function () {
+
+    };
+
+    // 打开项目生成目录
+    $scope.openDistDir = function () {
+
     };
 };
