@@ -15,7 +15,9 @@
                 <md-input-container>
                     <label>选择模板</label>
                     <md-select ng-model="tempPath">
-                        <md-option ng-repeat="template in templates" value="{{template.path}}">
+                        <md-option ng-repeat="template in templates"
+                                   value="{{template.path}}"
+                                   ng-selected="template.path == null">
                             {{template.name}}
                         </md-option>
                     </md-select>
