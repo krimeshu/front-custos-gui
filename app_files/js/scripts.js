@@ -47,7 +47,7 @@ function loadConfig() {
     } else {
         try {
             var content = _fs.readFileSync(configPath).toString();
-            config = JSON.parse(content);
+            config = angular.fromJson(content);
         } catch (e) {
             console.log('loadConfig 时发生异常: ', e);
             saveConfig(config);
@@ -59,7 +59,7 @@ function loadConfig() {
 // 保存默认配置
 function saveConfig(config) {
     var configPath = _path.resolve(__dirname, 'config.json'),
-        content = JSON.stringify(config);
+        content = angular.toJson(config);
     try {
         _fs.writeFileSync(configPath, content);
     } catch (e) {
@@ -76,7 +76,7 @@ function loadProjList() {
     } else {
         try {
             var content = _fs.readFileSync(listPath).toString();
-            list = JSON.parse(content);
+            list = angular.fromJson(content);
         } catch (e) {
             console.log('loadProjList 时发生异常: ', e);
             saveProjList(list);
@@ -88,7 +88,7 @@ function loadProjList() {
 // 保存项目列表
 function saveProjList(projList) {
     var listPath = _path.resolve(__dirname, 'project-list.json'),
-        content = JSON.stringify(projList);
+        content = angular.toJson(projList);
     try {
         _fs.writeFileSync(listPath, content);
     } catch (e) {
@@ -109,7 +109,7 @@ function loadProjPackage(projName, srcDir) {
     } else {
         try {
             var content = _fs.readFileSync(configPath).toString();
-            config = JSON.parse(content);
+            config = angular.fromJson(content);
         } catch (e) {
             console.log('readProjPackage 时发生异常: ', e);
             saveProjPackage(config, srcDir);
@@ -117,13 +117,13 @@ function loadProjPackage(projName, srcDir) {
     }
     var fcOpt = (config && config.fcOpt) || {};
     fcOpt.version = config.version;
-    return fcOpt;
+    return config;
 }
 
 // 保存 package.json
 function saveProjPackage(config, srcDir) {
     var configPath = _path.resolve(srcDir, 'package.json'),
-        content = JSON.stringify(config);
+        content = angular.toJson(config);
     try {
         _fs.writeFileSync(configPath, content);
     } catch (e) {
@@ -144,6 +144,33 @@ function getInitOpt() {
         upOpt: {},
         tasks: []
     };
+}
+
+// 深拷贝对象
+function deepCopyObj(origin, _copy) {
+    var self = arguments.callee,
+        type = Object.prototype.toString.call(origin),
+        copy = origin;
+    switch (type) {
+        case '[object Object]':
+            copy = _copy || {};
+            for (var k in origin) {
+                if (origin.hasOwnProperty(k)) {
+                    copy[k] = self(origin[k]);
+                }
+            }
+            break;
+        case '[object Array]':
+            copy = _copy || [];
+            for (var i = 0, l = origin.length; i < l; i++) {
+                copy[i] = self(origin[i]);
+            }
+            break;
+        case '[object Function]':
+            copy = new Function(origin.toString());
+            break;
+    }
+    return copy;
 }
 
 /********************************************************************************/
@@ -183,7 +210,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         $scope.showConfig = function (ev) {
             $mdDialog.show({
                 controller: function configDialogController($scope, $mdDialog) {
-                    $scope.config = JSON.parse(JSON.stringify(model.config));
+                    $scope.config = angular.fromJson(angular.toJson(model.config));
 
                     $scope.hide = function () {
                         $mdDialog.hide();
@@ -247,11 +274,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
                 return;
             }
 
-            for (var p in proj) {
-                if (proj.hasOwnProperty(p)) {
-                    model.curProj[p] = proj[p];
-                }
-            }
+            deepCopyObj(proj, model.curProj);
 
             var projName = proj.name,
                 srcDir = proj.srcDir,
@@ -260,11 +283,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
 
             model.curProj.version = pkg.version;
 
-            for (var p in opts) {
-                if (opts.hasOwnProperty(p)) {
-                    model.curProj[p] = opts[p];
-                }
-            }
+            deepCopyObj(opts, model.curProj);
         };
 
         // 显示打开项目路径对话框
@@ -320,7 +339,7 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
             }).then(function (tempPath) {
                 //console.log(tempPath);
                 var content = _fs.readFileSync(tempPath).toString(),
-                    opts = JSON.parse(content),
+                    opts = angular.fromJson(content),
                     pkg = loadProjPackage(projName, srcDir);
                 pkg.fcOpt = opts;
                 saveProjPackage(pkg, srcDir);
