@@ -1,4 +1,6 @@
 .idea
 node_modules
-template\*
+app_files/template/
+app_files/config.json
+app_files/project-list.json
 *.css.map

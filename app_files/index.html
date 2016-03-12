@@ -86,7 +86,7 @@
             <md-button class="md-fab float-btn btn-add-proj"
                        ng-click="showOpenDialog($event)">
                 <md-tooltip md-direction="bottom">
-                    添加项目
+                    导入项目
                 </md-tooltip>
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
@@ -319,6 +319,8 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.jsonFormater.js"></script>
 
-<script src="js/scripts.js"></script>
+<script>
+    require('./js/entry.js');
+</script>
 
 </html>
