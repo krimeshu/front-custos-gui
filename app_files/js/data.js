@@ -107,34 +107,32 @@ function saveProjList(projList) {
 
 // 加载 package.json
 function loadProjPackage(projName, srcDir) {
-    var configPath = _path.resolve(srcDir, 'package.json'),
-        config = {
+    var pkgPath = _path.resolve(srcDir, 'package.json'),
+        pkg = {
             projName: projName,
             version: '0.1.0',
             fcOpt: null
         };
-    if (!_fs.existsSync(configPath)) {
-        saveProjPackage(config, srcDir);
+    if (!_fs.existsSync(pkgPath)) {
+        saveProjPackage(pkg, srcDir);
     } else {
         try {
-            var content = _fs.readFileSync(configPath).toString();
-            config = angular.fromJson(content);
+            var content = _fs.readFileSync(pkgPath).toString();
+            pkg = angular.fromJson(content);
         } catch (e) {
             console.log('readProjPackage 时发生异常: ', e);
-            saveProjPackage(config, srcDir);
+            saveProjPackage(pkg, srcDir);
         }
     }
-    var fcOpt = (config && config.fcOpt) || {};
-    fcOpt.version = config.version;
-    return config;
+    return pkg;
 }
 
 // 保存 package.json
-function saveProjPackage(config, srcDir) {
-    var configPath = _path.resolve(srcDir, 'package.json'),
-        content = angular.toJson(config);
+function saveProjPackage(pkg, srcDir) {
+    var pkgPath = _path.resolve(srcDir, 'package.json'),
+        content = angular.toJson(pkg);
     try {
-        _fs.writeFileSync(configPath, content);
+        _fs.writeFileSync(pkgPath, content);
     } catch (e) {
         console.log('saveProjPackage 时发生异常: ', e);
     }

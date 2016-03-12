@@ -21,12 +21,27 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
     };
 
     // 选中某项，更改当前的项目
-    $scope.setCurrent = function (id) {
+    $scope.setCurrent = function (id, ev) {
         //console.log('projName:', projName);
         var proj = Model.getProjById(id);
 
         if (!proj) {
             console.log('ListBoxCtrl.setCurrent 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        if (!_fs.existsSync(proj.srcDir)) {
+            Model.removeProjById(id);
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('.window-box')))
+                    .title('项目配置失效，源目录不存在，已从项目列表中移除')
+                    .textContent('如项目被移动到其他位置，需要继续处理，请重新导入到工具内后继续操作。')
+                    .ariaLabel('项目不存在')
+                    .ok('好的')
+                    .clickOutsideToClose(true)
+                    .targetEvent(ev)
+            );
             return;
         }
 
@@ -37,7 +52,7 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             pkg = Data.loadProjPackage(projName, srcDir),
             opts = pkg.fcOpt || {};
 
-        Model.curProj.version = pkg.version;
+        opts.version = pkg.version;
 
         Utils.deepCopy(opts, Model.curProj);
     };

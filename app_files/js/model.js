@@ -2,7 +2,8 @@
  * Created by krimeshu on 2016/3/12.
  */
 
-var Data = require('./data.js');
+var Data = require('./data.js'),
+    Utils = require('./utils.js');
 
 module.exports = {
     templates: Data.getTemplates(),
@@ -18,5 +19,42 @@ module.exports = {
             }
         });
         return proj;
+    },
+    removeProjById: function (id) {
+        var projList = this.projList,
+            proj = this.getProjById(id),
+            pos = projList.indexOf(proj);
+        if (pos < 0) {
+            console.log('InfoBoxCtrl.removeProj 异常：没有找到需要移除的项目！');
+            return;
+        }
+        projList.splice(pos, 1);
+
+        Data.saveProjList(projList);
+        Utils.deepCopy(Data.getInitOpt(), this.curProj);
+    },
+    updateProj: function (projWithOpts) {
+        var id = projWithOpts.id,
+            projList = this.projList,
+            proj = this.getProjById(id),
+
+            fcOpt = Utils.deepCopy(this.curProj),
+            projName = fcOpt.projName,
+            srcDir = fcOpt.srcDir,
+            version = fcOpt.version,
+            pkg = Data.loadProjPackage(projName, srcDir);
+
+        delete fcOpt.id;
+        delete fcOpt.projName;
+        delete fcOpt.srcDir;
+        delete fcOpt.version;
+
+        proj.projName = projName;
+        proj.srcDir = srcDir;
+        pkg.fcOpt = fcOpt;
+        pkg.version = version;
+
+        Data.saveProjList(projList);
+        Data.saveProjPackage(pkg, srcDir);
     }
 };

@@ -107,8 +107,7 @@
                                    md-direction="up"
                                    ng-class="ctrl.openDialMode">
                     <md-fab-trigger>
-                        <md-button aria-label="打开…" class="md-fab md-primary"
-                                   ng-disabled="curProj.id === null">
+                        <md-button aria-label="打开…" class="md-fab md-primary">
                             <md-tooltip md-direction="bottom">
                                 打开…
                             </md-tooltip>
@@ -136,7 +135,7 @@
                 </md-fab-speed-dial>
                 <md-button class="md-fab btn-delete"
                            ng-disabled="curProj.id === null"
-                           ng-click="removeProj()">
+                           ng-click="removeProj($event)">
                     <md-tooltip md-direction="bottom">
                         删除项目配置
                     </md-tooltip>
@@ -144,7 +143,7 @@
                 </md-button>
                 <md-button class="md-fab md-primary btn-save"
                            ng-disabled="curProj.id === null"
-                           ng-click="saveProj()">
+                           ng-click="saveProj($event)">
                     <md-tooltip md-direction="bottom">
                         保存项目配置
                     </md-tooltip>
