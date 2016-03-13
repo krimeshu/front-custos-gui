@@ -52,33 +52,31 @@ input {
   }
 }
 
+/*---滚动条大小--*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
 /*---滚动条默认显示样式--*/
 ::-webkit-scrollbar-thumb {
-  background-color: #bbb;
+  background-color: rgba(120, 120, 120, .6);
   height: auto;
-  outline-offset: -2px;
-  outline: 2px solid #fff;
+  outline: 0 none;
   -webkit-border-radius: 6px;
-  border: 2px solid #fff;
 }
 
 /*---鼠标点击滚动条显示样式--*/
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #aaa;
+  background-color: rgba(120, 120, 120, .8);
   height: auto;
   -webkit-border-radius: 6px;
 }
 
-/*---滚动条大小--*/
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-/*---滚动框背景样式--*/
-::-webkit-scrollbar-track-piece {
-  background-color: #fff;
-  -webkit-border-radius: 0;
+/*---滚动条背景、空闲背景样式--*/
+::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece {
+  background: transparent;
+  padding: 2px;
 }
 
 .shadow-wrap {
@@ -187,39 +185,20 @@ input {
   color: darken($primaryThemeColor, 25%);
 
   .list-scroll {
-    width: 100%;
+    margin-right: 4px;
+    width: auto;
     height: 100%;
     overflow: auto;
   }
 
-  /*---滚动条默认显示样式--*/
-  ::-webkit-scrollbar-thumb {
-    border: 2px solid lighten($primaryThemeColor, 45%);
-  }
-
-  /*---滚动框背景样式--*/
-  ::-webkit-scrollbar-track-piece {
-    background-color: lighten($primaryThemeColor, 45%);
-  }
-
   .proj-list {
-    //list-style: none;
-
     margin: 0;
     padding: 5px 0;
 
     font-size: 14px;
 
     .proj-item {
-      //padding: 0 20px;
-      //margin: 5px 0;
-
       transition: background 400ms ease;
-
-      &:hover {
-        background-color: lighten($primaryThemeColor, 40%);
-      }
-
       &.current {
         background-color: lighten($primaryThemeColor, 25%);
         color: #fff;
@@ -332,15 +311,4 @@ input {
   position: relative;
   //width: auto;
   height: 200px;
-
-  /*---滚动条默认显示样式--*/
-  ::-webkit-scrollbar-thumb {
-    border: 2px solid #272822;
-  }
-
-  /*---滚动框背景样式--*/
-  ::-webkit-scrollbar-track-piece {
-    background-color: #272822;
-  }
-
 }

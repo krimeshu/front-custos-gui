@@ -77,9 +77,13 @@
             <section class="list-scroll">
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable">
-                    <md-list-item class="proj-item {{isCurrent(item.id)}}" ng-repeat="item in projList"
-                                  ng-click="setCurrent(item.id, $event)" aria-label="{{item.projName}}">
-                        <span ng-bind="item.projName" title="{{item.projName}}"></span>
+                    <md-list-item class="proj-item {{isCurrent(item.id)}}"
+                                  data-id="{{item.id}}"
+                                  ng-repeat="item in projList"
+                                  ng-click="setCurrent(item.id, $event)"
+                                  aria-label="{{item.projName}}">
+                        <span ng-bind="item.projName"
+                              title="{{item.projName}}"></span>
                     </md-list-item>
                 </md-list>
             </section>

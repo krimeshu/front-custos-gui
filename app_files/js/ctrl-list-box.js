@@ -45,8 +45,6 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             return;
         }
 
-        Utils.deepCopy(proj, Model.curProj);
-
         var projName = proj.name,
             srcDir = proj.srcDir,
             pkg = Data.loadProjPackage(projName, srcDir),
@@ -55,6 +53,25 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
         opts.version = pkg.version;
 
         Utils.deepCopy(opts, Model.curProj);
+        Utils.deepCopy(proj, Model.curProj);
+
+        $scope.scrollToItem(id);
+    };
+
+    $scope.scrollToItem = function (id) {
+        var listBox = document.querySelector('.list-box'),
+            listItem = listBox.querySelector('.proj-list .proj-item[data-id="' + id + '"]');
+        if (!listItem) {
+            window.setTimeout(function () {
+                $scope.scrollToItem(id);
+            }, 100);
+            return;
+        }
+        var listBoxRect = listBox.getBoundingClientRect(),
+            listItemRect = listItem.getBoundingClientRect(),
+            alignWithTop = listItemRect.bottom < listBoxRect.top ? true :
+                listItemRect.top > listBoxRect.bottom ? false : null;
+        (alignWithTop !== null) && listItem.scrollIntoView(alignWithTop);
     };
 
     // 显示打开项目路径对话框
@@ -76,15 +93,17 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
         var projName = _path.basename(srcDir),
             pkg = Data.loadProjPackage(projName, srcDir),
             opts = pkg.fcOpt;
+        $scope._importEv = ev;
         if (!opts) {
-            $scope.showTemplates(projName, srcDir, ev);
+            $scope.showTemplates(projName, srcDir);
         } else {
             $scope.addProj(projName, srcDir);
         }
     };
 
     // 显示模板选择对话框
-    $scope.showTemplates = function (projName, srcDir, ev) {
+    $scope.showTemplates = function (projName, srcDir) {
+        var ev = $scope._importEv;
         $mdDialog.show({
             controller: function templatesDialogController($scope, $mdDialog) {
                 $scope.templates = Model.templates;
@@ -109,9 +128,15 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             targetEvent: ev
         }).then(function (tempPath) {
             //console.log(tempPath);
-            var content = _fs.readFileSync(tempPath).toString(),
+            var content = tempPath ?
+                    _fs.readFileSync(tempPath).toString() :
+                    Data.getInitOpt(),
                 opts = angular.fromJson(content),
                 pkg = Data.loadProjPackage(projName, srcDir);
+            delete opts.id;
+            delete opts.projName;
+            delete opts.srcDir;
+            delete opts.version;
             pkg.fcOpt = Utils.deepCopy(opts);
             Data.saveProjPackage(pkg, srcDir);
             $scope.addProj(projName, srcDir);
@@ -120,6 +145,7 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
 
     // 将项目添加到列表中
     $scope.addProj = function (projName, srcDir) {
+        var ev = $scope._importEv;
         var projList = $scope.projList,
             getId = function () {
                 return new Date().getTime() + '_' + Utils.md5(String(Math.random()));
@@ -142,6 +168,8 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             srcDir: srcDir
         });
         Data.saveProjList(projList);
+
+        $scope.setCurrent(id, ev);
     };
 };
 
