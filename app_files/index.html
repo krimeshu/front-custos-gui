@@ -209,12 +209,12 @@
                     </md-tab>
                     <md-tab label="任务列表">
                         <md-content layout-margin>
-                            <div flex="30" ng-repeat="item in allTasks">
-                                <md-checkbox aria-label="{{item}}"
-                                             ng-checked="exists(item, curProj.tasks)"
-                                             ng-click="toggle(item, curProj.tasks)"
-                                             ng-disabled="curProj.id === null">
-                                    <span ng-bind="item"></span>
+                            <div ng-repeat="item in allTasks">
+                                <md-checkbox aria-label="{{item.desc}}"
+                                             ng-checked="item.locked || exists(item.name, curProj.tasks)"
+                                             ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)"
+                                             ng-disabled="item.locked || curProj.id === null">
+                                    <span ng-bind="item.desc + ' (' + item.name + ')'"></span>
                                 </md-checkbox>
                             </div>
                         </md-content>

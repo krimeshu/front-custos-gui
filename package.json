@@ -5,7 +5,8 @@
   "productName": "Front Custos GUI",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "packageWin64": "electron-packager ./app_files FrontCustos --out=~/FrontCustos --icon=./tea-time.ico --platform=win32 --arch=x64 --overwrite=true"
   },
   "repository": {
     "type": "git",

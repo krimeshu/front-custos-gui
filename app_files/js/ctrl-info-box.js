@@ -18,10 +18,7 @@ module.exports = function InfoBoxCtrl($scope, $mdDialog) {
     $scope.curProj = Model.curProj;
 
     // 任务勾选相关
-    $scope.toggle = function (item, list) {
-        if ($scope.curProj.id === null) {
-            return;
-        }
+    $scope.toggle = function (item, list, locked) {
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
         else list.push(item);
@@ -30,15 +27,15 @@ module.exports = function InfoBoxCtrl($scope, $mdDialog) {
         return list.indexOf(item) > -1;
     };
     $scope.allTasks = [
-        //'prepare_build',
-        //'replace_const',
-        'join_include',
-        'sprite_crafter',
-        'prefix_crafter',
-        'allot_link',
-        'optimize_image',
-        //'do_dist',
-        //'do_upload'
+        {name: 'prepare_build', desc: '构建预准备', locked: true},
+        {name: 'replace_const', desc: '替换定义的常量'},
+        {name: 'join_include', desc: '合并包含的文件'},
+        {name: 'sprite_crafter', desc: '自动合并雪碧图'},
+        {name: 'prefix_crafter', desc: '添加CSS3样式前缀'},
+        {name: 'allot_link', desc: '分发关联文件'},
+        {name: 'optimize_image', desc: '压缩图片'},
+        {name: 'do_dist', desc: '输出文件', locked: true},
+        {name: 'do_upload', desc: '上传文件', locked: true}
     ];
 
     // 编辑器相关
