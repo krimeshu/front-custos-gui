@@ -6,9 +6,15 @@ var shell = require('electron').remote.shell;
 
 var _path = require('path');
 
-var Data = require('./data.js'),
+var Logger = require('./logger.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    FrontCustos = require('../front-custos'),
+
+    gulp = require('../front-custos/node_modules/gulp');
+
+FrontCustos.takeOverConsole(Logger);
+FrontCustos.registerTasks(gulp);
 
 module.exports = function InfoBoxCtrl($scope, $mdDialog) {
     var self = this;
@@ -73,11 +79,34 @@ module.exports = function InfoBoxCtrl($scope, $mdDialog) {
         $mdDialog.show(confirm).then(function () {
             Model.removeProjById($scope.curProj.id);
         });
-
     };
 
     // 保存项目配置
     $scope.saveProj = function () {
         Model.updateProj($scope.curProj);
+    };
+
+    // 本地构建
+    $scope.buildLocally = function () {
+        var fcOpt = Model.curProj,
+            pos = fcOpt.tasks.indexOf('do_upload');
+        if (pos >= 0) {
+            fcOpt.tasks.splice(pos, 1);
+        }
+        doBuild(fcOpt);
+    };
+
+    // 构建上传
+    $scope.buildUpload = function () {
+        var fcOpt = Model.curProj,
+            pos = fcOpt.tasks.indexOf('do_upload');
+        if (pos < 0) {
+            fcOpt.tasks.push('do_upload');
+        }
+        doBuild(fcOpt);
+    };
+
+    var doBuild = function (fcOpt) {
+        FrontCustos.process(fcOpt);
     };
 };

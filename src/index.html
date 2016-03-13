@@ -188,10 +188,12 @@
 
                             <div layout-gt-sm="row">
                                 <md-button class="md-raised" flex="20"
-                                           ng-disabled="curProj.id === null">本地构建
+                                           ng-disabled="curProj.id === null"
+                                           ng-click="buildLocally()">本地构建
                                 </md-button>
                                 <md-button class="md-raised md-primary" flex="20"
-                                           ng-disabled="curProj.id === null">构建上传
+                                           ng-disabled="curProj.id === null"
+                                           ng-click="buildUpload()">构建上传
                                 </md-button>
                                 <div flex></div>
                                 <md-switch ng-model="curProj.upOpt.delta" flex="30"
@@ -315,14 +317,11 @@
             </form>
         </md-content>
 
-        <div class="log-box">
+        <div class="log-box" ng-controller="LogBoxCtrl as ctrl">
             <ul class="log-list">
-                <li class="inf">
-                    <script>document.write(require('path').resolve('./'));</script>
-                </li>
-                <li>
-                    这是一条普通的日志。
-                </li>
+                <li ng-repeat="item in logList"
+                    ng-class="item.type"
+                    ng-bind-html="item.text | to_trusted"></li>
             </ul>
         </div>
     </main>

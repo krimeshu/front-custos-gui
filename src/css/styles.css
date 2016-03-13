@@ -184,10 +184,14 @@ input {
   word-break: break-all;
   font-size: 13px;
   font-family: Consolas, custom-font, sans-serif; }
-  .log-box .err {
-    color: #a70334; }
-  .log-box .inf {
+  .log-box .literal {
+    color: #cacaca; }
+  .log-box .info {
     color: #74aa04; }
+  .log-box .warn {
+    color: #0383f5; }
+  .log-box .error {
+    color: #a70334; }
   .log-box .log-list {
     list-style: none;
     padding: 8px 10px;

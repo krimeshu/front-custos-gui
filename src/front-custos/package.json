@@ -1,0 +1,33 @@
+{
+  "name": "front-custos",
+  "version": "0.2.10",
+  "description": "Common front end gulp task collections.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "author": "krimeshu",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^6.3.3",
+    "cheerio": "^0.20.0",
+    "del": "^2.2.0",
+    "glob": "^7.0.0",
+    "gulp-cache": "^0.4.2",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-plumber": "^1.1.0",
+    "imagemin-pngquant": "^4.2.2",
+    "postcss": "^5.0.16",
+    "request": "^2.69.0",
+    "run-sequence": "^1.1.5",
+    "spritesmith": "^3.1.0",
+    "through2": "^2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Moonshell/front-custos.git"
+  }
+}

@@ -1,0 +1,15 @@
+.icon-1, .icon-2 {
+    display: block;
+    width: 600px;
+    height: 600px;
+}
+
+.icon-1 {
+    background: url("../images/icon-1.png#sc");
+    background-size: 300px 300px;
+}
+
+.icon-2 {
+    background: url("../images/icon-2.png#sc");
+    background-size: 300px 300px;
+}

@@ -1,3 +1,7 @@
+(function(){
+    var define = defineInAce;
+
+
 define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
 "use strict";
 
@@ -1138,3 +1142,5 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+
+})();

@@ -288,12 +288,20 @@ input {
   background-color: rgba(39, 40, 34, .95);
   color: #cacaca;
 
-  .err {
-    color: #a70334;
+  .literal {
+    color: #cacaca;
   }
 
-  .inf {
+  .info {
     color: #74aa04;
+  }
+
+  .warn {
+    color: #0383f5;
+  }
+
+  .error {
+    color: #a70334;
   }
 
   word-break: break-all;

@@ -5,3 +5,12 @@ src/template
 src/config.json
 src/project-list.json
 src/*.css.map
+
+src/front-custos/.idea
+src/front-custos/node_modules
+src/front-custos/dist
+src/front-custos/bundle.bat
+src/front-custos/7z.dll
+src/front-custos/7z.exe
+src/front-custos/test2.js
+src/front-custos/FC_UploadHistory

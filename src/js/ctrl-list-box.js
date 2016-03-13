@@ -4,7 +4,8 @@
 var mainWindow = require('electron').remote.getCurrentWindow(),
     dialog = require('electron').remote.require('dialog');
 
-var Data = require('./data.js'),
+var Logger = require('./logger.js'),
+    Data = require('./data.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js');
 
@@ -49,6 +50,8 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             srcDir = proj.srcDir,
             pkg = Data.loadProjPackage(projName, srcDir),
             opts = pkg.fcOpt || {};
+
+        Logger.info('切换到项目：%c%s (%s)', 'color: white;', projName, srcDir);
 
         opts.version = pkg.version;
 
