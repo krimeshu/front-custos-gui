@@ -9,7 +9,7 @@ var Data = require('./data.js'),
     Utils = require('./utils.js');
 
 module.exports = function HeaderMenuCtrl($scope, $mdDialog) {
-    $scope.version = require(_path.resolve('./package.json')).version;
+    $scope.version = appPackageFile.version;
 
     var originatorEv;
 

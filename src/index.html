@@ -6,20 +6,13 @@
     <link rel="stylesheet" href="font/custom-font.css"/>
     <link rel="stylesheet" href="font/material-icons.css"/>
 
-    <link rel="stylesheet" href="../node_modules/angular-material/angular-material.min.css"/>
+    <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css"/>
 
     <link rel="stylesheet" href="css/jquery.jsonFormater.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body class="shadow-wrap" style="background: transparent;">
 <script>
-    //    const version = require("../package.json").version;
-    const electron = require('electron');
-    const remote = electron.remote;
-    //    const shell = electron.shell;
-
-    var execPath = remote.process.execPath;
-
     document.ondragover = document.ondrop = function (e) {
         e.preventDefault();
         return false;
@@ -325,7 +318,7 @@
         <div class="log-box">
             <ul class="log-list">
                 <li class="inf">
-                    <script>document.write(require('path').dirname(execPath));</script>
+                    <script>document.write(require('path').resolve('./'));</script>
                 </li>
                 <li>
                     这是一条普通的日志。
@@ -337,12 +330,12 @@
 
 </body>
 
-<script src="../node_modules/angular/angular.min.js"></script>
-<script src="../node_modules/angular-animate/angular-animate.min.js"></script>
-<script src="../node_modules/angular-route/angular-route.min.js"></script>
-<script src="../node_modules/angular-aria/angular-aria.min.js"></script>
-<script src="../node_modules/angular-messages/angular-messages.min.js"></script>
-<script src="../node_modules/angular-material/angular-material.min.js"></script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="node_modules/angular-route/angular-route.min.js"></script>
+<script src="node_modules/angular-aria/angular-aria.min.js"></script>
+<script src="node_modules/angular-messages/angular-messages.min.js"></script>
+<script src="node_modules/angular-material/angular-material.min.js"></script>
 
 <script src="js/ace/ace.js"></script>
 <script src="js/ace/theme-monokai.js"></script>
@@ -353,7 +346,13 @@
 <script src="js/jquery.jsonFormater.js"></script>
 
 <script>
-    require('./js/entry.js');
+    var path = require('path');
+    var pageRequire = function (__path) {
+        return require(path.resolve(__dirname, __path));
+    };
+    var appPackageFile = pageRequire('./package.json');
+
+    pageRequire('./js/entry.js');
 
     var windowCtrl = {
         open: function () {

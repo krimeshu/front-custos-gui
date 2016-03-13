@@ -1,7 +1,7 @@
 .idea
 dist
-node_modules
-app_files/template
-app_files/config.json
-app_files/project-list.json
-*.css.map
+src/node_modules
+src/template
+src/config.json
+src/project-list.json
+src/*.css.map
