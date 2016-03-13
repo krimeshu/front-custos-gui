@@ -83,7 +83,9 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             ]
         }, function (files) {
             if (files && files.length) {
-                $scope.importProj(files[0], ev);
+                $scope.$apply(function () {
+                    $scope.importProj(files[0], ev);
+                });
             }
         });
     };
@@ -146,6 +148,7 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
     // 将项目添加到列表中
     $scope.addProj = function (projName, srcDir) {
         var ev = $scope._importEv;
+
         var projList = $scope.projList,
             getId = function () {
                 return new Date().getTime() + '_' + Utils.md5(String(Math.random()));
