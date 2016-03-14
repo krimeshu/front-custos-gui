@@ -317,12 +317,8 @@
             </form>
         </md-content>
 
-        <div class="log-box" ng-controller="LogBoxCtrl as ctrl">
-            <ul class="log-list">
-                <li ng-repeat="item in logList"
-                    ng-class="item.type"
-                    ng-bind-html="item.text | to_trusted"></li>
-            </ul>
+        <div class="log-box">
+            <ul class="log-list"></ul>
         </div>
     </main>
 </div>

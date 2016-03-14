@@ -16,7 +16,7 @@ var Logger = require('./logger.js'),
 FrontCustos.takeOverConsole(Logger);
 FrontCustos.registerTasks(gulp);
 
-module.exports = function InfoBoxCtrl($scope, $mdDialog) {
+module.exports = ['$scope', '$mdDialog', function InfoBoxCtrl($scope, $mdDialog) {
     var self = this;
     self.isOpenExpanded = false;
     self.openDialMode = 'md-fling';
@@ -107,6 +107,7 @@ module.exports = function InfoBoxCtrl($scope, $mdDialog) {
     };
 
     var doBuild = function (fcOpt) {
+        FrontCustos.config(Model.config);
         FrontCustos.process(fcOpt);
     };
-};
+}];

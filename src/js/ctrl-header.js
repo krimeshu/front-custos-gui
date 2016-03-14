@@ -8,7 +8,7 @@ var Data = require('./data.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js');
 
-module.exports = function HeaderMenuCtrl($scope, $mdDialog) {
+module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDialog) {
     $scope.version = appPackageFile.version;
 
     var originatorEv;
@@ -68,4 +68,4 @@ module.exports = function HeaderMenuCtrl($scope, $mdDialog) {
                 .targetEvent(ev)
         );
     };
-};
+}];

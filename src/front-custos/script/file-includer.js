@@ -95,6 +95,7 @@ FileIncluder.prototype = {
                     isDir = file.isDirectory(),
                     isText = !isDir && Utils.isText(filePath),
                     content = isText ? String(file.contents) : file.contents,
+                    newContent = content,
                     cache = self.resultCache,
                     reg = self._getRegExp(),
                     match;
@@ -117,7 +118,7 @@ FileIncluder.prototype = {
                                 .replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1');
                         } catch (ex) {
                             self.onError && self.onError(ex);
-                            return;
+                            continue;
                         }
                     }
                     if (!cache.hasOwnProperty(_file)) {
@@ -158,15 +159,15 @@ FileIncluder.prototype = {
                             }
                         }
                     }
-                    content = content.replace(_str, _content);
+                    newContent = content.replace(_str, _content);
                 }
 
-                cache[filePath] = content;
+                cache[filePath] = newContent;
                 file.contents = isText ? new Buffer(content) : content;
 
                 return cb(null, file);
             }
-        );
+        ).resume();
     }
 };
 

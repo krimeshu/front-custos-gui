@@ -12,7 +12,7 @@ var Logger = require('./logger.js'),
 var _fs = require('fs'),
     _path = require('path');
 
-module.exports = function ListBoxCtrl($scope, $mdDialog) {
+module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog) {
     $scope.curProj = Model.curProj;
     $scope.projList = Model.projList;
 
@@ -46,7 +46,7 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
             return;
         }
 
-        var projName = proj.name,
+        var projName = proj.projName,
             srcDir = proj.srcDir,
             pkg = Data.loadProjPackage(projName, srcDir),
             opts = pkg.fcOpt || {};
@@ -177,6 +177,6 @@ module.exports = function ListBoxCtrl($scope, $mdDialog) {
 
         $scope.setCurrent(id, ev);
     };
-};
+}];
 
 

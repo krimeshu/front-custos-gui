@@ -3,42 +3,46 @@
  */
 
 module.exports = {
-    logList: [],
+    logList: document.querySelector('.log-box .log-list'),
     clear: function () {
         var logList = this.logList;
-        logList.length > 0 && logList.splice(0, logList.length);
+        logList.html();
     },
     log: function () {
-        var logList = this.logList;
         var text = this._format(arguments);
-        logList.push({
+        this._append({
             text: text,
             type: 'literal'
         });
     },
     info: function () {
-        var logList = this.logList;
         var text = this._format(arguments);
-        logList.push({
+        this._append({
             text: text,
             type: 'info'
         });
     },
     warn: function () {
-        var logList = this.logList;
         var text = this._format(arguments);
-        logList.push({
+        this._append({
             text: text,
             type: 'warn'
         });
     },
     error: function () {
-        var logList = this.logList;
         var text = this._format(arguments);
-        logList.push({
+        this._append({
             text: text,
             type: 'error'
         });
+    },
+    _append: function (item) {
+        var logList = this.logList;
+        var li = document.createElement('li');
+        li.innerHTML = item.text;
+        li.className = item.type;
+        logList.appendChild(li);
+        li.scrollIntoView();
     },
     _format: function (args) {
         var formatStr = args[0];
