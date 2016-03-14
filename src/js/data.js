@@ -19,7 +19,7 @@ module.exports = {
 // 读取模板列表
 function getTemplates() {
     var templates = [{name: '空白模板', path: null}],
-        templateDir = _path.resolve(__dirname, '../template');
+        templateDir = _path.resolve(__dirname, '../fc-template');
     if (!_fs.existsSync(templateDir)) {
         _fs.mkdirSync(templateDir, 511); // 511:dec = 0777:hex
     }
@@ -34,7 +34,7 @@ function getTemplates() {
 
 // 加载默认配置
 function loadConfig() {
-    var configPath = _path.resolve(__dirname, '../config.json'),
+    var configPath = _path.resolve(__dirname, '../fc-config.json'),
         config = {
             "outputDir": "D:\\FC_Output",
             "htmlEnhanced": false,
@@ -49,7 +49,8 @@ function loadConfig() {
                 "audio": "audio",
                 "other": "raw"
             },
-            "concurrentLimit": 1
+            "concurrentLimit": 1,
+            "lastWorkingId": null
         };
     if (!_fs.existsSync(configPath)) {
         saveConfig(config);
@@ -67,7 +68,7 @@ function loadConfig() {
 
 // 保存默认配置
 function saveConfig(config) {
-    var configPath = _path.resolve(__dirname, '../config.json'),
+    var configPath = _path.resolve(__dirname, '../fc-config.json'),
         content = angular.toJson(config);
     try {
         _fs.writeFileSync(configPath, content);
@@ -78,7 +79,7 @@ function saveConfig(config) {
 
 // 加载项目列表
 function loadProjList() {
-    var listPath = _path.resolve(__dirname, '../project-list.json'),
+    var listPath = _path.resolve(__dirname, '../fc-project-list.json'),
         list = [];
     if (!_fs.existsSync(listPath)) {
         saveProjList(list);
@@ -96,7 +97,7 @@ function loadProjList() {
 
 // 保存项目列表
 function saveProjList(projList) {
-    var listPath = _path.resolve(__dirname, '../project-list.json'),
+    var listPath = _path.resolve(__dirname, '../fc-project-list.json'),
         content = angular.toJson(projList);
     try {
         _fs.writeFileSync(listPath, content);

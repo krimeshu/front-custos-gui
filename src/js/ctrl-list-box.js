@@ -16,6 +16,10 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
     $scope.curProj = Model.curProj;
     $scope.projList = Model.projList;
 
+    // 是否调试版
+    var isDebug = _path.basename(_path.resolve('./')) === 'src';
+    $scope.isDebug = isDebug;
+
     // 判断是否当前选中的项目
     $scope.isCurrent = function (id) {
         return id === $scope.curProj.id ? 'current' : '';
@@ -51,12 +55,18 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             pkg = Data.loadProjPackage(projName, srcDir),
             opts = pkg.fcOpt || {};
 
-        Logger.info('切换到项目：%c%s (%s)', 'color: white;', projName, srcDir);
+        Logger.log('<hr/>');
+        Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
+        Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', srcDir);
 
         opts.version = pkg.version;
 
         Utils.deepCopy(opts, Model.curProj);
         Utils.deepCopy(proj, Model.curProj);
+
+        // 记录上次操作的 Id
+        Model.config.lastWorkingId = id;
+        Data.saveConfig(Model.config);
 
         $scope.scrollToItem(id);
     };
@@ -177,6 +187,9 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         $scope.setCurrent(id, ev);
     };
+
+    var lastWorkingId = Model.config.lastWorkingId;
+    lastWorkingId && $scope.setCurrent(lastWorkingId);
 }];
 
 

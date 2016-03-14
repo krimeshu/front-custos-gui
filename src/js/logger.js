@@ -46,7 +46,7 @@ module.exports = {
     },
     _format: function (args) {
         var formatStr = args[0];
-        if (typeof(formatStr) != 'string') {
+        if (typeof(formatStr) !== 'string') {
             formatStr = JSON.stringify(formatStr);
         }
         var res = [];
@@ -98,8 +98,10 @@ module.exports = {
                 res.push(f.substr(1));
             }
         }
-        for (var len = args.length; offset < len; offset++) {
-            res.push(' ' + JSON.stringify(args[offset]));
+        for (var len = args.length, restArg; offset < len; offset++) {
+            restArg = args[offset];
+            res.push(' ');
+            res.push(typeof restArg === 'string' ? restArg : JSON.stringify(restArg));
         }
         res = '<span>' + res.join('') + '</span>';
         res = res.replace(/\n/g, '<br/>');

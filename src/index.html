@@ -88,6 +88,7 @@
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
             <md-button class="md-fab md-primary float-btn btn-reload"
+                       ng-show="isDebug"
                        onclick="window.location.reload();">
                 <md-tooltip md-direction="bottom">
                     刷新窗口
@@ -179,9 +180,9 @@
                                     </div>
                                 </md-input-container>
 
-                                <md-button class="md-raised" flex="15"
-                                           ng-disabled="curProj.id === null">选择
-                                </md-button>
+                                <!--<md-button class="md-raised" flex="15"-->
+                                           <!--ng-disabled="curProj.id === null">选择-->
+                                <!--</md-button>-->
                             </div>
 
                             <!--<h4>开始操作</h4>-->
@@ -341,9 +342,9 @@
 <script src="js/jquery.jsonFormater.js"></script>
 
 <script>
-    var path = require('path');
+    var _path = require('path');
     var pageRequire = function (__path) {
-        return require(path.resolve(__dirname, __path));
+        return require(_path.resolve(__dirname, __path));
     };
     var appPackageFile = pageRequire('./package.json');
 

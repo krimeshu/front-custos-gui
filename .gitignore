@@ -1,9 +1,9 @@
 .idea
 dist
 src/node_modules
-src/template
-src/config.json
-src/project-list.json
+src/fc-template
+src/fc-config.json
+src/fc-project-list.json
 src/*.css.map
 
 src/front-custos/.idea

@@ -189,7 +189,7 @@ input {
   .log-box .info {
     color: #74aa04; }
   .log-box .warn {
-    color: #0383f5; }
+    color: #cccc81; }
   .log-box .error {
     color: #a70334; }
   .log-box .log-list {
