@@ -10,7 +10,10 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
     .config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
             .primaryPalette('blue-grey')
-            .accentPalette('red');
+            .accentPalette('red')
+            .backgroundPalette('grey', {
+                'default': '50'
+            });
     })
     .filter('to_trusted', ['$sce', function ($sce) {
         return function (text) {

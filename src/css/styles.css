@@ -12,6 +12,9 @@ input {
   -webkit-user-select: text;
   user-select: text; }
 
+md-card {
+  background-color: #FFF; }
+
 .list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-save, .info-box .btn-delete, .info-box .btn-open {
   position: absolute;
   z-index: 5;
@@ -153,14 +156,13 @@ input {
   overflow: auto;
   box-sizing: border-box;
   color: #272822;
-  background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
+  .info-box md-button, .info-box button {
+    height: 48px; }
   .info-box form.info-form, .info-box md-tabs {
     height: 100%; }
   .info-box .indent {
     padding-left: 24px; }
-  .info-box md-button, .info-box button {
-    height: 48px; }
   .info-box .btn-save {
     bottom: 20px;
     right: 10px; }

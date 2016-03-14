@@ -150,36 +150,38 @@
                 <md-tabs md-border-bottom>
                     <md-tab label="基本信息">
                         <md-content layout-margin>
-                            <div layout="column">
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>名称</label>
-                                    <input ng-model="curProj.projName" name="projName" required
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="为将要处理的项目取个好记的名字"/>
-                                    <div ng-messages="curProjForm.projName.$error">
-                                        <div ng-message="required">请输入项目名称</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>版本</label>
-                                    <input ng-model="curProj.version" name="version"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="项目目前的版本号"/>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>位置</label>
-                                    <input ng-model="curProj.srcDir" name="srcDir" required readonly
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="这个项目所在的本地目录"/>
-                                    <div ng-messages="curProjForm.srcDir.$error">
-                                        <div ng-message="required">请选择项目所在位置</div>
-                                    </div>
-                                </md-input-container>
+                            <md-card>
+                                <md-card-content layout="column">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>名称</label>
+                                        <input ng-model="curProj.projName" name="projName" required
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="为将要处理的项目取个好记的名字"/>
+                                        <div ng-messages="curProjForm.projName.$error">
+                                            <div ng-message="required">请输入项目名称</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>版本</label>
+                                        <input ng-model="curProj.version" name="version"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="项目目前的版本号"/>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>位置</label>
+                                        <input ng-model="curProj.srcDir" name="srcDir" required readonly
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="这个项目所在的本地目录"/>
+                                        <div ng-messages="curProjForm.srcDir.$error">
+                                            <div ng-message="required">请选择项目所在位置</div>
+                                        </div>
+                                    </md-input-container>
 
-                                <!--<md-button class="md-raised" flex="15"-->
-                                           <!--ng-disabled="curProj.id === null">选择-->
-                                <!--</md-button>-->
-                            </div>
+                                    <!--<md-button class="md-raised" flex="15"-->
+                                    <!--ng-disabled="curProj.id === null">选择-->
+                                    <!--</md-button>-->
+                                </md-card-content>
+                            </md-card>
 
                             <!--<h4>开始操作</h4>-->
 
@@ -201,113 +203,131 @@
                     </md-tab>
                     <md-tab label="任务列表">
                         <md-content layout-margin>
-                            <div ng-repeat="item in allTasks">
-                                <md-checkbox aria-label="{{item.desc}}"
-                                             ng-checked="item.locked || exists(item.name, curProj.tasks)"
-                                             ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)"
-                                             ng-disabled="item.locked || curProj.id === null">
-                                    <span ng-bind="item.desc + ' (' + item.name + ')'"></span>
-                                </md-checkbox>
-                            </div>
+                            <md-card>
+                                <md-list>
+                                    <md-list-item ng-repeat="item in allTasks"
+                                                  ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)">
+                                        <md-checkbox aria-label="{{item.desc}}"
+                                                     ng-checked="item.locked || exists(item.name, curProj.tasks)"
+                                                     ng-disabled="item.locked || curProj.id === null"></md-checkbox>
+                                        <p ng-bind="item.desc + ' (' + item.name + ')'"></p>
+                                    </md-list-item>
+                                </md-list>
+                            </md-card>
                         </md-content>
                     </md-tab>
                     <md-tab label="任务配置">
                         <md-content layout-margin>
-                            <h4>雪碧图合成</h4>
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">雪碧图合成</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>像素密度</label>
+                                        <input ng-model="curProj.scOpt.useRatio" name="scRatio"
+                                               ng-disabled="curProj.id === null"
+                                               ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                               required placeholder="1=普通，大于1=Retina"/>
+                                        <div ng-messages="curProjForm.scRatio.$error">
+                                            <div ng-message="required">请输入一个普通数值</div>
+                                            <div ng-message="pattern">请输入一个有效的数值</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Rem像素比</label>
+                                        <input ng-model="curProj.scOpt.useRem" name="scRem"
+                                               ng-disabled="curProj.id === null"
+                                               ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                               required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
+                                        <div ng-messages="curProjForm.scRem.$error">
+                                            <div ng-message="required">请输入一个普通数值</div>
+                                            <div ng-message="pattern">请输入一个有效的数值</div>
+                                        </div>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>输出目录</label>
+                                        <input ng-model="curProj.scOpt.outputDir" name="scOutput"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="保存合并后的雪碧图的目录，相对于项目根目录的路径"/>
+                                    </md-input-container>
+                                </md-card-content>
+                            </md-card>
 
-                            <div layout="column">
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>像素密度</label>
-                                    <input ng-model="curProj.scOpt.useRatio" name="scRatio"
-                                           ng-disabled="curProj.id === null"
-                                           ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                           required placeholder="1=普通，大于1=Retina"/>
-                                    <div ng-messages="curProjForm.scRatio.$error">
-                                        <div ng-message="required">请输入一个普通数值</div>
-                                        <div ng-message="pattern">请输入一个有效的数值</div>
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">样式前缀</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>目标浏览器范围</label>
+                                        <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="参数形式可参考 autoprefixer 相关文档"/>
+                                        <div ng-messages="curProjForm.pcBrowsers.$error">
+                                            <div ng-message="required">请输入目标浏览器范围</div>
+                                        </div>
+                                    </md-input-container>
+                                </md-card-content>
+                            </md-card>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">文件分发</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <div layout="row">
+                                        <md-switch ng-model="curProj.alOpt.flatten" flex="50"
+                                                   ng-disabled="curProj.id === null">简化目录结构
+                                        </md-switch>
+                                        <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
+                                                   ng-disabled="curProj.id === null">链接追加指纹参数
+                                        </md-switch>
                                     </div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>Rem像素比</label>
-                                    <input ng-model="curProj.scOpt.useRem" name="scRem"
-                                           ng-disabled="curProj.id === null"
-                                           ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                           required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
-                                    <div ng-messages="curProjForm.scRem.$error">
-                                        <div ng-message="required">请输入一个普通数值</div>
-                                        <div ng-message="pattern">请输入一个有效的数值</div>
-                                    </div>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>输出目录</label>
-                                    <input ng-model="curProj.scOpt.outputDir" name="scOutput"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="保存合并后的雪碧图的目录，相对于项目根目录的路径"/>
-                                </md-input-container>
-                            </div>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>页面文件分发目录</label>
+                                        <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="html, php 等页面文件分发到此目录下"/>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>静态文件分发目录</label>
+                                        <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="非页面的静态文件分发到此目录下"/>
+                                    </md-input-container>
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>静态文件链接前缀</label>
+                                        <input ng-model="curProj.alOpt.staticUrlHead" name="alStaticUrlHead"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
+                                    </md-input-container>
+                                </md-card-content>
+                            </md-card>
 
-                            <!------------------------------------------------------------------------------------------>
-
-                            <h4>样式前缀</h4>
-
-                            <div layout="column">
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>目标浏览器范围</label>
-                                    <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="参数形式可参考 autoprefixer 相关文档"/>
-                                    <div ng-messages="curProjForm.pcBrowsers.$error">
-                                        <div ng-message="required">请输入目标浏览器范围</div>
-                                    </div>
-                                </md-input-container>
-                            </div>
-
-                            <!------------------------------------------------------------------------------------------>
-
-                            <h4>文件分发</h4>
-
-                            <div layout="column">
-                                <div layout="row">
-                                    <md-switch ng-model="curProj.alOpt.flatten" flex="50"
-                                               ng-disabled="curProj.id === null">简化目录结构
-                                    </md-switch>
-                                    <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
-                                               ng-disabled="curProj.id === null">链接追加指纹参数
-                                    </md-switch>
-                                </div>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>页面文件分发目录</label>
-                                    <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="html, php 等页面文件分发到此目录下"/>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>静态文件分发目录</label>
-                                    <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="非页面的静态文件分发到此目录下"/>
-                                </md-input-container>
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>静态文件链接前缀</label>
-                                    <input ng-model="curProj.alOpt.staticUrlHead" name="alStaticUrlHead"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
-                                </md-input-container>
-                            </div>
-
-                            <!------------------------------------------------------------------------------------------>
-
-                            <h4>上传表单与页面</h4>
-                            <div class="editor" ng-model="curProj.upOpt.form" flex-grow
-                                 ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
-                            <div layout="column">
-                                <md-input-container class="md-block" flex-gt-sm>
-                                    <label>上传页面</label>
-                                    <input ng-model="curProj.upOpt.page" name="uploadPage"
-                                           ng-disabled="curProj.id === null"
-                                           placeholder="处理项目文件上传的页面地址"/>
-                                </md-input-container>
-                            </div>
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">上传表单与页面</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <div class="editor" ng-model="curProj.upOpt.form" flex-grow
+                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
+                                <md-card-content layout="column">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>上传页面</label>
+                                        <input ng-model="curProj.upOpt.page" name="uploadPage"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="处理项目文件上传的页面地址"/>
+                                    </md-input-container>
+                                </md-card-content>
+                            </md-card>
                         </md-content>
                     </md-tab>
                 </md-tabs>

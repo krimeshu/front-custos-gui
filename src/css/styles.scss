@@ -41,6 +41,10 @@ input {
   user-select: text;
 }
 
+md-card {
+  background-color: #FFF;
+}
+
 %float-btn {
   position: absolute;
   z-index: 5;
@@ -242,8 +246,11 @@ input {
   box-sizing: border-box;
   //padding: 10px 20px;
   color: #272822;
-  background-color: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+
+  md-button, button {
+    height: 48px;
+  }
 
   form.info-form, md-tabs {
     height: 100%;
@@ -251,10 +258,6 @@ input {
 
   .indent {
     padding-left: 24px;
-  }
-
-  md-button, button {
-    height: 48px;
   }
 
   .btn-save {

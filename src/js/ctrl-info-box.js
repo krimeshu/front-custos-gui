@@ -16,7 +16,7 @@ var Logger = require('./logger.js'),
 FrontCustos.takeOverConsole(Logger);
 FrontCustos.registerTasks(gulp);
 
-module.exports = ['$scope', '$mdDialog', function InfoBoxCtrl($scope, $mdDialog) {
+module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
     var self = this;
     self.isOpenExpanded = false;
     self.openDialMode = 'md-fling';
@@ -77,13 +77,33 @@ module.exports = ['$scope', '$mdDialog', function InfoBoxCtrl($scope, $mdDialog)
             .ok('确定')
             .cancel('取消');
         $mdDialog.show(confirm).then(function () {
-            Model.removeProjById($scope.curProj.id);
+            var res = Model.removeProjById($scope.curProj.id),
+                projName = $scope.curProj.projName,
+                msg = res ?
+                '项目 ' + projName + ' 已被移除' :
+                '项目 ' + projName + ' 移除失败，请稍后重试';
+            $scope.toastMsg(msg);
         });
     };
 
     // 保存项目配置
     $scope.saveProj = function () {
-        Model.updateProj($scope.curProj);
+        var res = Model.updateProj($scope.curProj),
+            projName = $scope.curProj.projName,
+            msg = res ?
+            '项目 ' + projName + ' 配置保存完毕' :
+            '项目 ' + projName + ' 配置保存失败，请稍后重试';
+        $scope.toastMsg(msg);
+    };
+
+    $scope.toastMsg = function (msg) {
+        $mdToast.show(
+            $mdToast.simple()
+                .parent(angular.element(document.querySelector('.window-box .info-box')))
+                .textContent(msg)
+                .position('top right')
+                .hideDelay(2000)
+        );
     };
 
     // 本地构建
@@ -107,7 +127,12 @@ module.exports = ['$scope', '$mdDialog', function InfoBoxCtrl($scope, $mdDialog)
     };
 
     var doBuild = function (fcOpt) {
+        $scope.toastMsg('任务开始……');
         FrontCustos.config(Model.config);
-        FrontCustos.process(Utils.deepCopy(fcOpt));
+        FrontCustos.process(Utils.deepCopy(fcOpt), function () {
+            $scope.$apply(function(){
+                $scope.toastMsg('任务执行完毕');
+            });
+        });
     };
 }];
