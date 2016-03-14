@@ -1,7 +1,8 @@
 {
   "scOpt": {
     "useRatio": 1,
-    "useRem": 1
+    "useRem": 1,
+    "outputDir": "images"
   },
   "pcOpt": {
     "browsers": "> 5%"

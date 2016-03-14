@@ -108,6 +108,6 @@ module.exports = ['$scope', '$mdDialog', function InfoBoxCtrl($scope, $mdDialog)
 
     var doBuild = function (fcOpt) {
         FrontCustos.config(Model.config);
-        FrontCustos.process(fcOpt);
+        FrontCustos.process(Utils.deepCopy(fcOpt));
     };
 }];

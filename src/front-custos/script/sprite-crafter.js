@@ -5,7 +5,7 @@
 var _spritesmith = require('spritesmith'),
     _fs = require('fs'),
     _path = require('path'),
-    
+
     Utils = require('./utils.js'),
     FileCache = require('./file-cache.js');
 
@@ -26,7 +26,8 @@ function process(opt, cb) {
         files = opt.files || [],
         fileCache = new FileCache(),
         useRatio = opt.useRatio || 2,
-        useRem = opt.useRem || 10;
+        useRem = opt.useRem || 10,
+        outputDir = opt.outputDir || '';
 
     var cssFiles = files,
         maps = {};
@@ -67,7 +68,7 @@ function process(opt, cb) {
 
     for (var spriteImageName in spriteImages) {
         var spriteImage = spriteImages[spriteImageName],
-            distDir = _path.resolve(src, 'public/images'),
+            distDir = _path.resolve(src, outputDir),
             distImg = _path.resolve(distDir, 'sc_img_' + spriteImageName + '.png');
         joinImages({
             srcImg: spriteImage,
@@ -142,6 +143,7 @@ function joinImages(opt, cb) {
         var map = cacheMap[mapFile],
             stamp = map['stamp'],
             data = map['data'],
+            imgBuffer = map['imgBuffer'],
             visited = {},
             changed = false;
 
@@ -166,9 +168,10 @@ function joinImages(opt, cb) {
                 break;
             }
         }
-        if (!changed) {
+        if (!changed && imgBuffer) {
             res = data;
             res.noChange = true;
+            fileCache.set(distImg, imgBuffer);
             cb(res);
             return;
         }
@@ -202,7 +205,8 @@ function joinImages(opt, cb) {
         }
         cacheMap[mapFile] = {
             stamp: stamp,
-            data: data
+            data: data,
+            imgBuffer: img
         };
 
         cb(res);

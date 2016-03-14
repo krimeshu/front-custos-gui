@@ -94,8 +94,9 @@ FileIncluder.prototype = {
                     dirPath = _path.dirname(filePath),
                     isDir = file.isDirectory(),
                     isText = !isDir && Utils.isText(filePath),
-                    content = isText ? String(file.contents) : file.contents,
-                    newContent = content,
+                    content = isText ? String(file.contents) : file.contents;
+
+                var newContent = content,
                     cache = self.resultCache,
                     reg = self._getRegExp(),
                     match;
@@ -114,7 +115,7 @@ FileIncluder.prototype = {
                         try {
                             _para = JSON.parse(_json.substr(1));
                             _inlineString = !!_para['_inlineString'];
-                            _fragName = String(_para['_fragName'])
+                            _fragName = String(_para['_fragName'] || '')
                                 .replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1');
                         } catch (ex) {
                             self.onError && self.onError(ex);
@@ -159,11 +160,11 @@ FileIncluder.prototype = {
                             }
                         }
                     }
-                    newContent = content.replace(_str, _content);
+                    newContent = newContent.replace(_str, _content);
                 }
 
                 cache[filePath] = newContent;
-                file.contents = isText ? new Buffer(content) : content;
+                file.contents = isText ? new Buffer(newContent) : newContent;
 
                 return cb(null, file);
             }

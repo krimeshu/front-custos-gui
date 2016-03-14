@@ -71,7 +71,7 @@ module.exports = {
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + params.prjName + ' 任务开始……');
 
-        var tasks = (params.tasks || []).slice(0);
+        var tasks = params.tasks || [];
         tasks.push(function () {
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + params.prjName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
             cb && cb();

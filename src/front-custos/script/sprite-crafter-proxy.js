@@ -36,6 +36,7 @@ var SpriteCrafterProxy = {
             fileCache = new FileCache(),
             useRatio = opt.useRatio || 2,
             useRem = opt.useRem || 10,
+            outputDir = opt.outputDir || '',
 
             spriteImages = {},
             spriteImagesTotal = 0,
@@ -65,7 +66,7 @@ var SpriteCrafterProxy = {
 
         for (var spriteImageName in spriteImages) {
             var spriteImage = spriteImages[spriteImageName],
-                distDir = _path.resolve(src, 'public/images'),
+                distDir = _path.resolve(src, outputDir),
                 distImg = _path.resolve(distDir, 'sc_img_' + spriteImageName + '.png');
             SpriteCrafter.joinImages({
                 srcImg: spriteImage,

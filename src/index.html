@@ -150,7 +150,7 @@
                 <md-tabs md-border-bottom>
                     <md-tab label="基本信息">
                         <md-content layout-margin>
-                            <div layout-gt-sm="row">
+                            <div layout="column">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>名称</label>
                                     <input ng-model="curProj.projName" name="projName" required
@@ -160,16 +160,12 @@
                                         <div ng-message="required">请输入项目名称</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>版本</label>
                                     <input ng-model="curProj.version" name="version"
                                            ng-disabled="curProj.id === null"
                                            placeholder="项目目前的版本号"/>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>位置</label>
                                     <input ng-model="curProj.srcDir" name="srcDir" required readonly
@@ -187,7 +183,7 @@
 
                             <!--<h4>开始操作</h4>-->
 
-                            <div layout-gt-sm="row">
+                            <div layout="row">
                                 <md-button class="md-raised" flex="20"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildLocally()">本地构建
@@ -197,7 +193,7 @@
                                            ng-click="buildUpload()">构建上传
                                 </md-button>
                                 <div flex></div>
-                                <md-switch ng-model="curProj.upOpt.delta" flex="30"
+                                <md-switch ng-model="curProj.upOpt.delta" flex="50"
                                            ng-disabled="curProj.id === null">增量上传
                                 </md-switch>
                             </div>
@@ -219,7 +215,7 @@
                         <md-content layout-margin>
                             <h4>雪碧图合成</h4>
 
-                            <div layout-gt-sm="row">
+                            <div layout="column">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>像素密度</label>
                                     <input ng-model="curProj.scOpt.useRatio" name="scRatio"
@@ -231,8 +227,6 @@
                                         <div ng-message="pattern">请输入一个有效的数值</div>
                                     </div>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>Rem像素比</label>
                                     <input ng-model="curProj.scOpt.useRem" name="scRem"
@@ -244,13 +238,19 @@
                                         <div ng-message="pattern">请输入一个有效的数值</div>
                                     </div>
                                 </md-input-container>
+                                <md-input-container class="md-block" flex-gt-sm>
+                                    <label>输出目录</label>
+                                    <input ng-model="curProj.scOpt.outputDir" name="scOutput"
+                                           ng-disabled="curProj.id === null"
+                                           placeholder="保存合并后的雪碧图的目录，相对于项目根目录的路径"/>
+                                </md-input-container>
                             </div>
 
                             <!------------------------------------------------------------------------------------------>
 
                             <h4>样式前缀</h4>
 
-                            <div layout-gt-sm="row">
+                            <div layout="column">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>目标浏览器范围</label>
                                     <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
@@ -266,31 +266,27 @@
 
                             <h4>文件分发</h4>
 
-                            <div layout-gt-sm="row">
+                            <div layout="column">
+                                <div layout="row">
+                                    <md-switch ng-model="curProj.alOpt.flatten" flex="50"
+                                               ng-disabled="curProj.id === null">简化目录结构
+                                    </md-switch>
+                                    <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
+                                               ng-disabled="curProj.id === null">链接追加指纹参数
+                                    </md-switch>
+                                </div>
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>页面文件分发目录</label>
                                     <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
                                            ng-disabled="curProj.id === null"
                                            placeholder="html, php 等页面文件分发到此目录下"/>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>静态文件分发目录</label>
                                     <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
                                            ng-disabled="curProj.id === null"
                                            placeholder="非页面的静态文件分发到此目录下"/>
                                 </md-input-container>
-                            </div>
-                            <div layout-gt-sm="row">
-                                <md-switch ng-model="curProj.alOpt.flatten" flex="50"
-                                           ng-disabled="curProj.id === null">简化目录结构
-                                </md-switch>
-                                <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
-                                           ng-disabled="curProj.id === null">链接追加指纹参数
-                                </md-switch>
-                            </div>
-                            <div layout-gt-sm="row">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>静态文件链接前缀</label>
                                     <input ng-model="curProj.alOpt.staticUrlHead" name="alStaticUrlHead"
@@ -304,7 +300,7 @@
                             <h4>上传表单与页面</h4>
                             <div class="editor" ng-model="curProj.upOpt.form" flex-grow
                                  ui-ace="{ theme: 'monokai', mode: 'javascript', onChange: aceChanged }"></div>
-                            <div layout-gt-sm="row">
+                            <div layout="column">
                                 <md-input-container class="md-block" flex-gt-sm>
                                     <label>上传页面</label>
                                     <input ng-model="curProj.upOpt.page" name="uploadPage"

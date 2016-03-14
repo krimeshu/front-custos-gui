@@ -1,7 +1,8 @@
 {
   "scOpt": {
     "useRatio": 2,
-    "useRem": 10
+    "useRem": 10,
+    "outputDir": "images"
   },
   "pcOpt": {
     "browsers": "Android > 2.3, iOS > 6.0"
