@@ -2,7 +2,8 @@
  * Created by krimeshu on 2016/3/12.
  */
 
-var shell = require('electron').remote.shell;
+var shell = require('electron').remote.shell,
+    ipcRenderer = require('electron').ipcRenderer;
 
 var _path = require('path');
 
@@ -151,4 +152,16 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             });
         });
     };
+
+    // 快捷键
+    ipcRenderer.on('global-shortcut', function (ev, keys) {
+        switch (keys) {
+            case 'ctrl+shift+c':
+                $scope.buildLocally();
+                break;
+            case 'ctrl+shift+u':
+                $scope.buildUpload();
+                break;
+        }
+    });
 }];

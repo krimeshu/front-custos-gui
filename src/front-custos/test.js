@@ -43,7 +43,8 @@ frontCustos.process({
         staticDir: 'static/{PROJECT_NAME}',
         staticUrlHead: 'http://static.foo.com/{PROJECT_NAME}',
         flatten: true,
-        hashLink: true
+        hashLink: true,
+        useStaticUrlHead: true
     },
     upOpt: {
         delta: true,

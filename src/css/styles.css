@@ -156,6 +156,7 @@ md-card {
   overflow: auto;
   box-sizing: border-box;
   color: #272822;
+  background: #FFF;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
   .info-box md-button, .info-box button {
     height: 48px; }

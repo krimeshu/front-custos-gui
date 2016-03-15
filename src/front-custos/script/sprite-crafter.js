@@ -141,34 +141,41 @@ function joinImages(opt, cb) {
 
     if (cacheMap[mapFile]) {
         var map = cacheMap[mapFile],
+            key = map['key'],
             stamp = map['stamp'],
             data = map['data'],
             imgBuffer = map['imgBuffer'],
             visited = {},
             changed = false;
 
-
-        for (var i = 0, len = srcImg.length; i < len; i++) {
-            var img = srcImg[i],
-                s = stamp[img];
-            if (!s) {
-                changed = true;
-                break;
+        if (JSON.stringify(opt) !== key) {
+            // 配置已改变
+            changed = true;
+        } else {
+            // 组成图片已改变
+            for (var i = 0, len = srcImg.length; i < len; i++) {
+                var img = srcImg[i],
+                    s = stamp[img];
+                if (!s) {
+                    changed = true;
+                    break;
+                }
+                visited[img] = true;
+                var md5 = Utils.md5(img, true);
+                if (s != md5) {
+                    changed = true;
+                    break;
+                }
             }
-            visited[img] = true;
-            var md5 = Utils.md5(img, true);
-            if (s != md5) {
-                changed = true;
-                break;
-            }
-        }
-        for (var img in stamp) {
-            if (!visited[img]) {
-                changed = true;
-                break;
+            for (var img in stamp) {
+                if (!visited[img]) {
+                    changed = true;
+                    break;
+                }
             }
         }
         if (!changed && imgBuffer) {
+            // 没改变时直接取缓存
             res = data;
             res.noChange = true;
             fileCache.set(distImg, imgBuffer);
