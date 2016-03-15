@@ -108,29 +108,45 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 本地构建
     $scope.buildLocally = function () {
-        var fcOpt = Model.curProj,
-            pos = fcOpt.tasks.indexOf('do_upload');
-        if (pos >= 0) {
-            fcOpt.tasks.splice(pos, 1);
-        }
+        var fcOpt = Model.curProj;
+        fillTasks(fcOpt, false);
         doBuild(fcOpt);
     };
 
     // 构建上传
     $scope.buildUpload = function () {
-        var fcOpt = Model.curProj,
-            pos = fcOpt.tasks.indexOf('do_upload');
-        if (pos < 0) {
-            fcOpt.tasks.push('do_upload');
-        }
+        var fcOpt = Model.curProj;
+        fillTasks(fcOpt, true);
         doBuild(fcOpt);
+    };
+
+    // 补充可能缺少的默认任务参数
+    var fillTasks = function (fcOpt, withUpload) {
+        var tasks = fcOpt.tasks,
+            uploadPos = tasks.indexOf('do_upload');
+        if (tasks.indexOf('prepare_build') < 0) {
+            tasks.splice(0, 0, 'prepare_build');
+        }
+        if (tasks.indexOf('do_dist') < 0) {
+            if (uploadPos >= 0) {
+                tasks.splice(uploadPos++, 0, 'do_dist');
+            } else {
+                tasks.push('do_dist');
+            }
+        }
+        if (!withUpload && uploadPos >= 0) {
+            tasks.splice(uploadPos, 1);
+        }
+        if (withUpload && uploadPos < 0) {
+            tasks.push('do_upload');
+        }
     };
 
     var doBuild = function (fcOpt) {
         $scope.toastMsg('任务开始……');
         FrontCustos.config(Model.config);
         FrontCustos.process(Utils.deepCopy(fcOpt), function () {
-            $scope.$apply(function(){
+            $scope.$apply(function () {
                 $scope.toastMsg('任务执行完毕');
             });
         });
