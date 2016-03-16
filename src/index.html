@@ -210,7 +210,10 @@
                                         <md-checkbox aria-label="{{item.desc}}"
                                                      ng-checked="item.locked || exists(item.name, curProj.tasks)"
                                                      ng-disabled="item.locked || curProj.id === null"></md-checkbox>
-                                        <p ng-bind="item.desc + ' (' + item.name + ')'"></p>
+                                        <p flex>
+                                            <span ng-bind="item.desc"></span>
+                                            <em ng-bind="item.name"></em>
+                                        </p>
                                     </md-list-item>
                                 </md-list>
                             </md-card>

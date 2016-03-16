@@ -25,10 +25,22 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.curProj = Model.curProj;
 
     // 任务勾选相关
-    $scope.toggle = function (item, list, locked) {
+    $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
-        else list.push(item);
+        else {
+            idx = 0;
+            for (var i = 0, task; task = $scope.allTasks[i]; i++) {
+                if (task.name === item) {
+                    break;
+                }
+                var pos = list.indexOf(task.name);
+                if (pos >= 0) {
+                    idx = pos;
+                }
+            }
+            list.splice(idx, 0, item);
+        }
     };
     $scope.exists = function (item, list) {
         return list.indexOf(item) > -1;
@@ -38,7 +50,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         {name: 'replace_const', desc: '替换定义的常量'},
         {name: 'join_include', desc: '合并包含的文件'},
         {name: 'sprite_crafter', desc: '自动合并雪碧图'},
-        {name: 'prefix_crafter', desc: '添加CSS3样式前缀'},
+        {name: 'prefix_crafter', desc: '添加CSS3前缀'},
         {name: 'allot_link', desc: '分发关联文件'},
         {name: 'optimize_image', desc: '压缩图片'},
         {name: 'do_dist', desc: '输出文件', locked: true},
@@ -156,10 +168,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     // 快捷键
     ipcRenderer.on('global-shortcut', function (ev, keys) {
         switch (keys) {
-            case 'ctrl+shift+c':
+            case 'ctrl+alt+b':
                 $scope.buildLocally();
                 break;
-            case 'ctrl+shift+u':
+            case 'ctrl+alt+u':
                 $scope.buildUpload();
                 break;
         }

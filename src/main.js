@@ -38,11 +38,11 @@ function createWindow() {
     });
 
     // 注册快捷键
-    globalShortcut.register('ctrl+shift+c', function () {
-        mainWindow.webContents.send('global-shortcut', 'ctrl+shift+c');
+    globalShortcut.register('ctrl+alt+b', function () {
+        mainWindow.webContents.send('global-shortcut', 'ctrl+alt+b');
     });
-    globalShortcut.register('ctrl+shift+u', function () {
-        mainWindow.webContents.send('global-shortcut', 'ctrl+shift+u');
+    globalShortcut.register('ctrl+alt+u', function () {
+        mainWindow.webContents.send('global-shortcut', 'ctrl+alt+u');
     });
 }
 
