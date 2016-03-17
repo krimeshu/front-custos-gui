@@ -29,17 +29,15 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
         else {
-            idx = 0;
+            var _list = [];
             for (var i = 0, task; task = $scope.allTasks[i]; i++) {
-                if (task.name === item) {
-                    break;
-                }
                 var pos = list.indexOf(task.name);
-                if (pos >= 0) {
-                    idx = pos;
+                if (pos >= 0 || task.name === item || task.locked) {
+                    _list.push(task.name);
                 }
             }
-            list.splice(idx, 0, item);
+            var _args = [0, list.length].concat(_list);
+            list.splice.apply(list, _args);
         }
     };
     $scope.exists = function (item, list) {

@@ -110,7 +110,7 @@ function saveProjList(projList) {
 function loadProjPackage(projName, srcDir) {
     var pkgPath = _path.resolve(srcDir, 'package.json'),
         pkg = {
-            projName: projName,
+            name: projName,
             version: '0.1.0',
             fcOpt: null
         };
