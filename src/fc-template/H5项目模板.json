@@ -13,7 +13,8 @@
     "staticDir": "static/{PROJECT_NAME}",
     "staticUrlHead": "http://ac.gtimg.com/h5_hd/{PROJECT_NAME}",
     "flatten": true,
-    "hashLink": true
+    "hashLink": true,
+    "useStaticUrlHead": true
   },
   "upOpt": {
     "delta": true,

@@ -5,6 +5,7 @@ src/fc-template
 src/fc-config.json
 src/fc-project-list.json
 src/*.css.map
+src/FC_UploadHistory
 
 src/front-custos/.idea
 src/front-custos/node_modules

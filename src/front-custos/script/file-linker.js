@@ -284,6 +284,7 @@ FileLinker.prototype = {
             pageAllotDir = alOpt.pageDir,
             staticAllotDir = alOpt.staticDir,
             staticUrlHead = alOpt.staticUrlHead,
+            useStaticUrlHead = alOpt.useStaticUrlHead,
             flatten = alOpt.flatten,
             flattenMap = alOpt.flattenMap,
             hashLink = alOpt.hashLink;
@@ -338,7 +339,7 @@ FileLinker.prototype = {
                     ),
                     _newFile;
 
-                if (allot && !_isPage && !fromCss && staticUrlHead) {
+                if (allot && !_isPage && !fromCss && useStaticUrlHead && staticUrlHead) {
                     var _sp = staticUrlHead.charAt(staticUrlHead.length - 1) !== '/' ? '/' : '';
                     _newFile = staticUrlHead + _sp + _fileRela;
                 } else {
