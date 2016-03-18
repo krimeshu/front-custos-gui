@@ -370,7 +370,7 @@ var tasks = {
 
             upOpt = params.upOpt,
 
-            uploadDelta = upOpt.delta,
+            uploadAll = upOpt.uploadAll,
             uploadPage = upOpt.page,
             uploadForm = upOpt.form,
 
@@ -389,7 +389,7 @@ var tasks = {
             projectName: prjName,
             pageDir: alOpt.allot ? _path.resolve(distDir, pageDir) : distDir,
             staticDir: alOpt.allot ? _path.resolve(distDir, staticDir) : distDir,
-            uploadAll: !uploadDelta,
+            uploadAll: uploadAll,
             uploadPage: uploadPage,
             uploadForm: uploadForm,
             concurrentLimit: concurrentLimit

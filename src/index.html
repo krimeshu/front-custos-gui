@@ -87,14 +87,14 @@
                 </md-tooltip>
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
-            <md-button class="md-fab md-primary float-btn btn-reload"
-                       ng-show="isDebug"
-                       onclick="window.location.reload();">
-                <md-tooltip md-direction="bottom">
-                    刷新窗口
-                </md-tooltip>
-                <md-icon class="material-icons">refresh</md-icon>
-            </md-button>
+            <!--<md-button class="md-fab md-primary float-btn btn-reload"-->
+            <!--ng-show="isDebug"-->
+            <!--onclick="window.location.reload();">-->
+            <!--<md-tooltip md-direction="bottom">-->
+            <!--刷新窗口-->
+            <!--</md-tooltip>-->
+            <!--<md-icon class="material-icons">refresh</md-icon>-->
+            <!--</md-button>-->
         </md-content>
 
         <!-- Current Project Info -->
@@ -186,17 +186,17 @@
                             <!--<h4>开始操作</h4>-->
 
                             <div layout="row">
-                                <md-button class="md-raised" flex="20"
+                                <md-button class="md-raised"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildLocally()">本地构建
                                 </md-button>
-                                <md-button class="md-raised md-primary" flex="20"
+                                <md-button class="md-raised md-primary"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildUpload()">构建上传
                                 </md-button>
                                 <div flex></div>
-                                <md-switch ng-model="curProj.upOpt.delta" flex="50"
-                                           ng-disabled="curProj.id === null">增量上传
+                                <md-switch ng-model="curProj.upOpt.uploadAll"
+                                           ng-disabled="curProj.id === null">全量上传
                                 </md-switch>
                             </div>
                         </md-content>
@@ -206,6 +206,7 @@
                             <md-card>
                                 <md-list>
                                     <md-list-item ng-repeat="item in allTasks"
+                                                  aria-label="{{item.desc}}"
                                                   ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)">
                                         <md-checkbox aria-label="{{item.desc}}"
                                                      ng-checked="item.locked || exists(item.name, curProj.tasks)"
@@ -386,9 +387,23 @@
             window.setTimeout(function () {
                 window.close();
             }, 600);
+        },
+        setReloadShortcut: function () {
+            var _path = require('path');
+            var isDebug = _path.basename(_path.resolve('./')) === 'src';
+
+            var ipcRenderer = require('electron').ipcRenderer;
+            ipcRenderer.on('global-shortcut', function (ev, keys) {
+                switch (keys) {
+                    case 'ctrl+alt+r':
+                        isDebug && window.location.reload();
+                        break;
+                }
+            });
         }
     };
 
+    windowCtrl.setReloadShortcut();
     windowCtrl.open();
 </script>
 

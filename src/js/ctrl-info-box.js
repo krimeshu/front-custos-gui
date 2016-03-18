@@ -156,7 +156,9 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     var doBuild = function (fcOpt) {
         $scope.toastMsg('任务开始……');
         FrontCustos.config(Model.config);
-        FrontCustos.process(Utils.deepCopy(fcOpt), function () {
+        var params = Utils.deepCopy(fcOpt);
+        console.log('fcOpt === params:', fcOpt === params);
+        FrontCustos.process(params, function () {
             $scope.$apply(function () {
                 $scope.toastMsg('任务执行完毕');
             });

@@ -16,10 +16,6 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
     $scope.curProj = Model.curProj;
     $scope.projList = Model.projList;
 
-    // 是否调试版
-    var isDebug = _path.basename(_path.resolve('./')) === 'src';
-    $scope.isDebug = isDebug;
-
     // 判断是否当前选中的项目
     $scope.isCurrent = function (id) {
         return id === $scope.curProj.id ? 'current' : '';

@@ -110,6 +110,7 @@ FileUploader.prototype = {
 
         if (typeof uploadForm === 'string') {
             uploadForm = new Function('return ' + uploadForm)();
+            uploadForm = (typeof uploadForm === 'function') ? uploadForm : null;
         }
 
         var res = self.uploadResult = {
@@ -146,7 +147,7 @@ FileUploader.prototype = {
                     relativeDir = _path.relative(isPage ? pageDir : staticDir, filePath).replace(/\\/g, '/'),
 
                     fileStream = _fs.createReadStream(filePath),
-                    formMap = uploadForm(fileStream, relativeDir, projectName);
+                    formMap = uploadForm && uploadForm(fileStream, relativeDir, projectName);
                 uploadPage += (uploadPage.indexOf('?') < 0 ? '?' : '&') +
                     't=' + new Date().getTime();
 

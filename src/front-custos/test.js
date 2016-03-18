@@ -47,7 +47,7 @@ frontCustos.process({
         useStaticUrlHead: true
     },
     upOpt: {
-        delta: true,
+        uploadAll: false,
         page: 'http://test.oa.com/uploadDevFile.php',
         form: function (fileStream, relativeName, projectName) {
             var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),
