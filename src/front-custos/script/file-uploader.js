@@ -167,7 +167,7 @@ FileUploader.prototype = {
                         } else {
                             res.failed.push(filePath);
                         }
-                        if (res.succeed.length + res.failed.length >= res.totalCount) {
+                        if (res.succeed.length + res.failed.length >= res.queue.length) {
                             onComplete && onComplete(res);
                         }
                         done();
