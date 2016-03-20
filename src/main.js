@@ -11,11 +11,16 @@ const BrowserWindow = electron.BrowserWindow;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+const initWindowSize = {
+    width: 1280,
+    height: 720
+};
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 1280,
-        height: 700,
+        width: 2,
+        height: 2,
         autoHideMenuBar: true,
         useContentSize: true,
         hasShadow: false,
@@ -36,6 +41,18 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+
+    setTimeout(function () {
+        var bounds = mainWindow.getBounds(),
+            width = initWindowSize.width,
+            height = initWindowSize.height;
+        mainWindow.setBounds({
+            x: bounds.x - width / 2,
+            y: bounds.y - height / 2,
+            width: width,
+            height: height
+        });
+    }, 200);
 
     // 注册快捷键
     globalShortcut.register('ctrl+alt+b', function () {
