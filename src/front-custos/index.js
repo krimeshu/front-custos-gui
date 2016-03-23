@@ -12,6 +12,7 @@ var _os = require('os'),
     del = require('del'),
     plumber = require('gulp-plumber'),
     cache = require('gulp-cache'),
+    csso = require('gulp-csso'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
 
@@ -262,6 +263,24 @@ var tasks = {
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
+            });
+    },
+    // 压缩CSS
+    'run_csso': function (done) {
+        var buildDir = params.buildDir;
+
+        var timer = new Timer();
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
+        gulp.src(_path.resolve(buildDir, '**/*.css'))
+            .pipe(csso({
+                restructure: false,
+                sourceMap: false,
+                debug: false
+            }))
+            .pipe(gulp.dest(buildDir))
+            .on('end', function () {
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务结束。（' + timer.getTime() + 'ms）');
+                done();
             });
     },
     // 优化图片：
