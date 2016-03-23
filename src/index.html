@@ -384,7 +384,9 @@
 
     var windowCtrl = {
         open: function () {
-            document.querySelector('.shadow-box').classList.add('in');
+            window.setTimeout(function () {
+                document.querySelector('.shadow-box').classList.add('in');
+            }, 200);
         },
         close: function () {
             document.querySelector('.shadow-box').classList.remove('in');
