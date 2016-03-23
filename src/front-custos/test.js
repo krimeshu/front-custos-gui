@@ -35,7 +35,8 @@ frontCustos.process({
         "useRem": 1
     },
     pcOpt: {
-        "browsers": "Android > 2.3, iOS > 6.0"
+        "browsers": "Android > 2.3, iOS > 6.0",
+        "compress": false
     },
     alOpt: {
         allot: true,

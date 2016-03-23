@@ -276,6 +276,11 @@
                                             <div ng-message="required">请输入目标浏览器范围</div>
                                         </div>
                                     </md-input-container>
+                                    <md-input-container class="md-block" flex>
+                                        <md-switch ng-model="curProj.pcOpt.compress" flex="50"
+                                                   ng-disabled="curProj.id === null">折叠代码
+                                        </md-switch>
+                                    </md-input-container>
                                 </md-card-content>
                             </md-card>
 
