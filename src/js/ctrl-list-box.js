@@ -118,6 +118,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         $mdDialog.show({
             controller: function templatesDialogController($scope, $mdDialog) {
                 $scope.templates = Model.templates;
+                $scope.config = Model.config;
 
                 $scope.tempPath = null;
 

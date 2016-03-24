@@ -1,4 +1,5 @@
-<md-dialog aria-label="默认配置">
+<md-dialog aria-label="默认配置"
+           md-theme="{{config.theme}}">
     <form>
         <md-toolbar>
             <div class="md-toolbar-tools">
@@ -10,6 +11,20 @@
             </div>
         </md-toolbar>
         <md-dialog-content layout-margin style="width: 480px;">
+            <md-card>
+                <md-card-content layout="column">
+                    <md-input-container>
+                        <label>应用主题</label>
+                        <md-select ng-model="config.theme">
+                            <md-option ng-repeat="(themeName, prop) in allThemes"
+                                       value="{{themeName}}"
+                                       ng-selected="config.theme == themeName">
+                                {{themeName}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </md-card-content>
+            </md-card>
             <md-card>
                 <md-card-title>
                     <md-card-title-text>
@@ -47,7 +62,7 @@
             <md-button ng-click="cancel()">
                 取消
             </md-button>
-            <md-button class="md-primary" ng-click="save(config)" style="margin-right:10px;">
+            <md-button class="md-primary" ng-click="save()" style="margin-right:10px;">
                 确定
             </md-button>
         </md-dialog-actions>

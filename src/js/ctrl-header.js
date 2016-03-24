@@ -27,16 +27,19 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
     // 显示配置对话框
     $scope.showConfig = function (ev) {
         $mdDialog.show({
+            lacals: {parent: $scope},
             controller: function configDialogController($scope, $mdDialog) {
                 $scope.config = Utils.deepCopy(Model.config);
+                $scope.allThemes = Model.allThemes;
 
                 $scope.hide = function () {
                     $mdDialog.hide();
                 };
 
-                $scope.save = function (config) {
-                    Data.saveConfig(config);
-                    Model.config = config;
+                $scope.save = function () {
+                    Data.saveConfig($scope.config);
+                    Utils.deepCopy($scope.config, Model.config);
+                    console.log($scope.config);
                     $mdDialog.hide();
                 };
 

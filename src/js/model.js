@@ -6,6 +6,24 @@ var Data = require('./data.js'),
     Utils = require('./utils.js');
 
 module.exports = {
+    allThemes: {
+        'default': {
+            primary: 'blue-grey',
+            accent: 'red'
+        },
+        'pink': {
+            primary: 'pink',
+            accent: 'red'
+        },
+        'indigo': {
+            primary: 'indigo',
+            accent: 'pink'
+        },
+        'orange': {
+            primary: 'deep-orange',
+            accent: 'blue'
+        }
+    },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
     projList: Data.loadProjList(),
