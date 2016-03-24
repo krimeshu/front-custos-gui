@@ -30,7 +30,21 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace'])
         };
     }])
     .controller('MainCtrl', ['$scope', function ($scope) {
-        Model.config.theme || (Model.config.theme = 'default');
+        var theme = Model.config.theme,
+            allThemes = Model.allThemes,
+            correct = false;
+        for (var name in allThemes) {
+            if (!allThemes.hasOwnProperty(name)) {
+                continue;
+            }
+            if (name === theme) {
+                correct = true;
+                break;
+            }
+        }
+        if (!correct) {
+            Model.config.theme = 'default';
+        }
         $scope.config = Model.config;
     }])
     .controller('HeaderCtrl', HeaderCtrl)
