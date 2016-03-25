@@ -40,10 +40,6 @@ input {
   user-select: text;
 }
 
-md-card {
-  background-color: #FFF;
-}
-
 %float-btn {
   position: absolute;
   z-index: 5;
@@ -271,6 +267,10 @@ md-card {
   color: #272822;
   background: #FFF;
   box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+
+  md-card {
+    background-color: #FFF;
+  }
 
   md-button, button {
     height: 48px;

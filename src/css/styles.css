@@ -12,9 +12,6 @@ input {
   -webkit-user-select: text;
   user-select: text; }
 
-md-card {
-  background-color: #FFF; }
-
 .list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-save, .info-box .btn-delete, .info-box .btn-open {
   position: absolute;
   z-index: 5;
@@ -188,6 +185,8 @@ md-card {
   color: #272822;
   background: #FFF;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
+  .info-box md-card {
+    background-color: #FFF; }
   .info-box md-button, .info-box button {
     height: 48px; }
   .info-box form.info-form, .info-box md-tabs {
