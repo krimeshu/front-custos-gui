@@ -425,6 +425,7 @@ var tasks = {
             }))
             .pipe(uploader.appendFile())
             .on('end', function () {
+                var logId = console.genUniqueId && console.genUniqueId();
                 uploader.start(function onProgress(err, filePath, response, results) {
                     // 完成一个文件时
                     var sof = !err && uploadCallback(response),
@@ -433,6 +434,7 @@ var tasks = {
                         succeedCount = results.succeed.length + sof,
                         failedCount = results.failed.length + !sof,
                         queueCount = results.queue.length;
+                    logId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务进度：' +
                         queueCount + '/' + succeedCount + '/' + failedCount);
                     //console.log('服务器回复：', response);
@@ -448,6 +450,7 @@ var tasks = {
                             (failedCount ? '，失败' + failedCount + '个' : '') +
                             '。总共' + totalCount + '个文件' +
                             (unchangedCount ? '，其中' + unchangedCount + '个无变更。' : '。');
+                    logId && console.useId(logId);
                     console.info(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务结束' + resText + '（' + timer.getTime() + 'ms）');
                     done();
                 });

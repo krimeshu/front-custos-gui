@@ -4,9 +4,14 @@
 
 module.exports = {
     logList: document.querySelector('.log-box .log-list'),
+    nextId: null,
     clear: function () {
         var logList = this.logList;
         logList.html();
+    },
+    useId: function (id) {
+        this.nextId = id;
+        return this;
     },
     log: function () {
         var text = this._format(arguments);
@@ -36,13 +41,29 @@ module.exports = {
             type: 'error'
         });
     },
+    genUniqueId: function () {
+        var id = this._generateId();
+        while (document.getElementById(id)) {
+            id = this._generateId();
+        }
+        return id;
+    },
+    _generateId: function () {
+        return '_log_text_' + new Date().getTime() + Math.random();
+    },
     _append: function (item) {
-        var logList = this.logList;
-        var li = document.createElement('li');
+        var logList = this.logList,
+            nextId = this.nextId || '',
+            existed = nextId && document.getElementById(nextId);
+        this.nextId = null;
+        var li = existed || document.createElement('li');
         li.innerHTML = item.text;
         li.className = item.type;
-        logList.appendChild(li);
-        li.scrollIntoView();
+        if (!existed) {
+            li.id = nextId;
+            logList.appendChild(li);
+            li.scrollIntoView();
+        }
     },
     _format: function (args) {
         var formatStr = args[0];
