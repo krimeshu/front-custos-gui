@@ -1,17 +1,12 @@
 .idea
-dist
-src/node_modules
-src/fc-template
-src/fc-config.json
-src/fc-project-list.json
-src/*.css.map
-src/FC_UploadHistory
+node_modules
+fc-template
+fc-config.json
+fc-project-list.json
+*.css.map
+FC_UploadHistory
 
-src/front-custos/.idea
-src/front-custos/node_modules
-src/front-custos/dist
-src/front-custos/bundle.bat
-src/front-custos/7z.dll
-src/front-custos/7z.exe
-src/front-custos/test2.js
-src/front-custos/FC_UploadHistory
+front-custos/.idea
+front-custos/node_modules
+front-custos/dist
+front-custos/FC_UploadHistory
