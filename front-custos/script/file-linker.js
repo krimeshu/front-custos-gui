@@ -36,30 +36,35 @@ FileLinker.prototype = {
     },
     // 分析项目的文件引用关系
     analyseDepRelation: function (src) {
-        var self = this,
-            entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true),
-            finalList = [],
-            cache = {};
-        entryFiles.forEach(function (entryFile) {
-            entryFile = entryFile.replace(/\\/g, '/');
-            if (finalList.indexOf(entryFile) >= 0) {
-                return;
-            }
-            var basename = _path.basename(entryFile);
-            if (basename.charAt(0) === '_') {
-                return;
-            }
-            var depList = self._getFileDep(entryFile, cache);
-            depList.forEach(function (depFile) {
-                depFile = depFile.replace(/\\/g, '/');
-                if (finalList.indexOf(depFile) >= 0) {
+        try {
+            var self = this,
+                entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true),
+                finalList = [],
+                cache = {};
+            entryFiles.forEach(function (entryFile) {
+                entryFile = entryFile.replace(/\\/g, '/');
+                if (finalList.indexOf(entryFile) >= 0) {
                     return;
                 }
-                finalList.push(depFile);
+                var basename = _path.basename(entryFile);
+                if (basename.charAt(0) === '_') {
+                    return;
+                }
+                var depList = self._getFileDep(entryFile, cache);
+                depList.forEach(function (depFile) {
+                    depFile = depFile.replace(/\\/g, '/');
+                    if (finalList.indexOf(depFile) >= 0) {
+                        return;
+                    }
+                    finalList.push(depFile);
+                });
+                finalList.push(entryFile);
             });
-            finalList.push(entryFile);
-        });
-        return finalList;
+            return finalList;
+        } catch (e) {
+            this.onError && this.onError(e);
+            return [];
+        }
     },
     // 递归获取引用依赖关系表
     _getFileDep: function (filePath, cache) {

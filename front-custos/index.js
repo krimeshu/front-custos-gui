@@ -93,16 +93,23 @@ var tasks = {
             buildDir = params.buildDir;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
         del([_path.resolve(buildDir, '**/*')], {force: true}).then(function () {
             gulp.src(_path.resolve(srcDir, '**/*'))
                 .pipe(plumber({
                     'errorHandler': function (err) {
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 异常: ', err);
+                        var errWrap = {
+                            text: 'prepare_build 异常: ',
+                            err: err
+                        };
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                     }
                 }))
                 .pipe(gulp.dest(buildDir))
                 .on('end', function () {
+                    logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
@@ -116,6 +123,8 @@ var tasks = {
             constFields = params.constFields;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务开始……');
 
         var replacer = new ConstReplacer(constFields);
@@ -123,12 +132,17 @@ var tasks = {
         gulp.src(pattern)
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 异常: ', err);
+                    var errWrap = {
+                        text: 'replace_const 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(replacer.handleFile())
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
+                logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
@@ -138,21 +152,32 @@ var tasks = {
     'join_include': function (done) {
         var buildDir = params.buildDir;
         var includer = new FileIncluder(function (err) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 异常: ', err);
+            var errWrap = {
+                text: 'join_include 异常: ',
+                err: err
+            };
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务开始……');
         var fileList = includer.analyseDepRelation(buildDir);
         gulp.src(fileList, {base: buildDir})
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 异常: ', err);
+                    var errWrap = {
+                        text: 'join_include 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(includer.handleFile())
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
+                logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
@@ -165,6 +190,8 @@ var tasks = {
             scOpt = params.scOpt;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'sprite_crafter 任务开始……');
         var files = [],
             maps = {};
@@ -172,7 +199,11 @@ var tasks = {
         gulp.src(pattern)
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'sprite_crafter 异常: ', err);
+                    var errWrap = {
+                        text: 'sprite_crafter 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(SpriteCrafterProxy.analyseUsedImageMap(files, maps))
@@ -181,6 +212,7 @@ var tasks = {
                 scOpt.files = files;
                 scOpt.maps = maps;
                 SpriteCrafterProxy.process(scOpt, function () {
+                    logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'sprite_crafter 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
@@ -194,16 +226,23 @@ var tasks = {
             pcOpt = params.pcOpt;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务开始……');
         gulp.src(pattern)
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 异常: ', err);
+                    var errWrap = {
+                        text: 'prefix_crafter 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(PrefixCrafterProxy.process(pcOpt))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
+                logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
@@ -222,12 +261,18 @@ var tasks = {
         alOpt.flattenMap = flattenMap;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务开始……');
 
         var linker = new FileLinker({
             htmlEnhanced: htmlEnhanced
         }, function (err) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link:process 异常: ', err);
+            var errWrap = {
+                text: 'allot_link 异常: ',
+                err: err
+            };
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
         var fileAllotMap = {},                               // 用于记录文件分发前后的路径关系
             usedFiles = linker.analyseDepRelation(buildDir); //记录分发前的文件依赖表
@@ -235,7 +280,11 @@ var tasks = {
         gulp.src(_path.resolve(buildDir, '**/*'))
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 异常: ', err);
+                    var errWrap = {
+                        text: 'allot_link 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(linker.handleFile(alOpt, fileAllotMap))
@@ -260,6 +309,7 @@ var tasks = {
                 //console.log('allotedUsedFiles:', allotedUsedFiles);
                 // 3. 清空构建文件夹的过期旧文件
                 del(recycledFiles, {force: true}).then(function () {
+                    logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
@@ -270,6 +320,8 @@ var tasks = {
         var buildDir = params.buildDir;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
         gulp.src(_path.resolve(buildDir, '**/*.css'))
             .pipe(csso({
@@ -279,6 +331,7 @@ var tasks = {
             }))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
+                logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
@@ -289,9 +342,12 @@ var tasks = {
     // - Gif图片转为隔行加载
     'optimize_image': function (done) {
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image 任务开始……');
 
         runSequenceUseGulp(['optimize_image:png', 'optimize_image:other'], function () {
+            logId && console.useId && console.useId(logId);
             console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image 任务结束。（' + timer.getTime() + 'ms）');
             done();
         });
@@ -302,7 +358,11 @@ var tasks = {
         gulp.src(_path.resolve(buildDir, '**/*.png'))
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image:png 异常: ', err);
+                    var errWrap = {
+                        text: 'optimize_image:png 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(cache(pngquant({
@@ -320,7 +380,11 @@ var tasks = {
         gulp.src(_path.resolve(buildDir, '**/*.{jpg,gif}'))
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image:other 异常: ', err);
+                    var errWrap = {
+                        text: 'optimize_image:other 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(cache(imagemin({
@@ -344,12 +408,18 @@ var tasks = {
             delUnusedFiles = config.delUnusedFiles;
 
         var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务开始……');
 
         var linker = new FileLinker({
             htmlEnhanced: htmlEnhanced                                 // php代码处理有误，关闭 cheerio 解析
         }, function (err) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist: 异常', err);
+            var errWrap = {
+                text: 'do_dist 异常: ',
+                err: err
+            };
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
 
         //console.log('usedFiles:', usedFiles);
@@ -365,13 +435,18 @@ var tasks = {
             gulp.src(_path.resolve(buildDir, '**/*'))
                 .pipe(plumber({
                     'errorHandler': function (err) {
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 异常: ', err);
+                        var errWrap = {
+                            text: 'do_dist 异常: ',
+                            err: err
+                        };
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                     }
                 }))
                 .pipe(linker.excludeUnusedFiles(usedFiles))
                 .pipe(linker.excludeEmptyDir())
                 .pipe(gulp.dest(distDir))
                 .on('end', function () {
+                    logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
@@ -420,7 +495,11 @@ var tasks = {
         gulp.src(_path.resolve(distDir, '**/*'))
             .pipe(plumber({
                 'errorHandler': function (err) {
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 异常: ', err);
+                    var errWrap = {
+                        text: 'do_upload 异常: ',
+                        err: err
+                    };
+                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
             .pipe(uploader.appendFile())
@@ -434,7 +513,7 @@ var tasks = {
                         succeedCount = results.succeed.length + sof,
                         failedCount = results.failed.length + !sof,
                         queueCount = results.queue.length;
-                    logId && console.useId(logId);
+                    logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务进度：' +
                         queueCount + '/' + succeedCount + '/' + failedCount);
                     //console.log('服务器回复：', response);
@@ -450,7 +529,7 @@ var tasks = {
                             (failedCount ? '，失败' + failedCount + '个' : '') +
                             '。总共' + totalCount + '个文件' +
                             (unchangedCount ? '，其中' + unchangedCount + '个无变更。' : '。');
-                    logId && console.useId(logId);
+                    logId && console.useId && console.useId(logId);
                     console.info(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务结束' + resText + '（' + timer.getTime() + 'ms）');
                     done();
                 });
