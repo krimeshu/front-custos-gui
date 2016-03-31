@@ -43,18 +43,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.exists = function (item, list) {
         return list.indexOf(item) > -1;
     };
-    $scope.allTasks = [
-        {name: 'prepare_build', desc: '构建预准备', locked: true},
-        {name: 'replace_const', desc: '替换定义的常量'},
-        {name: 'join_include', desc: '合并包含的文件'},
-        {name: 'sprite_crafter', desc: '自动合并雪碧图'},
-        {name: 'prefix_crafter', desc: '添加CSS3前缀'},
-        {name: 'allot_link', desc: '分发关联文件'},
-        {name: 'run_csso', desc: '压缩样式'},
-        {name: 'optimize_image', desc: '压缩图片'},
-        {name: 'do_dist', desc: '输出文件', locked: true},
-        {name: 'do_upload', desc: '上传文件', locked: true}
-    ];
+    $scope.allTasks = Model.allTasks;
 
     // 编辑器相关
     $scope.aceChanged = function () {
