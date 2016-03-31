@@ -258,7 +258,7 @@ function replaceStyle(cssFile, rawContent, map, spriteData, useRatio, useRem) {
             prepareReg = new RegExp('(' + replacePattern + '[^\\}]*?)background\\-size:[^;]*?;', 'g'),
             replaceReg = new RegExp(replacePattern, 'g'),
             replaceStyle = css.join('');
-        newContent = newContent.replace(prepareReg, '$1').replace(replaceReg, replaceStyle);
+        newContent = newContent.replace(prepareReg, '$1').replace(replaceReg, replaceStyle.replace(/\u0024([`&'])/g, '$$$$$1'));
     }
     return newContent;
 }

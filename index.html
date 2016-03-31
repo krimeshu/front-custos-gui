@@ -396,7 +396,8 @@
         },
         setReloadShortcut: function () {
             var _path = require('path');
-            var isDebug = _path.basename(_path.resolve('./')) === 'src';
+            var pagePath = _path.resolve('./index.html');
+            var isDebug = pagePath === __filename;
 
             var ipcRenderer = require('electron').ipcRenderer;
             ipcRenderer.on('global-shortcut', function (ev, keys) {

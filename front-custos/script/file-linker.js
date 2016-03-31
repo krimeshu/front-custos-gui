@@ -120,10 +120,10 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                //_newStr = _rawStr.replace(_rawFile, _newFile),
+                //_newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
-                newContent = newContent.replace(_reg, _newFile);
+                newContent = newContent.replace(_reg, _newFile.replace(/\u0024([`&'])/g, '$$$$$1'));
             }
         }
         //if (content.substr(0, 1000) != newContent.substr(0, 1000)) {
@@ -170,11 +170,11 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                    _newStr = _rawStr.replace(_rawFile, _newFile),  // 注意，与上面不同
+                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),  // 注意，与上面不同
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
                 //console.log(_rawStr, '=>', _newStr);
-                newContent = newContent.replace(_reg, _newStr);
+                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([`&'])/g, '$$$$$1'));
             }
         }
         if (cb) {
@@ -213,10 +213,10 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                    _newStr = _rawStr.replace(_rawFile, _newFile),  // 注意，与上面不同
+                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),  // 注意，与上面不同
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
-                newContent = newContent.replace(_reg, _newStr);
+                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([`&'])/g, '$$$$$1'));
             }
         }
         if (cb) {

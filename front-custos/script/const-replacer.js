@@ -49,9 +49,9 @@ ConstReplacer.prototype = {
             if (!constFields.hasOwnProperty(key)) {
                 continue;
             }
-            var val = constFields[key],
+            var val = String(constFields[key]),
                 reg = constRegs[key];
-            res = res.replace(reg, val);
+            res = res.replace(reg, val.replace(/\u0024([`&'])/g, '$$$$$1'));
         }
         return res;
     },

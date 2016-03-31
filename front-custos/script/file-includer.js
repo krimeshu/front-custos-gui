@@ -154,13 +154,13 @@ FileIncluder.prototype = {
                                     continue;
                                 }
                                 key = key.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1');
-                                var value = _para[key],
+                                var value = String(_para[key]),
                                     valueReg = new RegExp('#' + key + '#', 'g');
-                                _content = _content.replace(valueReg, value);
+                                _content = _content.replace(valueReg, value.replace(/\u0024([`&'])/g, '$$$$$1'));
                             }
                         }
                     }
-                    newContent = newContent.replace(_str, _content);
+                    newContent = newContent.replace(_str, _content.replace(/\u0024([`&'])/g, '$$$$$1'));
                 }
 
                 cache[filePath] = newContent;

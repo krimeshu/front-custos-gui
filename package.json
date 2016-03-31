@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
