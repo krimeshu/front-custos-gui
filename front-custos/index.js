@@ -55,6 +55,9 @@ module.exports = {
         params.buildDir = _path.resolve(_os.tmpdir(), 'FC_BuildDir', params.prjName);
         params.distDir = _path.resolve(config.outputDir, params.prjName);
 
+        // 错误集合
+        params.errors = [];
+
         // 生成项目常量并替换参数中的项目常量
         var constFields = {
             PROJECT: params.buildDir,
@@ -104,6 +107,7 @@ var tasks = {
                             text: 'prepare_build 异常: ',
                             err: err
                         };
+                        params.errors.push(errWrap);
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                     }
                 }))
@@ -136,6 +140,7 @@ var tasks = {
                         text: 'replace_const 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -156,6 +161,7 @@ var tasks = {
                 text: 'join_include 异常: ',
                 err: err
             };
+            params.errors.push(errWrap);
             console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
 
@@ -171,6 +177,7 @@ var tasks = {
                         text: 'join_include 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -203,6 +210,7 @@ var tasks = {
                         text: 'sprite_crafter 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -236,6 +244,7 @@ var tasks = {
                         text: 'prefix_crafter 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -272,6 +281,7 @@ var tasks = {
                 text: 'allot_link 异常: ',
                 err: err
             };
+            params.errors.push(errWrap);
             console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
         var fileAllotMap = {},                               // 用于记录文件分发前后的路径关系
@@ -284,6 +294,7 @@ var tasks = {
                         text: 'allot_link 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -362,6 +373,7 @@ var tasks = {
                         text: 'optimize_image:png 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -384,6 +396,7 @@ var tasks = {
                         text: 'optimize_image:other 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
@@ -419,6 +432,7 @@ var tasks = {
                 text: 'do_dist 异常: ',
                 err: err
             };
+            params.errors.push(errWrap);
             console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
         });
 
@@ -439,6 +453,7 @@ var tasks = {
                             text: 'do_dist 异常: ',
                             err: err
                         };
+                        params.errors.push(errWrap);
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                     }
                 }))
@@ -499,6 +514,7 @@ var tasks = {
                         text: 'do_upload 异常: ',
                         err: err
                     };
+                    params.errors.push(errWrap);
                     console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
                 }
             }))
