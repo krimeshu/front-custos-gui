@@ -73,11 +73,13 @@ module.exports = {
         var res = [];
         var formats = formatStr.split('%');
         res.push(formats[0]);
-        var offset = 1;
+        var offset = 1,
+            type,
+            arg;
         if (formats.length > 1) {
             for (var i = offset, f; f = formats[i]; i++, offset++) {
-                var type = f[0];
-                var arg = args[offset];
+                type = f[0];
+                arg = args[offset];
                 switch (type) {
                     case '%':
                         res.push('%');
@@ -102,7 +104,7 @@ module.exports = {
                         break;
                     case 's':
                         try {
-                            res.push(String(arg));
+                            res.push(parseString(arg));
                         } catch (ex) {
                             res.push('');
                         }
@@ -110,7 +112,7 @@ module.exports = {
                     case 'O':
                     case 'o':
                         try {
-                            res.push(JSON.stringify(arg));
+                            res.push(parseString(arg));
                         } catch (ex) {
                             res.push('');
                         }
@@ -122,13 +124,34 @@ module.exports = {
         for (var len = args.length, restArg; offset < len; offset++) {
             restArg = args[offset];
             res.push(' ');
-            res.push(typeof restArg === 'string' ? restArg : JSON.stringify(restArg));
+            res.push(parseString(restArg));
         }
         res = '<span>' + res.join('') + '</span>';
         res = res.replace(/\n/g, '<br/>');
         return res;
     }
 };
+
+// var JSONFormatter = require('json-formatter-js/src/index.js');
+
+var parseString = function (arg) {
+    var type = typeof(arg);
+    switch (type) {
+        case 'string':
+            return arg;
+        case 'object':
+            var id = module.exports.genUniqueId();
+            window.setTimeout(function () {
+                var formatter = new JSONFormatter(arg, 0);
+                document.getElementById(id).appendChild(formatter.render());
+            }, 0);
+            return '<em id="' + id + '" class="json-holder"></em>';
+        default:
+            return String(arg);
+    }
+};
+
+// ----------------------------------------
 
 var console = module.exports,
     FooCalendar = require('./foo-calendar.js');

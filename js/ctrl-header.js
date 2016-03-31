@@ -48,7 +48,7 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
                 };
             },
             parent: angular.element(document.querySelector('.window-box')),
-            templateUrl: 'dialog-temp/dialog-config.html',
+            templateUrl: 'templates/dialog-config.html',
             clickOutsideToClose: true,
             targetEvent: ev
         });

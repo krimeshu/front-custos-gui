@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "0.2.17",
+  "version": "0.2.20",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
@@ -19,7 +19,7 @@
     "url": "https://github.com/Moonshell/front-custos-gui/issues"
   },
   "homepage": "https://github.com/Moonshell/front-custos-gui#readme",
-  "devDependencies": {
+  "dependencies": {
     "angular": "^1.4.8",
     "angular-animate": "^1.4.8",
     "angular-aria": "^1.4.8",
@@ -27,6 +27,7 @@
     "angular-messages": "^1.4.8",
     "angular-route": "^1.4.8",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.0"
+    "electron-prebuilt": "^0.36.0",
+    "json-formatter-js": "^0.3.0"
   }
 }

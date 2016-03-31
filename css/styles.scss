@@ -344,6 +344,21 @@ input {
       margin: 4px 0;
     }
   }
+
+  .options-confirm {
+    font-style: normal;
+    color: #cacaca;
+
+    .options-link {
+      &.ok, &.cancel {
+        color: white;
+      }
+    }
+  }
+
+  .json-holder {
+    font-style: normal;
+  }
 }
 
 .editor {

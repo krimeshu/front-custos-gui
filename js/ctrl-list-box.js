@@ -135,7 +135,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
                 };
             },
             parent: angular.element(document.querySelector('.window-box')),
-            templateUrl: 'dialog-temp/dialog-templates.html',
+            templateUrl: 'templates/dialog-templates.html',
             clickOutsideToClose: true,
             targetEvent: ev
         }).then(function (tempPath) {

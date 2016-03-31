@@ -131,6 +131,12 @@ FileIncluder.prototype = {
                         _file = _path.resolve(dirPath, _file);
                     }
                     if (!cache.hasOwnProperty(_file)) {
+                        var information = '没有找到需要包含的文件：' + _path.relative(dirPath, _file),
+                            err = new Error(information);
+                        err.infomation = information;
+                        err.fromFile = file.path;
+                        err.targetFile = _file;
+                        self.onError && self.onError(err);
                         continue;
                     }
                     var _content = cache[_file],

@@ -230,6 +230,13 @@ input {
     margin: 0; }
     .log-box .log-list li {
       margin: 4px 0; }
+  .log-box .options-confirm {
+    font-style: normal;
+    color: #cacaca; }
+    .log-box .options-confirm .options-link.ok, .log-box .options-confirm .options-link.cancel {
+      color: white; }
+  .log-box .json-holder {
+    font-style: normal; }
 
 .editor {
   position: relative;

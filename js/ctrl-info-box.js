@@ -24,6 +24,9 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     $scope.curProj = Model.curProj;
 
+    $scope.optionsConfirmTemplate = require('fs').readFileSync('templates/options-confirm.html').toString();
+    $scope.optionsConfirmTemplate = $scope.optionsConfirmTemplate.replace(/\n/g, '');
+
     // 任务勾选相关
     $scope.toggle = function (item, list) {
         var idx = list.indexOf(item);
@@ -110,19 +113,49 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     // 本地构建
     $scope.buildLocally = function () {
         var fcOpt = Model.curProj;
-        fillTasks(fcOpt, false);
-        doBuild(fcOpt);
+        fillTasks(fcOpt);
+        doBuild(fcOpt, function () {
+            $scope.toastMsg('任务执行完毕');
+        });
     };
 
     // 构建上传
     $scope.buildUpload = function () {
         var fcOpt = Model.curProj;
-        fillTasks(fcOpt, true);
-        doBuild(fcOpt);
+        fillTasks(fcOpt);
+        doBuild(fcOpt, function (params) {
+            var errors = params.errors;
+            if (errors.length) {
+                var logId = Logger.genUniqueId();
+                Logger.useId(logId).warn('构建过程中发生了一些错误，是否要继续上传？' + $scope.optionsConfirmTemplate);
+                var cb = function (e) {
+                    var target = e.target,
+                        optionsConfirm = target && Utils.dom.refluxToFind(target, '.options-confirm'),
+                        linkOK = target && Utils.dom.refluxToFind(target, '.options-link.ok'),
+                        linkCancel = target && Utils.dom.refluxToFind(target, '.options-link.cancel');
+                    if (linkOK) {
+                        document.getElementById(logId).removeEventListener('click', cb);
+                        optionsConfirm.innerHTML = ' -确定继续-';
+                        doUpload(params, function () {
+                            $scope.toastMsg('任务执行完毕');
+                        });
+                    } else if (linkCancel) {
+                        document.getElementById(logId).removeEventListener('click', cb);
+                        optionsConfirm.innerHTML = ' -已取消-';
+                        $scope.toastMsg('上传已取消');
+                    }
+                };
+                document.getElementById(logId).addEventListener('click', cb);
+            } else {
+                doUpload(params, function () {
+                    $scope.toastMsg('任务执行完毕');
+                });
+            }
+        });
     };
 
     // 补充可能缺少的默认任务参数
-    var fillTasks = function (fcOpt, withUpload) {
+    var fillTasks = function (fcOpt) {
         var tasks = fcOpt.tasks,
             uploadPos = tasks.indexOf('do_upload');
         if (tasks.indexOf('prepare_build') < 0) {
@@ -135,22 +168,28 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                 tasks.push('do_dist');
             }
         }
-        if (!withUpload && uploadPos >= 0) {
+        if (uploadPos >= 0) {
             tasks.splice(uploadPos, 1);
-        }
-        if (withUpload && uploadPos < 0) {
-            tasks.push('do_upload');
         }
     };
 
-    var doBuild = function (fcOpt) {
+    var doBuild = function (fcOpt, cb) {
         $scope.toastMsg('任务开始……');
         FrontCustos.config(Model.config);
         var params = Utils.deepCopy(fcOpt);
-        console.log('fcOpt === params:', fcOpt === params);
+        // console.log('fcOpt === params:', fcOpt === params);
         FrontCustos.process(params, function () {
             $scope.$apply(function () {
-                $scope.toastMsg('任务执行完毕');
+                cb && cb(params);
+            });
+        });
+    };
+
+    var doUpload = function (params, cb) {
+        params.tasks = ['do_upload'];
+        FrontCustos.process(params, function () {
+            $scope.$apply(function () {
+                cb && cb(params);
             });
         });
     };
