@@ -5,7 +5,8 @@
 var shell = require('electron').remote.shell,
     ipcRenderer = require('electron').ipcRenderer;
 
-var _path = require('path');
+var _path = require('path'),
+    _fs = require('fs');
 
 var Logger = require('./logger.js'),
     Model = require('./model.js'),
@@ -24,7 +25,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     $scope.curProj = Model.curProj;
 
-    $scope.optionsConfirmTemplate = require('fs').readFileSync('templates/options-confirm.html').toString();
+    var tempPath = _path.resolve(_path.dirname(pagePath), './templates/options-confirm.html');
+    $scope.optionsConfirmTemplate = _fs.readFileSync(tempPath).toString();
     $scope.optionsConfirmTemplate = $scope.optionsConfirmTemplate.replace(/\n/g, '');
 
     // 任务勾选相关
