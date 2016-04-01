@@ -1,4 +1,5 @@
 .idea
+start.bat
 node_modules
 fc-template
 fc-config.json

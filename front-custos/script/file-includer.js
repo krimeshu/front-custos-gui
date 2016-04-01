@@ -32,7 +32,7 @@ FileIncluder.prototype = {
     analyseDepRelation: function (src) {
         try {
             var self = this,
-                entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php|.css|.js', true),
+                entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true),
                 finalList = [],
                 cache = {};
             entryFiles.forEach(function (entryFile) {
