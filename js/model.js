@@ -9,6 +9,7 @@ module.exports = {
     allTasks: [
         {name: 'prepare_build', desc: '构建预准备', locked: true},
         {name: 'replace_const', desc: '替换定义的常量'},
+        {name: 'compile_sass', desc: '编译SASS文件'},
         {name: 'join_include', desc: '合并包含的文件'},
         {name: 'sprite_crafter', desc: '自动合并雪碧图'},
         {name: 'prefix_crafter', desc: '添加CSS3前缀'},

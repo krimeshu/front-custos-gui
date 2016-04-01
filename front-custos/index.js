@@ -19,6 +19,7 @@ var _os = require('os'),
     Utils = require('./script/utils.js'),
     Timer = require('./script/timer.js'),
     ConstReplacer = require('./script/const-replacer.js'),
+    SassCompiler = require('./script/sass-compiler'),
     FileIncluder = require('./script/file-includer.js'),
     FileLinker = require('./script/file-linker.js'),
     FileUploader = require('./script/file-uploader.js'),
@@ -159,6 +160,34 @@ var tasks = {
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务结束。（' + timer.getTime() + 'ms）');
+                done();
+            });
+    },
+    // 编译SASS:
+    // - 通过 gulp-sass (基于 node-sass) 编译 scss 文件
+    'compile_sass': function (done) {
+        var buildDir = params.buildDir,
+            pattern = _path.resolve(buildDir, '**/*@(.scss)');
+
+        var compiler = new SassCompiler(function (err) {
+            var errWrap = {
+                text: 'compile_sass 异常: ',
+                err: err
+            };
+            params.errors.push(errWrap);
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
+        });
+
+        var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务开始……');
+        gulp.src(pattern)
+            .pipe(compiler.handleFile())
+            .pipe(gulp.dest(buildDir))
+            .on('end', function () {
+                logId && console.useId && console.useId(logId);
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     },
