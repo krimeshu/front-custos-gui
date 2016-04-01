@@ -36,11 +36,13 @@ FileLinker.prototype = {
     },
     // 分析项目的文件引用关系
     analyseDepRelation: function (src) {
+        var self = this,
+            onError = self.onError,
+            cache = {},
+            finalList = [];
+        self.onError = null;
         try {
-            var self = this,
-                entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true),
-                finalList = [],
-                cache = {};
+            var entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true);
             entryFiles.forEach(function (entryFile) {
                 entryFile = entryFile.replace(/\\/g, '/');
                 if (finalList.indexOf(entryFile) >= 0) {
@@ -50,7 +52,7 @@ FileLinker.prototype = {
                 if (basename.charAt(0) === '_') {
                     return;
                 }
-                var depList = self._getFileDep(entryFile, cache);
+                var depList = self._getFileDep(entryFile, cache, src);
                 depList.forEach(function (depFile) {
                     depFile = depFile.replace(/\\/g, '/');
                     if (finalList.indexOf(depFile) >= 0) {
@@ -60,14 +62,14 @@ FileLinker.prototype = {
                 });
                 finalList.push(entryFile);
             });
-            return finalList;
         } catch (e) {
             this.onError && this.onError(e);
-            return [];
         }
+        self.onError = onError;
+        return finalList;
     },
     // 递归获取引用依赖关系表
-    _getFileDep: function (filePath, cache) {
+    _getFileDep: function (filePath, cache, src) {
         var self = this,
             depList = [],
             isText = Utils.isText(filePath);
@@ -78,13 +80,30 @@ FileLinker.prototype = {
         cache[filePath] = content;
         var usedList = self.getUsedFiles({
             path: filePath,
+            base: src,
             contents: content
         });
         usedList.forEach(function (_file) {
-            depList = depList.concat(self._getFileDep(_file, cache));
+            depList = depList.concat(self._getFileDep(_file, cache, src));
             depList.push(_file);
         });
         return depList;
+    },
+    // 判断是否可以忽略此链接
+    _canIgnoreLink: function (_rawStr) {
+        // 忽略空链接
+        if (!_rawStr.length) {
+            return true;
+        }
+        // 忽略非本地文件
+        if (/^(http|https|data|javascript):/.test(_rawStr)) {
+            return true;
+        }
+        // 忽略模板标记
+        if (/(\{\{|}})/.test(_rawStr) || /(<%|%>)/.test(_rawStr) || /^\$/.test(_rawStr)) {
+            return true;
+        }
+        return false;
     },
     // 获取单个文件的引用依赖关系表
     getUsedFiles: function (file, cb) {
@@ -92,6 +111,7 @@ FileLinker.prototype = {
             reg = self._getRegExp(),
             match,
             usedFiles = [],
+            basePath = file.base,
             filePath = file.path,
             dir = _path.dirname(filePath),
             isStyle = Utils.isStyle(filePath),
@@ -113,12 +133,18 @@ FileLinker.prototype = {
             var _rawStr = match[0],
                 _rawFile = match[1],
                 _file = _rawFile.split(/[?#]/)[0];
-            if (!_file) {
+            if (!_file || self._canIgnoreLink(_rawFile)) {
                 continue;
             }
+
             if (!_fs.existsSync(_file)) {
                 _file = _path.resolve(dir, _file);
                 if (!_fs.existsSync(_file)) {
+                    var information = '无法链接文件：' + _path.relative(basePath, _file),
+                        err = new Error(information);
+                    err.fromFile = _path.relative(basePath, file.path);
+                    err.targetFile = _path.relative(basePath, _file);
+                    self.onError && self.onError(err);
                     continue;
                 }
             }
@@ -148,6 +174,7 @@ FileLinker.prototype = {
         var self = this,
             reg = self._getRegExp('css'),
             match,
+            basePath = file.base,
             filePath = file.path,
             dir = _path.dirname(filePath),
             usedFiles = [];
@@ -161,7 +188,7 @@ FileLinker.prototype = {
             var _rawStr = match[0],
                 _rawFile = match[1],
                 _file = _rawFile.split(/[?#]/)[0];
-            if (!_file || /^data:/.test(_file)) {
+            if (!_file || self._canIgnoreLink(_rawFile)) {
                 continue;
             }
             //console.log('    ~ find:', _rawStr);
@@ -169,6 +196,11 @@ FileLinker.prototype = {
                 _file = _path.resolve(dir, _file);
                 if (!_fs.existsSync(_file)) {
                     //console.log('  but miss: ', _file);
+                    var information = '无法链接文件：' + _path.relative(basePath, _file),
+                        err = new Error(information);
+                    err.fromFile = _path.relative(basePath, file.path);
+                    err.targetFile = _path.relative(basePath, _file);
+                    self.onError && self.onError(err);
                     continue;
                 }
             }
@@ -193,6 +225,7 @@ FileLinker.prototype = {
         var self = this,
             reg = self._getRegExp('html'),
             match,
+            basePath = file.base,
             filePath = file.path,
             dir = _path.dirname(filePath),
             usedFiles = [];
@@ -204,7 +237,7 @@ FileLinker.prototype = {
             var _rawStr = match[0],
                 _rawFile = match[1],
                 _file = _rawFile.split(/[?#]/)[0];
-            if (!_file || /^data:/.test(_file)) {
+            if (!_file || self._canIgnoreLink(_rawFile)) {
                 continue;
             }
             //console.log('    ~ find:', _rawStr);
@@ -212,6 +245,11 @@ FileLinker.prototype = {
                 _file = _path.resolve(dir, _file);
                 if (!_fs.existsSync(_file)) {
                     //console.log('  but miss: ', _file);
+                    var information = '无法链接文件：' + _path.relative(basePath, _file),
+                        err = new Error(information);
+                    err.fromFile = _path.relative(basePath, file.path);
+                    err.targetFile = _path.relative(basePath, _file);
+                    self.onError && self.onError(err);
                     continue;
                 }
             }
@@ -232,7 +270,9 @@ FileLinker.prototype = {
     },
     // 通过解析DOM元素中的属性来获取文件引用依赖关系
     _getUsedFilesByDom: function (file, cb) {
-        var filePath = file.path,
+        var self = this,
+            basePath = file.base,
+            filePath = file.path,
             dir = _path.dirname(filePath),
             usedFiles = [];
 
@@ -253,7 +293,7 @@ FileLinker.prototype = {
             }
             var _rawFile = $this.attr(propName),
                 _file = _rawFile.split(/[?#]/)[0];
-            if (!_file || /^data:/.test(_file)) {
+            if (!_file || self._canIgnoreLink(_rawFile)) {
                 return;
             }
             //console.log('    ~ find:', _rawFile);
@@ -261,6 +301,11 @@ FileLinker.prototype = {
                 _file = _path.resolve(dir, _file);
                 if (!_fs.existsSync(_file)) {
                     //console.log('      but miss: ', _file);
+                    var information = '无法链接文件：' + _path.relative(basePath, _file),
+                        err = new Error(information);
+                    err.fromFile = _path.relative(basePath, file.path);
+                    err.targetFile = _path.relative(basePath, _file);
+                    self.onError && self.onError(err);
                     return;
                 }
             }
@@ -310,7 +355,15 @@ FileLinker.prototype = {
                 fromCss = Utils.isStyle(filePath),
 
                 baseName = _path.basename(filePath),
-                flattenDir = flattenMap[fileType] || '';
+                flattenDir = flattenMap[fileType] || '',
+
+                pathParts = filePath.split('/');
+
+            for (var i = 0, l = pathParts.length; i < l; i++) {
+                if (pathParts[i].charAt(0) === '_') {
+                    return cb(null, null);
+                }
+            }
 
             //console.log('- baseName:', baseName, '\n- fileType:', fileType, '\n- flattenDir:', flattenDir, '\n===')
 

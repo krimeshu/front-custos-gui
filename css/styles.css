@@ -216,6 +216,8 @@ input {
   word-break: break-all;
   font-size: 13px;
   font-family: Consolas, custom-font, sans-serif; }
+  .log-box hr {
+    border-color: #cacaca; }
   .log-box .literal {
     color: #cacaca; }
   .log-box .info {

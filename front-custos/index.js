@@ -47,7 +47,15 @@ module.exports = {
             console = _console;
         }
     },
+    isRunning: function () {
+        return running;
+    },
     process: function (_params, cb) {
+        if (running) {
+            return;
+        }
+        running = true;
+
         params = _params;
 
         // 提取项目名称和构建、发布文件夹路径
@@ -78,6 +86,7 @@ module.exports = {
         var tasks = params.tasks || [];
         tasks.push(function () {
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + params.prjName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
+            running = false;
             cb && cb();
         });
         runSequenceUseGulp.apply(null, tasks);
@@ -85,7 +94,8 @@ module.exports = {
 };
 
 var config = {delUnusedFiles: true},
-    params = {};
+    params = {},
+    running = false;
 
 var tasks = {
     // 准备构建环境：
@@ -123,7 +133,7 @@ var tasks = {
     // - 替换常见常量（项目路径、项目名字等）
     'replace_const': function (done) {
         var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.js|.css|.html|.shtml|.php)'),
+            pattern = _path.resolve(buildDir, '**/*@(.js|.css|.scss|.html|.shtml|.php)'),
             constFields = params.constFields;
 
         var timer = new Timer();
@@ -547,6 +557,12 @@ var tasks = {
                             (unchangedCount ? '，其中' + unchangedCount + '个无变更。' : '。');
                     logId && console.useId && console.useId(logId);
                     console.info(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务结束' + resText + '（' + timer.getTime() + 'ms）');
+                    if (succeedCount) {
+                        console.log(succeedCount, '个文件上传成功：', results.succeed);
+                    }
+                    if (failedCount) {
+                        console.log(failedCount, '个文件上传失败：', results.failed);
+                    }
                     done();
                 });
             });

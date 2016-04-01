@@ -174,10 +174,14 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     };
 
     var doBuild = function (fcOpt, cb) {
+        if (FrontCustos.isRunning()) {
+            $scope.toastMsg('有未完成的任务，请稍后再试');
+            return;
+        }
         $scope.toastMsg('任务开始……');
         FrontCustos.config(Model.config);
         var params = Utils.deepCopy(fcOpt);
-        // console.log('fcOpt === params:', fcOpt === params);
+        Logger.log('<hr/>');
         FrontCustos.process(params, function () {
             $scope.$apply(function () {
                 cb && cb(params);

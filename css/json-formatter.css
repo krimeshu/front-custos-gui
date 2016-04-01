@@ -12,7 +12,7 @@
 .json-formatter-row,
 .json-formatter-row a,
 .json-formatter-row a:hover {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 .json-formatter-row .json-formatter-row {
@@ -32,38 +32,38 @@
     content: "[]";
 }
 .json-formatter-row .string {
-    color: #74aa04;
+    color: green;
     white-space: pre;
     word-wrap: break-word;
 }
 .json-formatter-row .number {
-    color: #cacaca;
+    color: blue;
 }
 .json-formatter-row .boolean {
-    color: #cacaca;
+    color: red;
 }
 .json-formatter-row .null {
-    color: #cacaca;
+    color: #855a00;
 }
 .json-formatter-row .undefined {
-    color: #cacaca;
+    color: #ca0b69;
 }
 .json-formatter-row .function {
-    color: #a70334;
+    color: #ff20ed;
 }
 .json-formatter-row .date {
     background-color: rgba(0, 0, 0, 0.05);
 }
 .json-formatter-row .url {
     text-decoration: underline;
-    color: #ffffff;
+    color: blue;
     cursor: pointer;
 }
 .json-formatter-row .bracket {
-    color: #74aa04;
+    color: blue;
 }
 .json-formatter-row .key {
-    color: #cccc81;
+    color: #00008b;
     cursor: pointer;
 }
 .json-formatter-row .constructor-name {
@@ -188,5 +188,98 @@
     display: inline-block;
 }
 .json-formatter-dark.json-formatter-row.open > a > .preview-text {
+    display: none;
+}
+/* 自定义的monikai主题 */
+.json-formatter-monokai.json-formatter-row {
+    font-family: monospace;
+}
+.json-formatter-monokai.json-formatter-row,
+.json-formatter-monokai.json-formatter-row a,
+.json-formatter-monokai.json-formatter-row a:hover {
+    color: white;
+    text-decoration: none;
+}
+.json-formatter-monokai.json-formatter-row .json-formatter-row {
+    margin-left: 1rem;
+}
+.json-formatter-monokai.json-formatter-row .children.empty {
+    opacity: 0.5;
+    margin-left: 1rem;
+}
+.json-formatter-monokai.json-formatter-row .children.empty:after {
+    display: none;
+}
+.json-formatter-monokai.json-formatter-row .children.empty.object:after {
+    content: "No properties";
+}
+.json-formatter-monokai.json-formatter-row .children.empty.array:after {
+    content: "[]";
+}
+.json-formatter-monokai.json-formatter-row .string {
+    color: #cccc81;
+    white-space: pre;
+    word-wrap: break-word;
+}
+.json-formatter-monokai.json-formatter-row .number {
+    color: #cccc81;
+}
+.json-formatter-monokai.json-formatter-row .boolean {
+    color: #cccc81;
+}
+.json-formatter-monokai.json-formatter-row .null {
+    color: #cccc81;
+}
+.json-formatter-monokai.json-formatter-row .undefined {
+    color: #cccc81;
+}
+.json-formatter-monokai.json-formatter-row .function {
+    color: #a70334;
+}
+.json-formatter-monokai.json-formatter-row .date {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.json-formatter-monokai.json-formatter-row .url {
+    text-decoration: underline;
+    color: #ffffff;
+    cursor: pointer;
+}
+.json-formatter-monokai.json-formatter-row .bracket {
+    color: #ffffff;
+}
+.json-formatter-monokai.json-formatter-row .key {
+    color: #74aa04;
+    cursor: pointer;
+}
+.json-formatter-monokai.json-formatter-row .constructor-name {
+    cursor: pointer;
+}
+.json-formatter-monokai.json-formatter-row .toggler {
+    line-height: 1.2rem;
+    font-size: 0.8em;
+    vertical-align: middle;
+    opacity: 0.6;
+    cursor: pointer;
+}
+.json-formatter-monokai.json-formatter-row .toggler:after {
+    display: inline-block;
+    transition: transform 100ms ease-in;
+    content: "►";
+}
+.json-formatter-monokai.json-formatter-row > a > .preview-text {
+    opacity: 0;
+    transition: opacity 0.15s ease-in;
+    font-style: italic;
+}
+.json-formatter-monokai.json-formatter-row:hover > a > .preview-text {
+    opacity: 0.6;
+}
+.json-formatter-monokai.json-formatter-row.open > .toggler-link .toggler:after {
+    transform: rotate(90deg);
+}
+.json-formatter-monokai.json-formatter-row.open > .children:after {
+    display: inline-block;
+}
+.json-formatter-monokai.json-formatter-row.open > a > .preview-text {
     display: none;
 }

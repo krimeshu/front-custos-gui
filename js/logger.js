@@ -62,7 +62,10 @@ module.exports = {
         if (!existed) {
             li.id = nextId;
             logList.appendChild(li);
-            li.scrollIntoView();
+            window.setTimeout(function () {
+                li.scrollIntoView();
+                li = null;
+            }, 10);
         }
     },
     _format: function (args) {
@@ -142,7 +145,12 @@ var parseString = function (arg) {
         case 'object':
             var id = module.exports.genUniqueId();
             window.setTimeout(function () {
-                var formatter = new JSONFormatter(arg, 0);
+                if (arg.message && !Object.getOwnPropertyDescriptor(arg, 'message').enumerable) {
+                    arg.infomation = arg.message;
+                }
+                var formatter = new JSONFormatter(arg, 0, {
+                    theme: 'monokai'
+                });
                 document.getElementById(id).appendChild(formatter.render());
             }, 0);
             return '<em id="' + id + '" class="json-holder"></em>';

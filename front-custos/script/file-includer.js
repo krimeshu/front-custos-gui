@@ -95,7 +95,8 @@ FileIncluder.prototype = {
                 //console.log('================================================================================');
                 //console.log('> FileIncluder - file:', file.path);
 
-                var filePath = file.path,
+                var basePath = file.base,
+                    filePath = file.path,
                     dirPath = _path.dirname(filePath),
                     isDir = file.isDirectory(),
                     isText = !isDir && Utils.isText(filePath),
@@ -131,11 +132,10 @@ FileIncluder.prototype = {
                         _file = _path.resolve(dirPath, _file);
                     }
                     if (!cache.hasOwnProperty(_file)) {
-                        var information = '没有找到需要包含的文件：' + _path.relative(dirPath, _file),
+                        var information = '无法包含文件：' + _path.relative(basePath, _file),
                             err = new Error(information);
-                        err.infomation = information;
-                        err.fromFile = file.path;
-                        err.targetFile = _file;
+                        err.fromFile = _path.relative(basePath, file.path);
+                        err.targetFile = _path.relative(basePath, _file);
                         self.onError && self.onError(err);
                         continue;
                     }

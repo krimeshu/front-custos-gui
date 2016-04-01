@@ -164,19 +164,27 @@ FileUploader.prototype = {
                         var res = self.uploadResult;
                         if (!err && (!onProgress || onProgress(err, filePath, body, res))) {
                             self._updateFileHash(filePath);
-                            res.succeed.push(filePath);
+                            res.succeed.push(formPreview);
                         } else {
-                            res.failed.push(filePath);
+                            formPreview.response = response;
+                            res.failed.push(formPreview);
                         }
                         if (res.succeed.length + res.failed.length >= res.queue.length) {
                             onComplete && onComplete(res);
                         }
                         done();
                     });
-                    var form = request.form();
+                    var form = request.form(),
+                        formPreview = {},
+                        value, type;
                     for (var key in formMap) {
                         if (formMap.hasOwnProperty(key)) {
-                            form.append(key, formMap[key]);
+                            value = formMap[key];
+                            type = typeof (value);
+                            form.append(key, value);
+                            if (type !== 'object' && type !== 'function') {
+                                formPreview[key] = value;
+                            }
                         }
                     }
                 };
