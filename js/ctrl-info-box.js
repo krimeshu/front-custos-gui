@@ -11,12 +11,15 @@ var _path = require('path'),
 var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
-    FrontCustos = require('../front-custos'),
-
-    gulp = require('../front-custos/node_modules/gulp');
-
-FrontCustos.takeOverConsole(Logger);
-FrontCustos.registerTasks(gulp);
+    FrontCustos = {
+        unloaded: true,
+        loadPlugin: function () {
+            var gulp = require('../front-custos/node_modules/gulp');
+            FrontCustos = require('../front-custos');
+            FrontCustos.takeOverConsole(Logger);
+            FrontCustos.registerTasks(gulp);
+        }
+    };
 
 module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
     var self = this;
@@ -176,6 +179,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     };
 
     var doBuild = function (fcOpt, cb) {
+        FrontCustos.unloaded && FrontCustos.loadPlugin();
         if (FrontCustos.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
@@ -192,6 +196,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     };
 
     var doUpload = function (params, cb) {
+        FrontCustos.unloaded && FrontCustos.loadPlugin();
         params.tasks = ['do_upload'];
         FrontCustos.process(params, function () {
             $scope.$apply(function () {

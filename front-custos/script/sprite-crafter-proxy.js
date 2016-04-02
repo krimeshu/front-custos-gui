@@ -6,11 +6,11 @@ var _path = require('path');
 
 var Through2 = require('through2'),
 
-    SpriteCrafter = require('./sprite-crafter.js'),
     FileCache = require('./file-cache.js');
 
 var SpriteCrafterProxy = {
     analyseUsedImageMap: function (files, maps) {
+        var SpriteCrafter = require('./sprite-crafter.js');
         return Through2.obj(function (file, enc, cb) {
             if (file.isDirectory()) {
                 return cb(null, file);
@@ -30,6 +30,8 @@ var SpriteCrafterProxy = {
         });
     },
     process: function (opt, cb) {
+        var SpriteCrafter = require('./sprite-crafter.js');
+
         var src = opt.src,
             cssFiles = opt.files,
             maps = opt.maps,
