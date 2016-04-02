@@ -14,12 +14,12 @@ var _os = require('os'),
     cache = require('gulp-cache'),
     csso = require('gulp-csso'),
     imagemin = require('gulp-imagemin'),
+    sass = require('gulp-sass'),
     pngquant = require('imagemin-pngquant'),
 
     Utils = require('./script/utils.js'),
     Timer = require('./script/timer.js'),
     ConstReplacer = require('./script/const-replacer.js'),
-    SassCompiler = require('./script/sass-compiler'),
     FileIncluder = require('./script/file-includer.js'),
     FileLinker = require('./script/file-linker.js'),
     FileUploader = require('./script/file-uploader.js'),
@@ -169,21 +169,21 @@ var tasks = {
         var buildDir = params.buildDir,
             pattern = _path.resolve(buildDir, '**/*@(.scss)');
 
-        var compiler = new SassCompiler(function (err) {
+        var errorHandler = function (err) {
             var errWrap = {
                 text: 'compile_sass 异常: ',
                 err: err
             };
             params.errors.push(errWrap);
             console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        };
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务开始……');
         gulp.src(pattern)
-            .pipe(compiler.handleFile())
+            .pipe(sass().on('error', errorHandler))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
