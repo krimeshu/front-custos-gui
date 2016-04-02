@@ -98,6 +98,17 @@ var config = {delUnusedFiles: true},
     params = {},
     running = false;
 
+var getTaskErrorHander = function (taskName) {
+    return function (err) {
+        var errWrap = {
+            text: taskName + ' 异常: ',
+            err: err
+        };
+        params.errors.push(errWrap);
+        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
+    };
+};
+
 var tasks = {
     // 准备构建环境：
     // - 清理构建文件夹
@@ -113,14 +124,7 @@ var tasks = {
         del([_path.resolve(buildDir, '**/*')], {force: true}).then(function () {
             gulp.src(_path.resolve(srcDir, '**/*'))
                 .pipe(plumber({
-                    'errorHandler': function (err) {
-                        var errWrap = {
-                            text: 'prepare_build 异常: ',
-                            err: err
-                        };
-                        params.errors.push(errWrap);
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                    }
+                    'errorHandler': getTaskErrorHander('prepare_build')
                 }))
                 .pipe(gulp.dest(buildDir))
                 .on('end', function () {
@@ -146,14 +150,7 @@ var tasks = {
         //replacer.doReplace(params);
         gulp.src(pattern)
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'replace_const 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('replace_const')
             }))
             .pipe(replacer.handleFile())
             .pipe(gulp.dest(buildDir))
@@ -169,14 +166,7 @@ var tasks = {
         var buildDir = params.buildDir,
             pattern = _path.resolve(buildDir, '**/*@(.scss)');
 
-        var errorHandler = function (err) {
-            var errWrap = {
-                text: 'compile_sass 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        };
+        var errorHandler = getTaskErrorHander('compile_sass');
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
@@ -195,14 +185,8 @@ var tasks = {
     // - 根据 #include 包含关系，合并涉及到的文件
     'join_include': function (done) {
         var buildDir = params.buildDir;
-        var includer = new FileIncluder(function (err) {
-            var errWrap = {
-                text: 'join_include 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('join_include'),
+            includer = new FileIncluder(errorHandler);
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
@@ -211,14 +195,7 @@ var tasks = {
         var fileList = includer.analyseDepRelation(buildDir);
         gulp.src(fileList, {base: buildDir})
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'join_include 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': errorHandler
             }))
             .pipe(includer.handleFile())
             .pipe(gulp.dest(buildDir))
@@ -244,14 +221,7 @@ var tasks = {
         scOpt.src = buildDir;
         gulp.src(pattern)
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'sprite_crafter 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('sprite_crafter')
             }))
             .pipe(SpriteCrafterProxy.analyseUsedImageMap(files, maps))
             .pipe(gulp.dest(buildDir))
@@ -278,14 +248,7 @@ var tasks = {
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务开始……');
         gulp.src(pattern)
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'prefix_crafter 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('prefix_crafter')
             }))
             .pipe(PrefixCrafterProxy.process(pcOpt))
             .pipe(gulp.dest(buildDir))
@@ -313,29 +276,16 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务开始……');
 
-        var linker = new FileLinker({
-            htmlEnhanced: htmlEnhanced
-        }, function (err) {
-            var errWrap = {
-                text: 'allot_link 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('allot_link'),
+            linker = new FileLinker({
+                htmlEnhanced: htmlEnhanced
+            }, errorHandler);
         var fileAllotMap = {},                               // 用于记录文件分发前后的路径关系
             usedFiles = linker.analyseDepRelation(buildDir); //记录分发前的文件依赖表
         // 1. 将构建文件夹中的文件进行分发和重链接，生成到分发文件夹中
         gulp.src(_path.resolve(buildDir, '**/*'))
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'allot_link 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': errorHandler
             }))
             .pipe(linker.handleFile(alOpt, fileAllotMap))
             .pipe(gulp.dest(buildDir))
@@ -374,6 +324,9 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
         gulp.src(_path.resolve(buildDir, '**/*.css'))
+            .pipe(plumber({
+                'errorHandler': getTaskErrorHander('run_csso')
+            }))
             .pipe(csso({
                 restructure: false,
                 sourceMap: false,
@@ -407,14 +360,7 @@ var tasks = {
 
         gulp.src(_path.resolve(buildDir, '**/*.png'))
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'optimize_image:png 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('optimize_image:png')
             }))
             .pipe(cache(pngquant({
                 quality: '65-80',
@@ -430,14 +376,7 @@ var tasks = {
 
         gulp.src(_path.resolve(buildDir, '**/*.{jpg,gif}'))
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'optimize_image:other 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('optimize_image:other')
             }))
             .pipe(cache(imagemin({
                 progressive: true,
@@ -464,16 +403,10 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务开始……');
 
-        var linker = new FileLinker({
-            htmlEnhanced: htmlEnhanced                                 // php代码处理有误，关闭 cheerio 解析
-        }, function (err) {
-            var errWrap = {
-                text: 'do_dist 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('do_dist'),
+            linker = new FileLinker({
+                htmlEnhanced: htmlEnhanced                                 // php代码处理有误，关闭 cheerio 解析
+            }, errorHandler);
 
         //console.log('usedFiles:', usedFiles);
         if (delUnusedFiles) {
@@ -487,14 +420,7 @@ var tasks = {
         del([_path.resolve(distDir, '**/*')], {force: true}).then(function () {
             gulp.src(_path.resolve(buildDir, '**/*'))
                 .pipe(plumber({
-                    'errorHandler': function (err) {
-                        var errWrap = {
-                            text: 'do_dist 异常: ',
-                            err: err
-                        };
-                        params.errors.push(errWrap);
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                    }
+                    'errorHandler': errorHandler
                 }))
                 .pipe(linker.excludeUnusedFiles(usedFiles))
                 .pipe(linker.excludeEmptyDir())
@@ -548,14 +474,7 @@ var tasks = {
 
         gulp.src(_path.resolve(distDir, '**/*'))
             .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'do_upload 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+                'errorHandler': getTaskErrorHander('do_upload')
             }))
             .pipe(uploader.appendFile())
             .on('end', function () {
