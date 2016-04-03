@@ -84,8 +84,11 @@ var watch = function (_projWithOpt) {
     fillTasks(projWithOpt);
     var rebuild = debounce(function () {
         Logger.info('监听到变化，执行项目构建：%c%s', 'color: white;', projName);
-        doBuild(projWithOpt, function () {
+        doBuild(projWithOpt, function (params) {
             Logger.info('监听项目构建完毕：%c%s', 'color: white;', projName);
+            Model.config.watchToUploading && doUpload(params, function () {
+                Logger.info('监听构建上传完毕：%c%s', 'color: white;', projName);
+            });
         });
     }, 500);
 
@@ -141,7 +144,6 @@ var debounce = function (func, wait, immediate) {
     var later = function () {
         // 据上一次触发时间间隔
         var last = Date.now() - timestamp;
-
         // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
         if (last < wait && last > 0) {
             timeout = setTimeout(later, wait - last);
@@ -166,7 +168,6 @@ var debounce = function (func, wait, immediate) {
             result = func.apply(context, args);
             context = args = null;
         }
-
         return result;
     };
 };
