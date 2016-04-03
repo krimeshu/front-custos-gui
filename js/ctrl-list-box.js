@@ -7,7 +7,8 @@ var mainWindow = require('electron').remote.getCurrentWindow(),
 var Logger = require('./logger.js'),
     Data = require('./data.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    CustosProxy = require('./custos-proxy.js');
 
 var _fs = require('fs'),
     _path = require('path');
@@ -31,7 +32,10 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             return;
         }
 
-        if (!_fs.existsSync(proj.srcDir)) {
+        var projName = proj.projName,
+            srcDir = proj.srcDir;
+
+        if (!_fs.existsSync(srcDir)) {
             Model.removeProjById(id);
             $mdDialog.show(
                 $mdDialog.alert()
@@ -46,19 +50,16 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             return;
         }
 
-        var projName = proj.projName,
-            srcDir = proj.srcDir,
-            pkg = Data.loadProjPackage(projName, srcDir),
-            opts = pkg.fcOpt || {};
-
+        // 开始加载
+        Model.loadCurProj(proj);
         Logger.log('<hr/>');
         Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
         Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', srcDir);
 
-        opts.version = pkg.version;
-
-        Utils.deepCopy(opts, Model.curProj);
-        Utils.deepCopy(proj, Model.curProj);
+        // 检查是否监听自动构建
+        if (Model.curProj.watchToRebuilding) {
+            CustosProxy.watch(Model.curProj);
+        }
 
         // 记录上次操作的 Id
         Model.config.lastWorkingId = id;

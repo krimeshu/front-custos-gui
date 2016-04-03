@@ -29,6 +29,21 @@ module.exports = {
     config: Data.loadConfig(),
     projList: Data.loadProjList(),
     curProj: Data.getInitOpt(),
+    watchingProjIds: [],
+    loadCurProj: function (proj) {
+        var opts = this.loadProjOptions(proj);
+        Utils.deepCopy(opts, this.curProj);
+        Utils.deepCopy(proj, this.curProj);
+    },
+    loadProjOptions: function (proj) {
+        var projName = proj.projName,
+            srcDir = proj.srcDir,
+            pkg = Data.loadProjPackage(projName, srcDir),
+            opts = pkg.fcOpt || {};
+        opts.version = pkg.version;
+        opts.watchToRebuilding = !!pkg.watchToRebuilding;
+        return opts;
+    },
     getProjById: function (id) {
         var proj = null;
         this.projList && this.projList.forEach &&
@@ -60,30 +75,36 @@ module.exports = {
     updateProj: function (projWithOpts) {
         try {
             var id = projWithOpts.id,
-                projList = this.projList,
-                proj = this.getProjById(id),
+                projName = projWithOpts.projName,
+                srcDir = projWithOpts.srcDir,
+                version = projWithOpts.version,
+                watchToRebuilding = projWithOpts.watchToRebuilding,
+                fcOpt = this.extractFcOpt(projWithOpts, ['id', 'projName', 'srcDir', 'version']);
+            this.updatePkg(projName, srcDir, version, watchToRebuilding, fcOpt);
 
-                fcOpt = Utils.deepCopy(this.curProj),
-                projName = fcOpt.projName,
-                srcDir = fcOpt.srcDir,
-                version = fcOpt.version,
-                pkg = Data.loadProjPackage(projName, srcDir);
-
-            delete fcOpt.id;
-            delete fcOpt.projName;
-            delete fcOpt.srcDir;
-            delete fcOpt.version;
-
-            proj.projName = projName;
-            proj.srcDir = srcDir;
-            pkg.fcOpt = fcOpt;
-            pkg.version = version;
-
+            var projList = this.projList,
+                justProj = this.getProjById(id);
+            justProj.projName = projName;
+            justProj.srcDir = srcDir;
             Data.saveProjList(projList);
-            Data.saveProjPackage(pkg, srcDir);
+
             return true;
         } catch (e) {
             return false;
         }
+    },
+    extractFcOpt: function (proj, excludeFields) {
+        var fcOpt = Utils.deepCopy(proj);
+        excludeFields && excludeFields.forEach(function (field) {
+            delete fcOpt[field];
+        });
+        return fcOpt;
+    },
+    updatePkg: function (projName, srcDir, version, watchToRebuilding, fcOpt) {
+        var pkg = Data.loadProjPackage(projName, srcDir);
+        pkg.version = version;
+        pkg.watchToRebuilding = watchToRebuilding;
+        pkg.fcOpt = fcOpt;
+        Data.saveProjPackage(pkg, srcDir);
     }
 };

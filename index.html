@@ -190,16 +190,23 @@
                             <!--<h4>开始操作</h4>-->
 
                             <div layout="row">
-                                <md-button class="md-raised"
+                                <md-button class="md-raised middle-width"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildLocally()">本地构建
                                 </md-button>
-                                <md-button class="md-raised md-primary"
+                                <md-button class="md-raised md-primary middle-width"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildUpload()">构建上传
                                 </md-button>
-                                <div flex></div>
-                                <md-switch ng-model="curProj.upOpt.uploadAll"
+                            </div>
+                            <div layout="row">
+                                <md-switch class="middle-width"
+                                           ng-checked="curProj.watchToRebuilding"
+                                           ng-click="!(curProj.id === null) && toggleCurWatching()"
+                                           ng-disabled="curProj.id === null">监听自动构建
+                                </md-switch>
+                                <md-switch class="middle-width"
+                                           ng-model="curProj.upOpt.uploadAll"
                                            ng-disabled="curProj.id === null">全量上传
                                 </md-switch>
                             </div>
