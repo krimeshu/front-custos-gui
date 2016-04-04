@@ -113,8 +113,8 @@ JSONViewer.prototype = {
             indentSize = this.indentSize | 0,
             expand = this.expand | 0,
             rowClass = this.rowClass || 'json-viewer-row',
-            collapseClass = (expand > 0 && depth >= expand ? ' collapsed' : ''),
             isEmpty,
+            collapseClass,
             child,
             baseType,
             objectType,
@@ -144,6 +144,7 @@ JSONViewer.prototype = {
                 break;
             case '[object Array]':
                 isEmpty = target.length ? '' : ' empty';
+                collapseClass = ((expand > 0 && depth >= expand) || isEmpty) ? ' collapsed' : '';
                 buffer.push('<div class="' + rowClass + collapseClass + isEmpty + '">');
                 _keyName && this._tryPrependKey(buffer, _keyName);
                 buffer.push('<div class="json-viewer-bracket">[</div>');
@@ -187,6 +188,7 @@ JSONViewer.prototype = {
                 keys.splice(0, 0, 'message');
             }
             isEmpty = keys.length ? '' : ' empty';
+            collapseClass = ((expand > 0 && depth >= expand) || isEmpty) ? ' collapsed' : '';
             buffer.push('<div class="' + rowClass + collapseClass + isEmpty + '">');
             _keyName && this._tryPrependKey(buffer, _keyName);
             buffer.push('<div class="json-viewer-bracket">{</div>');
