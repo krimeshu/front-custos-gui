@@ -202,3 +202,14 @@ exports.isAudio = function (file) {
     return type === 'audio';
 };
 // 格式验证相关 ED
+
+exports.countLineNumber = function (content, match) {
+    var index = match.index,
+        row = 1;
+    for (var i = 0, len = content.length; i < index && i < len; i++) {
+        if (content.charAt(i) === '\n') {
+            row++;
+        }
+    }
+    return row;
+};

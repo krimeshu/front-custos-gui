@@ -15,6 +15,7 @@ var _os = require('os'),
     FileIncluder = require('./script/file-includer.js'),
     FileLinker = require('./script/file-linker.js'),
     FileUploader = require('./script/file-uploader.js'),
+    BrowserifyProxy = require('./script/browserify-proxy.js'),
     SpriteCrafterProxy = require('./script/sprite-crafter-proxy.js'),
     PrefixCrafterProxy = require('./script/prefix-crafter-proxy.js'),
 
@@ -195,11 +196,39 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务开始……');
         gulp.src(pattern)
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': errorHandler
+            }))
             .pipe(LazyLoadPlugins.sass().on('error', errorHandler))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务结束。（' + timer.getTime() + 'ms）');
+                done();
+            });
+    },
+    // 使用Browserify打包JS:
+    'run_browserify': function (done) {
+        var buildDir = params.buildDir,
+            pattern = _path.resolve(buildDir, '**/*@(.js)');
+
+        var errorHandler = getTaskErrorHander('run_browserify'),
+            browserify = new BrowserifyProxy(errorHandler);
+
+        var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_browserify 任务开始……');
+        gulp.src(pattern)
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': errorHandler
+            }))
+            .pipe(browserify.findEntryFiles())
+            .pipe(browserify.handleFile())
+            .pipe(gulp.dest(buildDir))
+            .on('end', function () {
+                logId && console.useId && console.useId(logId);
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_browserify 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     },

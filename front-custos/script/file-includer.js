@@ -100,14 +100,17 @@ FileIncluder.prototype = {
                     dirPath = _path.dirname(filePath),
                     isDir = file.isDirectory(),
                     isText = !isDir && Utils.isText(filePath),
-                    content = isText ? String(file.contents) : file.contents;
+                    content = isText ? String(file.contents) : file.contents,
+                    baseName = _path.basename(filePath),
+                    extName = _path.extname(filePath),
+                    ignoreSass = /\.(scss|sass)/i.test(extName) && baseName.charAt(0) === '_';
 
                 var newContent = content,
                     cache = self.resultCache,
                     reg = self._getRegExp(),
                     match;
 
-                while (isText && (match = reg.exec(content)) !== null) {
+                while (!ignoreSass && isText && (match = reg.exec(content)) !== null) {
                     var _str = match[0],
                         _file = match[1],
                         _json = match[2];
@@ -135,6 +138,7 @@ FileIncluder.prototype = {
                         var information = '无法包含文件：' + _path.relative(basePath, _file),
                             err = new Error(information);
                         err.fromFile = _path.relative(basePath, file.path);
+                        err.rowNumber = Utils.countLineNumber(content, match);
                         err.targetFile = _path.relative(basePath, _file);
                         self.onError && self.onError(err);
                         continue;

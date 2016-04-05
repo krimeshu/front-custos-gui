@@ -143,6 +143,7 @@ FileLinker.prototype = {
                     var information = '无法链接文件：' + _path.relative(basePath, _file),
                         err = new Error(information);
                     err.fromFile = _path.relative(basePath, file.path);
+                    err.rowNumber = Utils.countLineNumber(content, match);
                     err.targetFile = _path.relative(basePath, _file);
                     self.onError && self.onError(err);
                     continue;
@@ -199,6 +200,7 @@ FileLinker.prototype = {
                     var information = '无法链接文件：' + _path.relative(basePath, _file),
                         err = new Error(information);
                     err.fromFile = _path.relative(basePath, file.path);
+                    err.rowNumber = Utils.countLineNumber(content, match);
                     err.targetFile = _path.relative(basePath, _file);
                     self.onError && self.onError(err);
                     continue;
@@ -248,6 +250,7 @@ FileLinker.prototype = {
                     var information = '无法链接文件：' + _path.relative(basePath, _file),
                         err = new Error(information);
                     err.fromFile = _path.relative(basePath, file.path);
+                    err.rowNumber = Utils.countLineNumber(content, match);
                     err.targetFile = _path.relative(basePath, _file);
                     self.onError && self.onError(err);
                     continue;
@@ -302,8 +305,24 @@ FileLinker.prototype = {
                 if (!_fs.existsSync(_file)) {
                     //console.log('      but miss: ', _file);
                     var information = '无法链接文件：' + _path.relative(basePath, _file),
-                        err = new Error(information);
+                        err = new Error(information),
+                        domPath = [],
+                        getSelector = function (elem) {
+                            var selector = elem.tagName.toLowerCase(),
+                                id = elem.id,
+                                classList = elem.classList;
+                            id && (selector += '#' + id);
+                            classList && [].forEach.call(classList, function (className) {
+                                selector += '.' + className;
+                            });
+                            return selector;
+                        };
+                    domPath.push(getSelector($this.get(0)));
+                    $this.parents().each(function () {
+                        domPath.push(getSelector(this));
+                    });
                     err.fromFile = _path.relative(basePath, file.path);
+                    err.domPath = domPath.reverse().join('>');
                     err.targetFile = _path.relative(basePath, _file);
                     self.onError && self.onError(err);
                     return;

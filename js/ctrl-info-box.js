@@ -53,8 +53,9 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.allTasks = Model.allTasks;
 
     // 编辑器相关
-    $scope.aceChanged = function () {
-        // 暂无
+    $scope.aceLoaded = function(_editor) {
+        // Options
+        _editor.$blockScrolling = Infinity;
     };
 
     // 打开项目源目录

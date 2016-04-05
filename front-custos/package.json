@@ -1,6 +1,6 @@
 {
   "name": "front-custos",
-  "version": "0.2.46",
+  "version": "0.2.50",
   "description": "Common front end gulp task collections.",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "autoprefixer": "^6.3.3",
+    "browserify": "^13.0.0",
     "cheerio": "^0.20.0",
     "del": "^2.2.0",
     "glob": "^7.0.0",
