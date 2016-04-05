@@ -1,0 +1,91 @@
+.json-viewer-row {
+    cursor: default;
+    color: #545353;
+    margin: 2px 0;
+}
+
+.json-viewer-ellipsis {
+    background: #C0C0C0;
+    padding: 0 6px;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+
+.json-viewer-array-members.collapsed,
+.json-viewer-after-array-members.collapsed,
+.json-viewer-object-members.collapsed,
+.json-viewer-after-object-members.collapsed {
+    display: none;
+}
+
+.json-viewer-bracket, .json-viewer-colon, .json-viewer-comma {
+    margin: 0 2px;
+}
+
+.json-viewer-row .json-viewer-collapse-tag {
+    display: none;
+}
+
+.json-viewer-row.collapsed .json-viewer-collapse-tag {
+    display: inline;
+}
+
+.json-viewer-row.empty .json-viewer-collapse-tag.json-viewer-ellipsis {
+    display: none;
+}
+
+.json-viewer-row.empty .json-viewer-collapse-tag.json-viewer-bracket {
+    display: inline;
+}
+
+.json-viewer-bracket,
+.json-viewer-key,
+.json-viewer-colon,
+.json-viewer-comma,
+.json-viewer-string,
+.json-viewer-number,
+.json-viewer-boolean,
+.json-viewer-null,
+.json-viewer-undefined {
+    display: inline;
+}
+
+.json-viewer-key, .json-viewer-string {
+    color: #036A07;
+}
+
+.json-viewer-number {
+    color: #0000CD;
+}
+
+.json-viewer-boolean, .json-viewer-null, .json-viewer-undefined {
+    color: #585CF6;
+}
+
+/****************************************/
+
+.json-viewer-row.theme-dark {
+    color: #DEDEDE;
+}
+
+.json-viewer-row.theme-dark .json-viewer-ellipsis {
+    background: #666666;
+}
+
+.json-viewer-row.theme-dark .json-viewer-key {
+    color: #74AA04;
+}
+
+.json-viewer-row.theme-dark .json-viewer-string {
+    color: #CCCC81;
+}
+
+.json-viewer-row.theme-dark .json-viewer-number {
+    color: #4178B3;
+}
+
+.json-viewer-row.theme-dark .json-viewer-boolean,
+.json-viewer-row.theme-dark .json-viewer-null,
+.json-viewer-row.theme-dark .json-viewer-undefined {
+    color: #CC7832;
+}

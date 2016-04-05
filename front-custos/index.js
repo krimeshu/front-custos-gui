@@ -7,19 +7,11 @@ var _os = require('os'),
 
     gulp = null,
     runSequenceUseGulp = null,
-
     runSequence = require('run-sequence'),
-    del = require('del'),
-    plumber = require('gulp-plumber'),
-    cache = require('gulp-cache'),
-    csso = require('gulp-csso'),
-    imagemin = require('gulp-imagemin'),
-    pngquant = require('imagemin-pngquant'),
 
     Utils = require('./script/utils.js'),
     Timer = require('./script/timer.js'),
     ConstReplacer = require('./script/const-replacer.js'),
-    SassCompiler = require('./script/sass-compiler'),
     FileIncluder = require('./script/file-includer.js'),
     FileLinker = require('./script/file-linker.js'),
     FileUploader = require('./script/file-uploader.js'),
@@ -29,6 +21,7 @@ var _os = require('os'),
     console = global.console;
 
 module.exports = {
+    // 注册相关gulp任务、run-sequence插件
     registerTasks: function (_gulp) {
         gulp = _gulp;
         runSequenceUseGulp = runSequence.use(gulp);
@@ -40,17 +33,21 @@ module.exports = {
             gulp.task(taskName, tasks[taskName]);
         }
     },
+    // 设置通用配置
     config: function (_config) {
         config = _config;
     },
+    // 接管console
     takeOverConsole: function (_console) {
         if (_console.log && _console.info && _console.warn && _console.error) {
             console = _console;
         }
     },
+    // 是否任务中
     isRunning: function () {
         return running;
     },
+    // 开始处理任务
     process: function (_params, cb) {
         if (running) {
             return;
@@ -98,6 +95,42 @@ var config = {delUnusedFiles: true},
     params = {},
     running = false;
 
+var LazyLoadPlugins = {
+    _cached: {},
+    get del() {
+        return this._cached['del'] || (this._cached['del'] = require('del'));
+    },
+    get pngquant() {
+        return this._cached['pngquant'] || (this._cached['pngquant'] = require('imagemin-pngquant'));
+    },
+    get plumber() {
+        return this._cached['plumber'] || (this._cached['plumber'] = require('gulp-plumber'));
+    },
+    get cache() {
+        return this._cached['cache'] || (this._cached['cache'] = require('gulp-cache'));
+    },
+    get csso() {
+        return this._cached['csso'] || (this._cached['csso'] = require('gulp-csso'));
+    },
+    get imagemin() {
+        return this._cached['imagemin'] || (this._cached['imagemin'] = require('gulp-imagemin'));
+    },
+    get sass() {
+        return this._cached['sass'] || (this._cached['sass'] = require('gulp-sass'));
+    }
+};
+
+var getTaskErrorHander = function (taskName) {
+    return function (err) {
+        var errWrap = {
+            text: taskName + ' 异常: ',
+            err: err
+        };
+        params.errors.push(errWrap);
+        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
+    };
+};
+
 var tasks = {
     // 准备构建环境：
     // - 清理构建文件夹
@@ -110,17 +143,10 @@ var tasks = {
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
-        del([_path.resolve(buildDir, '**/*')], {force: true}).then(function () {
+        LazyLoadPlugins.del([_path.resolve(buildDir, '**/*')], {force: true}).then(function () {
             gulp.src(_path.resolve(srcDir, '**/*'))
-                .pipe(plumber({
-                    'errorHandler': function (err) {
-                        var errWrap = {
-                            text: 'prepare_build 异常: ',
-                            err: err
-                        };
-                        params.errors.push(errWrap);
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                    }
+                .pipe(LazyLoadPlugins.plumber({
+                    'errorHandler': getTaskErrorHander('prepare_build')
                 }))
                 .pipe(gulp.dest(buildDir))
                 .on('end', function () {
@@ -145,15 +171,8 @@ var tasks = {
         var replacer = new ConstReplacer(constFields);
         //replacer.doReplace(params);
         gulp.src(pattern)
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'replace_const 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('replace_const')
             }))
             .pipe(replacer.handleFile())
             .pipe(gulp.dest(buildDir))
@@ -169,21 +188,14 @@ var tasks = {
         var buildDir = params.buildDir,
             pattern = _path.resolve(buildDir, '**/*@(.scss)');
 
-        var compiler = new SassCompiler(function (err) {
-            var errWrap = {
-                text: 'compile_sass 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('compile_sass');
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务开始……');
         gulp.src(pattern)
-            .pipe(compiler.handleFile())
+            .pipe(LazyLoadPlugins.sass().on('error', errorHandler))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
@@ -195,14 +207,8 @@ var tasks = {
     // - 根据 #include 包含关系，合并涉及到的文件
     'join_include': function (done) {
         var buildDir = params.buildDir;
-        var includer = new FileIncluder(function (err) {
-            var errWrap = {
-                text: 'join_include 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('join_include'),
+            includer = new FileIncluder(errorHandler);
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
@@ -210,15 +216,8 @@ var tasks = {
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务开始……');
         var fileList = includer.analyseDepRelation(buildDir);
         gulp.src(fileList, {base: buildDir})
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'join_include 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': errorHandler
             }))
             .pipe(includer.handleFile())
             .pipe(gulp.dest(buildDir))
@@ -243,15 +242,8 @@ var tasks = {
             maps = {};
         scOpt.src = buildDir;
         gulp.src(pattern)
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'sprite_crafter 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('sprite_crafter')
             }))
             .pipe(SpriteCrafterProxy.analyseUsedImageMap(files, maps))
             .pipe(gulp.dest(buildDir))
@@ -277,15 +269,8 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务开始……');
         gulp.src(pattern)
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'prefix_crafter 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('prefix_crafter')
             }))
             .pipe(PrefixCrafterProxy.process(pcOpt))
             .pipe(gulp.dest(buildDir))
@@ -313,29 +298,16 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务开始……');
 
-        var linker = new FileLinker({
-            htmlEnhanced: htmlEnhanced
-        }, function (err) {
-            var errWrap = {
-                text: 'allot_link 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('allot_link'),
+            linker = new FileLinker({
+                htmlEnhanced: htmlEnhanced
+            }, errorHandler);
         var fileAllotMap = {},                               // 用于记录文件分发前后的路径关系
             usedFiles = linker.analyseDepRelation(buildDir); //记录分发前的文件依赖表
         // 1. 将构建文件夹中的文件进行分发和重链接，生成到分发文件夹中
         gulp.src(_path.resolve(buildDir, '**/*'))
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'allot_link 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': errorHandler
             }))
             .pipe(linker.handleFile(alOpt, fileAllotMap))
             .pipe(gulp.dest(buildDir))
@@ -358,7 +330,7 @@ var tasks = {
                 //console.log('recycledFiles:', recycledFiles);
                 //console.log('allotedUsedFiles:', allotedUsedFiles);
                 // 3. 清空构建文件夹的过期旧文件
-                del(recycledFiles, {force: true}).then(function () {
+                LazyLoadPlugins.del(recycledFiles, {force: true}).then(function () {
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务结束。（' + timer.getTime() + 'ms）');
                     done();
@@ -374,7 +346,10 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
         gulp.src(_path.resolve(buildDir, '**/*.css'))
-            .pipe(csso({
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('run_csso')
+            }))
+            .pipe(LazyLoadPlugins.csso({
                 restructure: false,
                 sourceMap: false,
                 debug: false
@@ -406,21 +381,14 @@ var tasks = {
         var buildDir = params.buildDir;
 
         gulp.src(_path.resolve(buildDir, '**/*.png'))
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'optimize_image:png 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('optimize_image:png')
             }))
-            .pipe(cache(pngquant({
+            .pipe(LazyLoadPlugins.cache(LazyLoadPlugins.pngquant({
                 quality: '65-80',
                 speed: 4
             })(), {
-                fileCache: new cache.Cache({cacheDirName: 'imagemin-cache'})
+                fileCache: new LazyLoadPlugins.cache.Cache({cacheDirName: 'imagemin-cache'})
             }))
             .pipe(gulp.dest(buildDir))
             .on('end', done);
@@ -429,21 +397,14 @@ var tasks = {
         var buildDir = params.buildDir;
 
         gulp.src(_path.resolve(buildDir, '**/*.{jpg,gif}'))
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'optimize_image:other 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('optimize_image:other')
             }))
-            .pipe(cache(imagemin({
+            .pipe(LazyLoadPlugins.cache(LazyLoadPlugins.imagemin({
                 progressive: true,
                 interlaced: true
             }), {
-                fileCache: new cache.Cache({cacheDirName: 'imagemin-cache'})
+                fileCache: new LazyLoadPlugins.cache.Cache({cacheDirName: 'imagemin-cache'})
             }))
             .pipe(gulp.dest(buildDir))
             .on('end', done);
@@ -464,16 +425,10 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务开始……');
 
-        var linker = new FileLinker({
-            htmlEnhanced: htmlEnhanced                                 // php代码处理有误，关闭 cheerio 解析
-        }, function (err) {
-            var errWrap = {
-                text: 'do_dist 异常: ',
-                err: err
-            };
-            params.errors.push(errWrap);
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-        });
+        var errorHandler = getTaskErrorHander('do_dist'),
+            linker = new FileLinker({
+                htmlEnhanced: htmlEnhanced                                 // php代码处理有误，关闭 cheerio 解析
+            }, errorHandler);
 
         //console.log('usedFiles:', usedFiles);
         if (delUnusedFiles) {
@@ -484,17 +439,10 @@ var tasks = {
             usedFiles = null;
         }
 
-        del([_path.resolve(distDir, '**/*')], {force: true}).then(function () {
+        LazyLoadPlugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(function () {
             gulp.src(_path.resolve(buildDir, '**/*'))
-                .pipe(plumber({
-                    'errorHandler': function (err) {
-                        var errWrap = {
-                            text: 'do_dist 异常: ',
-                            err: err
-                        };
-                        params.errors.push(errWrap);
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                    }
+                .pipe(LazyLoadPlugins.plumber({
+                    'errorHandler': errorHandler
                 }))
                 .pipe(linker.excludeUnusedFiles(usedFiles))
                 .pipe(linker.excludeEmptyDir())
@@ -547,15 +495,8 @@ var tasks = {
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务开始……');
 
         gulp.src(_path.resolve(distDir, '**/*'))
-            .pipe(plumber({
-                'errorHandler': function (err) {
-                    var errWrap = {
-                        text: 'do_upload 异常: ',
-                        err: err
-                    };
-                    params.errors.push(errWrap);
-                    console.error(Utils.formatTime('[HH:mm:ss.fff]'), errWrap.text, errWrap.err);
-                }
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('do_upload')
             }))
             .pipe(uploader.appendFile())
             .on('end', function () {

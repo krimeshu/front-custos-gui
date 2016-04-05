@@ -135,7 +135,12 @@ module.exports = {
     }
 };
 
-// var JSONFormatter = require('json-formatter-js/src/index.js');
+var jsonViewer = new JSONViewer({
+    eventHandler: document.querySelector('.log-box .log-list'),
+    indentSize: 16,
+    expand: 1,
+    theme: 'dark'
+});
 
 var parseString = function (arg) {
     var type = typeof(arg);
@@ -143,17 +148,7 @@ var parseString = function (arg) {
         case 'string':
             return arg;
         case 'object':
-            var id = module.exports.genUniqueId();
-            window.setTimeout(function () {
-                if (arg.message && !Object.getOwnPropertyDescriptor(arg, 'message').enumerable) {
-                    arg.infomation = arg.message;
-                }
-                var formatter = new JSONFormatter(arg, 0, {
-                    theme: 'monokai'
-                });
-                document.getElementById(id).appendChild(formatter.render());
-            }, 0);
-            return '<em id="' + id + '" class="json-holder"></em>';
+            return jsonViewer.toJSON(arg);
         default:
             return String(arg);
     }

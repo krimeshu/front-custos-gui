@@ -50,6 +50,7 @@ function loadConfig() {
                 "other": "raw"
             },
             "concurrentLimit": 1,
+            "watchToUploading": false,
             "lastWorkingId": null
         };
     if (!_fs.existsSync(configPath)) {

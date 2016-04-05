@@ -2,11 +2,11 @@
  * Created by krimeshu on 2016/2/16.
  */
 
-var Through2 = require('through2'),
-    PrefixCrafter = require('./prefix-crafter.js');
+var Through2 = require('through2');
 
 var PrefixCrafterProxy = {
-    process: function (pcOpt){
+    process: function (pcOpt) {
+        var PrefixCrafter = require('./prefix-crafter.js');
         return Through2.obj(function (file, enc, cb) {
             if (file.isDirectory()) {
                 return cb(null, file);

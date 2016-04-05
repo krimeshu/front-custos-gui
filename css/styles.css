@@ -84,13 +84,10 @@ input {
   -webkit-app-region: drag; }
   body[md-theme="default"] .window-header {
     background: #607D8B; }
-
   body[md-theme="pink"] .window-header {
     background: #E91C63; }
-
   body[md-theme="indigo"] .window-header {
     background: #3F51B5; }
-
   body[md-theme="orange"] .window-header {
     background: #FF5622; }
   .window-header .clickable, .md-clickable {
@@ -147,19 +144,16 @@ input {
     color: #2c3940; }
     body[md-theme="default"] .list-box .proj-list .proj-item.current {
       background-color: #a8bac3; }
-
   body[md-theme="pink"] .list-box {
     background-color: #fdedf3;
     color: #7a0c32; }
     body[md-theme="pink"] .list-box .proj-list .proj-item.current {
       background-color: #f490b3; }
-
   body[md-theme="indigo"] .list-box {
     background-color: #e4e7f6;
     color: #1e2756; }
     body[md-theme="indigo"] .list-box .proj-list .proj-item.current {
       background-color: #98a2db; }
-
   body[md-theme="orange"] .list-box {
     background-color: white;
     color: #a22600; }
@@ -191,6 +185,8 @@ input {
     height: 48px; }
   .info-box form.info-form, .info-box md-tabs {
     height: 100%; }
+  .info-box .middle-width {
+    width: 150px; }
   .info-box .indent {
     padding-left: 24px; }
   .info-box .btn-save {
@@ -244,4 +240,4 @@ input {
   position: relative;
   height: 200px; }
 
-/*# sourceMappingURL=styles.css.map */
+/*# sourceMappingURL=none/styles.css.map */

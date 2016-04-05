@@ -11,12 +11,7 @@ var _path = require('path'),
 var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
-    FrontCustos = require('../front-custos'),
-
-    gulp = require('../front-custos/node_modules/gulp');
-
-FrontCustos.takeOverConsole(Logger);
-FrontCustos.registerTasks(gulp);
+    CustosProxy = require('./custos-proxy.js');
 
 module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
     var self = this;
@@ -24,6 +19,13 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     self.openDialMode = 'md-fling';
 
     $scope.curProj = Model.curProj;
+    $scope.toggleCurWatching = function () {
+        if (Model.curProj.watchToRebuilding) {
+            CustosProxy.unwatch(Model.curProj);
+        } else {
+            CustosProxy.watch(Model.curProj);
+        }
+    };
 
     var tempPath = _path.resolve(_path.dirname(pagePath), './templates/options-confirm.html');
     $scope.optionsConfirmTemplate = _fs.readFileSync(tempPath).toString();
@@ -83,11 +85,13 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             .ok('确定')
             .cancel('取消');
         $mdDialog.show(confirm).then(function () {
-            var res = Model.removeProjById($scope.curProj.id),
+            var id = $scope.curProj.id,
+                res = Model.removeProjById(id),
                 projName = $scope.curProj.projName,
                 msg = res ?
                 '项目 ' + projName + ' 已被移除' :
                 '项目 ' + projName + ' 移除失败，请稍后重试';
+            unwatch(id);
             $scope.toastMsg(msg);
         });
     };
@@ -102,6 +106,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         $scope.toastMsg(msg);
     };
 
+    // 弹个消息
     $scope.toastMsg = function (msg) {
         $mdToast.show(
             $mdToast.simple()
@@ -115,89 +120,64 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     // 本地构建
     $scope.buildLocally = function () {
         var fcOpt = Model.curProj;
-        fillTasks(fcOpt);
-        doBuild(fcOpt, function () {
-            $scope.toastMsg('任务执行完毕');
+        if (CustosProxy.isRunning()) {
+            $scope.toastMsg('有未完成的任务，请稍后再试');
+            return;
+        }
+        CustosProxy.fillTasks(fcOpt);
+        CustosProxy.doBuild(fcOpt, function () {
+            $scope.$apply(function () {
+                $scope.toastMsg('任务执行完毕');
+            });
         });
     };
 
     // 构建上传
     $scope.buildUpload = function () {
         var fcOpt = Model.curProj;
-        fillTasks(fcOpt);
-        doBuild(fcOpt, function (params) {
-            var errors = params.errors;
-            if (errors.length) {
-                var logId = Logger.genUniqueId();
-                Logger.useId(logId).warn('构建过程中发生了一些错误，是否要继续上传？' + $scope.optionsConfirmTemplate);
-                var cb = function (e) {
-                    var target = e.target,
-                        optionsConfirm = target && Utils.dom.refluxToFind(target, '.options-confirm'),
-                        linkOK = target && Utils.dom.refluxToFind(target, '.options-link.ok'),
-                        linkCancel = target && Utils.dom.refluxToFind(target, '.options-link.cancel');
-                    if (linkOK) {
-                        document.getElementById(logId).removeEventListener('click', cb);
-                        optionsConfirm.innerHTML = ' -确定继续-';
-                        doUpload(params, function () {
-                            $scope.toastMsg('任务执行完毕');
-                        });
-                    } else if (linkCancel) {
-                        document.getElementById(logId).removeEventListener('click', cb);
-                        optionsConfirm.innerHTML = ' -已取消-';
-                        $scope.toastMsg('上传已取消');
-                    }
-                };
-                document.getElementById(logId).addEventListener('click', cb);
-            } else {
-                doUpload(params, function () {
-                    $scope.toastMsg('任务执行完毕');
-                });
-            }
-        });
-    };
-
-    // 补充可能缺少的默认任务参数
-    var fillTasks = function (fcOpt) {
-        var tasks = fcOpt.tasks,
-            uploadPos = tasks.indexOf('do_upload');
-        if (tasks.indexOf('prepare_build') < 0) {
-            tasks.splice(0, 0, 'prepare_build');
-        }
-        if (tasks.indexOf('do_dist') < 0) {
-            if (uploadPos >= 0) {
-                tasks.splice(uploadPos++, 0, 'do_dist');
-            } else {
-                tasks.push('do_dist');
-            }
-        }
-        if (uploadPos >= 0) {
-            tasks.splice(uploadPos, 1);
-        }
-    };
-
-    var doBuild = function (fcOpt, cb) {
-        if (FrontCustos.isRunning()) {
+        if (CustosProxy.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
         }
         $scope.toastMsg('任务开始……');
-        FrontCustos.config(Model.config);
-        var params = Utils.deepCopy(fcOpt);
-        Logger.log('<hr/>');
-        FrontCustos.process(params, function () {
+        CustosProxy.fillTasks(fcOpt);
+        CustosProxy.doBuild(fcOpt, function (params) {
             $scope.$apply(function () {
-                cb && cb(params);
+                remindErrorAndUpload(params, '构建过程中发生了一些错误，是否要继续上传？', function () {
+                    CustosProxy.doUpload(params, function () {
+                        $scope.$apply(function () {
+                            $scope.toastMsg('任务执行完毕');
+                        });
+                    });
+                });
             });
         });
     };
 
-    var doUpload = function (params, cb) {
-        params.tasks = ['do_upload'];
-        FrontCustos.process(params, function () {
-            $scope.$apply(function () {
-                cb && cb(params);
-            });
-        });
+    var remindErrorAndUpload = function (params, msg, cb) {
+        var errors = params.errors;
+        if (errors.length) {
+            var logId = Logger.genUniqueId();
+            Logger.useId(logId).warn(msg + $scope.optionsConfirmTemplate);
+            var listener = function (e) {
+                var target = e.target,
+                    optionsConfirm = target && Utils.dom.refluxToFind(target, '.options-confirm'),
+                    linkOK = target && Utils.dom.refluxToFind(target, '.options-link.ok'),
+                    linkCancel = target && Utils.dom.refluxToFind(target, '.options-link.cancel');
+                if (linkOK) {
+                    document.getElementById(logId).removeEventListener('click', listener);
+                    optionsConfirm.innerHTML = ' -确定继续-';
+                    cb();
+                } else if (linkCancel) {
+                    document.getElementById(logId).removeEventListener('click', listener);
+                    optionsConfirm.innerHTML = ' -已取消-';
+                    $scope.toastMsg('上传已取消');
+                }
+            };
+            document.getElementById(logId).addEventListener('click', listener);
+        } else {
+            cb();
+        }
     };
 
     // 快捷键
