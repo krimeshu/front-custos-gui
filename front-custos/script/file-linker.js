@@ -25,7 +25,7 @@ FileLinker.prototype = {
     // 用于匹配语法的正则表达式
     _regExp: /(?:\/\/)?[#_]link\(['"]?([^\)'"]+)['"]?\)/gi,
     _regExpHtml: /<(?:link|script|img|audio|video|source)[^>]*(?:href|src|data\-src)\s*=\s*['"]?([^<>'"\$]+)[<>'"\$]?[^>]*>/gi,
-    _regExpCss: /[:\s\b\f\n\t\r]url\(['"]?([^\)'"]+)['"]?\)/gi,
+    _regExpCss: /[,:\s\b\f\n\t\r]url\(['"]?([^\)'"]+)['"]?\)/gi,
     // 获取初始化后的正则表达式
     _getRegExp: function (type) {
         var self = this,

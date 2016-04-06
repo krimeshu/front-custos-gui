@@ -24,6 +24,9 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
     // 选中某项，更改当前的项目
     $scope.setCurrent = function (id, ev) {
+        if (Model.curProj.id === id) {
+            return;
+        }
         //console.log('projName:', projName);
         var proj = Model.getProjById(id);
 
