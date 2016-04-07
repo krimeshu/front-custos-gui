@@ -199,7 +199,10 @@ var tasks = {
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': errorHandler
             }))
-            .pipe(LazyLoadPlugins.sass().on('error', errorHandler))
+            .pipe(LazyLoadPlugins.sass().on('error', function () {
+                // errorHandler(err);
+                this.emit('end');
+            }))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
