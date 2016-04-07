@@ -138,7 +138,7 @@ FileIncluder.prototype = {
                         var information = '无法包含文件：' + _path.relative(basePath, _file),
                             err = new Error(information);
                         err.fromFile = _path.relative(basePath, file.path);
-                        err.rowNumber = Utils.countLineNumber(content, match);
+                        err.line = Utils.countLineNumber(content, match);
                         err.targetFile = _path.relative(basePath, _file);
                         self.onError && self.onError(err);
                         continue;
