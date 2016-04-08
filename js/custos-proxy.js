@@ -83,6 +83,7 @@ var watch = function (_projWithOpt) {
 
     fillTasks(projWithOpt);
     var rebuild = debounce(function () {
+        Logger.info('<hr/>');
         Logger.info('监听到变化，执行项目构建：%c%s', 'color: white;', projName);
         doBuild(projWithOpt, function (params) {
             Logger.info('监听项目构建完毕：%c%s', 'color: white;', projName);
