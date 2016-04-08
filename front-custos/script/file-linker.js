@@ -91,16 +91,14 @@ FileLinker.prototype = {
     },
     // 判断是否可以忽略此链接
     _canIgnoreLink: function (_rawStr) {
-        // 忽略空链接
-        if (!_rawStr.length) {
-            return true;
-        }
-        // 忽略非本地文件
-        if (/^(http|https|data|javascript):/.test(_rawStr)) {
-            return true;
-        }
-        // 忽略各种模板标记
-        return /((\{\{|}})|(<%|%>)|(\{.*?})|^\$)/.test(_rawStr);
+        return (
+            // 忽略空链接
+            !_rawStr.length ||
+            // 忽略非本地文件
+            /^(http|https|data|javascript|about|chrome):/.test(_rawStr) ||
+            // 忽略各种模板标记
+            /((\{\{|}})|(<%|%>)|(\{.*?})|^\$)/.test(_rawStr)
+        );
     },
     // 获取单个文件的引用依赖关系表
     getUsedFiles: function (file, cb) {
