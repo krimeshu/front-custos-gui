@@ -99,11 +99,8 @@ FileLinker.prototype = {
         if (/^(http|https|data|javascript):/.test(_rawStr)) {
             return true;
         }
-        // 忽略模板标记
-        if (/(\{\{|}})/.test(_rawStr) || /(<%|%>)/.test(_rawStr) || /^\$/.test(_rawStr)) {
-            return true;
-        }
-        return false;
+        // 忽略各种模板标记
+        return /((\{\{|}})|(<%|%>)|(\{.*?})|^\$)/.test(_rawStr);
     },
     // 获取单个文件的引用依赖关系表
     getUsedFiles: function (file, cb) {
