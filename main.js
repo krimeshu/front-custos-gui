@@ -42,17 +42,15 @@ function createWindow() {
         mainWindow = null;
     });
 
-    setTimeout(function () {
-        var bounds = mainWindow.getBounds(),
-            width = initWindowSize.width,
-            height = initWindowSize.height;
-        mainWindow.setBounds({
-            x: bounds.x - width / 2,
-            y: bounds.y - height / 2,
-            width: width,
-            height: height
-        });
-    }, 200);
+    var bounds = mainWindow.getBounds(),
+        width = initWindowSize.width,
+        height = initWindowSize.height;
+    mainWindow.setBounds({
+        x: bounds.x - width / 2,
+        y: bounds.y - height / 2,
+        width: width,
+        height: height
+    });
 
     // 注册快捷键
     globalShortcut.register('ctrl+alt+b', function () {
