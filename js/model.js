@@ -80,7 +80,7 @@ module.exports = {
                 srcDir = projWithOpts.srcDir,
                 version = projWithOpts.version,
                 watchToRebuilding = projWithOpts.watchToRebuilding,
-                fcOpt = this.extractFcOpt(projWithOpts, ['id', 'projName', 'srcDir', 'version']);
+                fcOpt = this.extractFcOpt(projWithOpts, ['id', 'projName', 'srcDir', 'version', 'watchToRebuilding']);
             this.updatePkg(projName, srcDir, version, watchToRebuilding, fcOpt);
 
             var projList = this.projList,

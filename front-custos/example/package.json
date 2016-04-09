@@ -1,1 +1,41 @@
-{"version":"0.1.0","fcOpt":{"scOpt":{"useRatio":2,"useRem":10},"pcOpt":{"browsers":"Android > 2.3, iOS > 6.0"},"alOpt":{"allot":true,"pageDir":"event/{PROJECT_NAME}","staticDir":"static/{PROJECT_NAME}","staticUrlHead":"http://ac.gtimg.com/h5_hd/{PROJECT_NAME}","flatten":true,"hashLink":true},"upOpt":{"delta":true,"page":"http://admin.ac.oa.com/uploadDevFile.php","form":"function uploadForm(fileStream, relativeName, projectName) {\r\n    var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),\r\n        prefix = (relativeName.split('/').slice(0, -1));\r\n    (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();\r\n    prefix.splice(0, 0, projectName);\r\n    return {\r\n        'fileName': relativeName,\r\n        'prefix': prefix.join('/'),\r\n        'myfile': fileStream\r\n    };\r\n}"},"tasks":["prepare_build","replace_const","join_include","sprite_crafter","prefix_crafter","allot_link","optimize_image","do_dist"]}}
+{
+  "version": "0.1.0",
+  "fcOpt": {
+    "scOpt": {
+      "useRatio": 2,
+      "useRem": 10
+    },
+    "pcOpt": {
+      "browsers": "Android > 2.3, iOS > 6.0"
+    },
+    "alOpt": {
+      "allot": true,
+      "pageDir": "page",
+      "staticDir": "static",
+      "staticUrlHead": "http://example.com/{PROJECT_NAME}",
+      "flatten": true,
+      "hashLink": true,
+      "useStaticUrlHead": true
+    },
+    "upOpt": {
+      "delta": true,
+      "page": "",
+      "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var suffix = (relativeName.substr(relativeName.lastIndexOf('.'))),\r\n        prefix = (relativeName.split('/').slice(0, -1));\r\n    (['.html', '.shtml', '.php'].indexOf(suffix) < 0) && prefix.pop();\r\n    prefix.splice(0, 0, projectName);\r\n    return {\r\n        'fileName': relativeName,\r\n        'prefix': prefix.join('/'),\r\n        'myfile': fileStream\r\n    };\r\n}"
+    },
+    "tasks": [
+      "prepare_build",
+      "replace_const",
+      "compile_sass",
+      "prefix_crafter",
+      "sprite_crafter",
+      "run_csso",
+      "join_include",
+      "run_browserify",
+      "allot_link",
+      "optimize_image",
+      "do_dist",
+      "do_upload"
+    ]
+  },
+  "watchToRebuilding": false
+}
