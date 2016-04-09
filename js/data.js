@@ -70,7 +70,7 @@ function loadConfig() {
 // 保存默认配置
 function saveConfig(config) {
     var configPath = _path.resolve(__dirname, '../fc-config.json'),
-        content = angular.toJson(config);
+        content = angular.toJson(config, true);
     try {
         _fs.writeFileSync(configPath, content);
     } catch (e) {
@@ -99,7 +99,7 @@ function loadProjList() {
 // 保存项目列表
 function saveProjList(projList) {
     var listPath = _path.resolve(__dirname, '../fc-project-list.json'),
-        content = angular.toJson(projList);
+        content = angular.toJson(projList, true);
     try {
         _fs.writeFileSync(listPath, content);
     } catch (e) {
@@ -132,7 +132,7 @@ function loadProjPackage(projName, srcDir) {
 // 保存 package.json
 function saveProjPackage(pkg, srcDir) {
     var pkgPath = _path.resolve(srcDir, 'package.json'),
-        content = angular.toJson(pkg);
+        content = angular.toJson(pkg, true);
     try {
         _fs.writeFileSync(pkgPath, content);
     } catch (e) {
