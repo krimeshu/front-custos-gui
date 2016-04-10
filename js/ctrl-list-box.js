@@ -84,7 +84,8 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             listItemRect = listItem.getBoundingClientRect(),
             alignWithTop = listItemRect.bottom < listBoxRect.top ? true :
                 listItemRect.top > listBoxRect.bottom ? false : null;
-        (alignWithTop !== null) && listItem.scrollIntoView(alignWithTop);
+        (alignWithTop !== null) ? listItem.scrollIntoView(alignWithTop) :
+            (listBox.querySelector('.list-scroll').scrollTop = 1);  // 激活滚动条
     };
 
     // 显示打开项目路径对话框

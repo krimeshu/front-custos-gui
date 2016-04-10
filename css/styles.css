@@ -20,20 +20,26 @@ input {
   .list-box .btn-add-proj:hover, .list-box .btn-reload:hover, .info-box .btn-save:hover, .info-box .btn-delete:hover, .info-box .btn-open:hover {
     opacity: 1; }
 
+.ps-container .ps-scrollbar-y-rail, .ps-container .ps-scrollbar-y-rail:hover, .ps-container .ps-scrollbar-y-rail.hover, .ps-container .ps-scrollbar-y-rail:active, .ps-container .ps-scrollbar-y-rail.active, .ps-container .ps-scrollbar-y-rail.in-scrolling {
+  background: transparent; }
+
+.ps-container .ps-scrollbar-y-rail .ps-scrollbar-y {
+  width: 6px; }
+
 /*---滚动条大小--*/
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px; }
 
 /*---滚动条默认显示样式--*/
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y {
   background-color: rgba(120, 120, 120, 0.6);
   height: auto;
   outline: 0 none;
   -webkit-border-radius: 6px; }
 
 /*---鼠标点击滚动条显示样式--*/
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y:hover {
   background-color: rgba(120, 120, 120, 0.8);
   height: auto;
   -webkit-border-radius: 6px; }
@@ -122,23 +128,29 @@ input {
   width: 220px;
   height: 100%; }
   .list-box .list-scroll {
-    margin-right: 4px;
-    width: auto;
+    position: relative;
+    width: 100%;
     height: 100%;
-    overflow: auto; }
+    overflow: hidden; }
   .list-box .proj-list {
+    width: 100%;
     margin: 0;
     padding: 5px 0;
     font-size: 14px; }
     .list-box .proj-list .proj-item {
+      width: 100%;
       transition: background 400ms ease;
+      cursor: pointer; }
+      .list-box .proj-list .proj-item.current {
+        color: #fff; }
+    .list-box .proj-list .proj-name {
+      display: block;
+      width: 100%;
+      height: 100%;
       font-weight: 500;
-      cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis; }
-      .list-box .proj-list .proj-item.current {
-        color: #fff; }
   body[md-theme="default"] .list-box {
     background-color: #e4eaec;
     color: #2c3940; }

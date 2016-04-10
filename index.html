@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="font/material-icons.css"/>
 
     <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css"/>
+    <link rel="stylesheet" href="angular-perfect-scrollbar/perfect-scrollbar.min.css"/>
 
     <link rel="stylesheet" href="css/json-viewer.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
@@ -71,7 +72,10 @@
     <main class="window-content" ng-controller="ListBoxCtrl as ctrl">
         <!-- Project List -->
         <md-content class="list-box">
-            <section class="list-scroll">
+            <perfect-scrollbar class="list-scroll"
+                               wheel-propagation="true"
+                               wheel-speed="2"
+                               min-scrollbar-length="20">
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable">
                     <md-list-item class="proj-item {{isCurrent(item.id)}}"
@@ -79,11 +83,12 @@
                                   ng-repeat="item in projList"
                                   ng-click="setCurrent(item.id, $event)"
                                   aria-label="{{item.projName}}">
-                        <span ng-bind="item.projName"
-                              title="{{item.projName}}"></span>
+                        <p class="proj-name"
+                           ng-bind="item.projName"
+                           title="{{item.projName}}"></p>
                     </md-list-item>
                 </md-list>
-            </section>
+            </perfect-scrollbar>
             <md-button class="md-fab float-btn btn-add-proj"
                        ng-click="showOpenDialog($event)">
                 <md-tooltip md-direction="bottom">
@@ -378,18 +383,6 @@
 
 </body>
 
-<script src="node_modules/angular/angular.min.js"></script>
-<script src="node_modules/angular-animate/angular-animate.min.js"></script>
-<script src="node_modules/angular-route/angular-route.min.js"></script>
-<script src="node_modules/angular-aria/angular-aria.min.js"></script>
-<script src="node_modules/angular-messages/angular-messages.min.js"></script>
-<script src="node_modules/angular-material/angular-material.min.js"></script>
-
-<script src="js/ace/ace.js"></script>
-<script src="js/ace/theme-monokai.js"></script>
-<script src="js/ace/mode-javascript.js"></script>
-<script src="js/ace/ui-ace.js"></script>
-<script src="js/json-viewer.js"></script>
 
 <script>
     window.pagePath = __filename;
@@ -399,8 +392,28 @@
             return require(_path.resolve(__dirname, __path));
         };
     })();
-    window.appPackageFile = pageRequire('./package.json');
 
+    window.appPackageFile = pageRequire('./package.json');
+    window.$ = window.jQuery = pageRequire('./js/jquery.min.js');
+</script>
+
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/angular-animate/angular-animate.min.js"></script>
+<script src="node_modules/angular-route/angular-route.min.js"></script>
+<script src="node_modules/angular-aria/angular-aria.min.js"></script>
+<script src="node_modules/angular-messages/angular-messages.min.js"></script>
+<script src="node_modules/angular-material/angular-material.min.js"></script>
+
+<script src="angular-perfect-scrollbar/perfect-scrollbar.with-mousewheel.min.js"></script>
+<script src="angular-perfect-scrollbar/angular-perfect-scrollbar.js"></script>
+
+<script src="js/ace/ace.js"></script>
+<script src="js/ace/theme-monokai.js"></script>
+<script src="js/ace/mode-javascript.js"></script>
+<script src="js/ace/ui-ace.js"></script>
+<script src="js/json-viewer.js"></script>
+
+<script>
     pageRequire('./js/entry.js');
 
     window.windowCtrl = {

@@ -51,6 +51,15 @@ input {
   }
 }
 
+.ps-container .ps-scrollbar-y-rail {
+  &, &:hover, &.hover, &:active, &.active, &.in-scrolling {
+    background: transparent;
+  }
+  .ps-scrollbar-y {
+    width: 6px;
+  }
+}
+
 /*---滚动条大小--*/
 ::-webkit-scrollbar {
   width: 6px;
@@ -58,7 +67,7 @@ input {
 }
 
 /*---滚动条默认显示样式--*/
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y {
   background-color: rgba(120, 120, 120, .6);
   height: auto;
   outline: 0 none;
@@ -66,7 +75,7 @@ input {
 }
 
 /*---鼠标点击滚动条显示样式--*/
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y:hover {
   background-color: rgba(120, 120, 120, .8);
   height: auto;
   -webkit-border-radius: 6px;
@@ -191,27 +200,35 @@ input {
   height: 100%;
 
   .list-scroll {
-    margin-right: 4px;
-    width: auto;
+    position: relative;
+    width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
   }
 
   .proj-list {
+    width: 100%;
     margin: 0;
     padding: 5px 0;
 
     font-size: 14px;
 
     .proj-item {
+      width: 100%;
       transition: background 400ms ease;
       &.current {
         color: #fff;
       }
 
-      font-weight: 500;
       cursor: pointer;
+    }
 
+    .proj-name {
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
