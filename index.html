@@ -156,30 +156,46 @@
                         <md-content layout-margin>
                             <md-card>
                                 <md-card-content layout="column">
-                                    <md-input-container class="md-block" flex>
-                                        <label>名称</label>
-                                        <input ng-model="curProj.projName" name="projName" required
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="为将要处理的项目取个好记的名字"/>
-                                        <div ng-messages="curProjForm.projName.$error">
-                                            <div ng-message="required">请输入项目名称</div>
-                                        </div>
-                                    </md-input-container>
-                                    <md-input-container class="md-block" flex>
-                                        <label>版本</label>
-                                        <input ng-model="curProj.version" name="version"
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="项目目前的版本号"/>
-                                    </md-input-container>
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex="70">
+                                            <label>名称</label>
+                                            <input ng-model="curProj.projName" name="projName" required
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="为将要处理的项目取个好记的名字"/>
+                                            <div ng-messages="curProjForm.projName.$error">
+                                                <div ng-message="required">请输入项目名称</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex="30">
+                                            <label>版本</label>
+                                            <input ng-model="curProj.version" name="version"
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="项目目前的版本号"/>
+                                        </md-input-container>
+                                    </div>
                                     <md-input-container class="md-block" flex>
                                         <label>位置</label>
-                                        <input ng-model="curProj.srcDir" name="srcDir" required readonly
+                                        <input ng-model="curProj.projDir" name="projDir" required readonly
                                                ng-disabled="curProj.id === null"
                                                placeholder="这个项目所在的本地目录"/>
-                                        <div ng-messages="curProjForm.srcDir.$error">
+                                        <div ng-messages="curProjForm.projDir.$error">
                                             <div ng-message="required">请选择项目所在位置</div>
                                         </div>
                                     </md-input-container>
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>内部源目录（选填）</label>
+                                            <input ng-model="curProj.innerSrcDir" name="innerSrcDir"
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="处理子目录时填写，如：“./src”"/>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>内部输出目录（选填）</label>
+                                            <input ng-model="curProj.innerDistDir" name="innerDistDir"
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="输出到子目录时填写，如：“./dist”"/>
+                                        </md-input-container>
+                                    </div>
 
                                     <!--<md-button class="md-raised" flex="15"-->
                                     <!--ng-disabled="curProj.id === null">选择-->

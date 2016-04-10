@@ -15,7 +15,7 @@
       "staticUrlHead": "http://example.com/{PROJECT_NAME}",
       "flatten": true,
       "hashLink": true,
-      "useStaticUrlHead": true
+      "useStaticUrlHead": false
     },
     "upOpt": {
       "delta": true,
@@ -33,9 +33,10 @@
       "run_browserify",
       "allot_link",
       "optimize_image",
-      "do_dist",
-      "do_upload"
-    ]
+      "do_dist"
+    ],
+    "innerSrcDir": "./src",
+    "innerDistDir": "./dist"
   },
   "watchToRebuilding": false
 }

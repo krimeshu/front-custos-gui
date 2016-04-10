@@ -27,7 +27,10 @@ frontCustos.config({
 });
 
 frontCustos.process({
-    srcDir: './example/',
+    projName: 'example',
+    projDir: './example/',
+    innerSrcDir: './src',
+    innerDistDir: './dist',
     version: '0.1.0',
     keepOldCopy: false,
     scOpt: {

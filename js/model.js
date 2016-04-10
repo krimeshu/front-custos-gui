@@ -38,9 +38,15 @@ module.exports = {
     },
     loadProjOptions: function (proj) {
         var projName = proj.projName,
-            srcDir = proj.srcDir,
-            pkg = Data.loadProjPackage(projName, srcDir),
-            opts = pkg.fcOpt || {};
+            projDir = proj.projDir,
+            pkg = Data.loadProjPackage(projName, projDir),
+            opts = pkg.fcOpt || {},
+            needsFields = Data.getInitOpt();
+        for (var field in needsFields) {
+            if (needsFields.hasOwnProperty(field) && opts[field] === undefined) {
+                opts[field] = needsFields[field];
+            }
+        }
         opts.version = pkg.version;
         opts.watchToRebuilding = !!pkg.watchToRebuilding;
         return opts;
@@ -77,16 +83,16 @@ module.exports = {
         try {
             var id = projWithOpts.id,
                 projName = projWithOpts.projName,
-                srcDir = projWithOpts.srcDir,
+                projDir = projWithOpts.projDir,
                 version = projWithOpts.version,
                 watchToRebuilding = projWithOpts.watchToRebuilding,
-                fcOpt = this.extractFcOpt(projWithOpts, ['id', 'projName', 'srcDir', 'version', 'watchToRebuilding']);
-            this.updatePkg(projName, srcDir, version, watchToRebuilding, fcOpt);
+                fcOpt = this.extractFcOpt(projWithOpts);
+            this.updatePkg(projName, projDir, version, watchToRebuilding, fcOpt);
 
             var projList = this.projList,
                 justProj = this.getProjById(id);
             justProj.projName = projName;
-            justProj.srcDir = srcDir;
+            justProj.projDir = projDir;
             Data.saveProjList(projList);
 
             return true;
@@ -94,18 +100,19 @@ module.exports = {
             return false;
         }
     },
-    extractFcOpt: function (proj, excludeFields) {
-        var fcOpt = Utils.deepCopy(proj);
+    extractFcOpt: function (proj, _excludeFields) {
+        var fcOpt = Utils.deepCopy(proj),
+            excludeFields = _excludeFields || ['id', 'projName', 'projDir', 'srcDir', 'version', 'watchToRebuilding'];
         excludeFields && excludeFields.forEach(function (field) {
             delete fcOpt[field];
         });
         return fcOpt;
     },
-    updatePkg: function (projName, srcDir, version, watchToRebuilding, fcOpt) {
-        var pkg = Data.loadProjPackage(projName, srcDir);
+    updatePkg: function (projName, projDir, version, watchToRebuilding, fcOpt) {
+        var pkg = Data.loadProjPackage(projName, projDir);
         pkg.version = version;
         pkg.watchToRebuilding = watchToRebuilding;
         pkg.fcOpt = fcOpt;
-        Data.saveProjPackage(pkg, srcDir);
+        Data.saveProjPackage(pkg, projDir);
     }
 };

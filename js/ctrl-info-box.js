@@ -53,24 +53,21 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.allTasks = Model.allTasks;
 
     // 编辑器相关
-    $scope.aceLoaded = function(_editor) {
+    $scope.aceLoaded = function (_editor) {
         // Options
         _editor.$blockScrolling = Infinity;
     };
 
     // 打开项目源目录
     $scope.openSrcDir = function () {
-        var srcDir = $scope.curProj.srcDir;
+        var srcDir = CustosProxy.getSrcDir(Model.curProj);
         Utils.makeSureDir(srcDir);
         shell.openExternal(srcDir);
     };
 
     // 打开项目生成目录
     $scope.openDistDir = function () {
-        var srcDir = $scope.curProj.srcDir,
-            baseName = _path.basename(srcDir),
-            outputDir = Model.config.outputDir,
-            distDir = _path.resolve(outputDir, baseName);
+        var distDir = CustosProxy.getDistDir(Model.curProj, Model.config.outputDir);
         Utils.makeSureDir(distDir);
         shell.openExternal(distDir);
     };

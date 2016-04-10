@@ -36,14 +36,14 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         }
 
         var projName = proj.projName,
-            srcDir = proj.srcDir;
+            projDir = proj.projDir;
 
-        if (!_fs.existsSync(srcDir)) {
+        if (!_fs.existsSync(projDir)) {
             Model.removeProjById(id);
             $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('.window-box')))
-                    .title('项目配置失效，源目录不存在，已从项目列表中移除')
+                    .title('项目配置失效，项目目录不存在，已从项目列表中移除')
                     .textContent('如项目被移动到其他位置，需要继续处理，请重新导入到工具内后继续操作。')
                     .ariaLabel('项目不存在')
                     .ok('好的')
@@ -57,7 +57,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         Model.loadCurProj(proj);
         Logger.log('<hr/>');
         Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
-        Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', srcDir);
+        Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', projDir);
 
         // 检查是否监听自动构建
         if (Model.curProj.watchToRebuilding) {
@@ -104,20 +104,20 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
     };
 
     // 导入项目
-    $scope.importProj = function (srcDir, ev) {
-        var projName = _path.basename(srcDir),
-            pkg = Data.loadProjPackage(projName, srcDir),
+    $scope.importProj = function (projDir, ev) {
+        var projName = _path.basename(projDir),
+            pkg = Data.loadProjPackage(projName, projDir),
             opts = pkg.fcOpt;
         $scope._importEv = ev;
         if (!opts) {
-            $scope.showTemplates(projName, srcDir);
+            $scope.showTemplates(projName, projDir);
         } else {
-            $scope.addProj(projName, srcDir);
+            $scope.addProj(projName, projDir);
         }
     };
 
     // 显示模板选择对话框
-    $scope.showTemplates = function (projName, srcDir) {
+    $scope.showTemplates = function (projName, projDir) {
         var ev = $scope._importEv;
         $mdDialog.show({
             controller: function templatesDialogController($scope, $mdDialog) {
@@ -144,23 +144,20 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             targetEvent: ev
         }).then(function (tempPath) {
             //console.log(tempPath);
-            var content = tempPath ?
+            var pkg = Data.loadProjPackage(projName, projDir),
+                content = tempPath ?
                     _fs.readFileSync(tempPath).toString() :
                     Data.getInitOpt(),
-                opts = angular.fromJson(content),
-                pkg = Data.loadProjPackage(projName, srcDir);
-            delete opts.id;
-            delete opts.projName;
-            delete opts.srcDir;
-            delete opts.version;
-            pkg.fcOpt = Utils.deepCopy(opts);
-            Data.saveProjPackage(pkg, srcDir);
-            $scope.addProj(projName, srcDir);
+                temp = angular.fromJson(content),
+                fcOpt = Model.extractFcOpt(temp);
+            pkg.fcOpt = Utils.deepCopy(fcOpt);
+            Data.saveProjPackage(pkg, projDir);
+            $scope.addProj(projName, projDir);
         });
     };
 
     // 将项目添加到列表中
-    $scope.addProj = function (projName, srcDir) {
+    $scope.addProj = function (projName, projDir) {
         var ev = $scope._importEv;
 
         var projList = $scope.projList,
@@ -182,7 +179,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         projList.push({
             id: id,
             projName: projName,
-            srcDir: srcDir
+            projDir: projDir
         });
         Data.saveProjList(projList);
 

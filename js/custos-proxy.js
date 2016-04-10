@@ -41,7 +41,17 @@ var fillTasks = function (fcOpt) {
 
 var isRunning = function () {
     FrontCustos.unloaded && FrontCustos.loadPlugin();
-    return FrontCustos.isRunning();
+    return FrontCustos.isRunning.apply(FrontCustos, arguments);
+};
+
+var getSrcDir = function (fcOpt) {
+    FrontCustos.unloaded && FrontCustos.loadPlugin();
+    return FrontCustos.getSrcDir.apply(FrontCustos, arguments);
+};
+
+var getDistDir = function () {
+    FrontCustos.unloaded && FrontCustos.loadPlugin();
+    return FrontCustos.getDistDir.apply(FrontCustos, arguments);
 };
 
 var doBuild = function (fcOpt, cb) {
@@ -72,7 +82,7 @@ var watch = function (_projWithOpt) {
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        srcDir = projWithOpt.srcDir;
+        projDir = projWithOpt.projDir;
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos >= 0) {
@@ -94,7 +104,7 @@ var watch = function (_projWithOpt) {
     }, 500);
 
     Logger.info('开始监听项目：%c%s', 'color: white;', projName);
-    _watch.watchTree(srcDir, {
+    _watch.watchTree(projDir, {
         ignoreDotFiles: true,
         filter: function (f) {
             var baseName = _path.basename(f),
@@ -126,7 +136,7 @@ var unwatch = function (_projWithOpt) {
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        srcDir = projWithOpt.srcDir;
+        projDir = projWithOpt.projDir;
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos < 0) {
@@ -136,7 +146,7 @@ var unwatch = function (_projWithOpt) {
     }
 
     Logger.info('停止监听项目：%c%s', 'color: white;', projName);
-    _watch.unwatchTree(srcDir);
+    _watch.unwatchTree(projDir);
 };
 
 var debounce = function (func, wait, immediate) {
@@ -176,6 +186,8 @@ var debounce = function (func, wait, immediate) {
 module.exports = {
     fillTasks: fillTasks,
     isRunning: isRunning,
+    getSrcDir: getSrcDir,
+    getDistDir: getDistDir,
     doBuild: doBuild,
     doUpload: doUpload,
     watch: watch,

@@ -88,12 +88,23 @@ function loadProjList() {
         try {
             var content = _fs.readFileSync(listPath).toString();
             list = angular.fromJson(content);
+            projList_update(list);
         } catch (e) {
             console.log('loadProjList 时发生异常: ', e);
             saveProjList(list);
         }
     }
     return list;
+}
+
+// 项目列表版本更新
+function projList_update(list) {
+    list.forEach(function (proj) {
+        if (proj.srcDir) {
+            proj.projDir = proj.srcDir;
+            delete proj.srcDir;
+        }
+    });
 }
 
 // 保存项目列表
@@ -108,30 +119,30 @@ function saveProjList(projList) {
 }
 
 // 加载 package.json
-function loadProjPackage(projName, srcDir) {
-    var pkgPath = _path.resolve(srcDir, 'package.json'),
+function loadProjPackage(projName, projDir) {
+    var pkgPath = _path.resolve(projDir, 'package.json'),
         pkg = {
             name: projName,
             version: '0.1.0',
-            fcOpt: null
+            fcOpt: getInitOpt()
         };
     if (!_fs.existsSync(pkgPath)) {
-        saveProjPackage(pkg, srcDir);
+        saveProjPackage(pkg, projDir);
     } else {
         try {
             var content = _fs.readFileSync(pkgPath).toString();
             pkg = angular.fromJson(content);
         } catch (e) {
             console.log('readProjPackage 时发生异常: ', e);
-            saveProjPackage(pkg, srcDir);
+            saveProjPackage(pkg, projDir);
         }
     }
     return pkg;
 }
 
 // 保存 package.json
-function saveProjPackage(pkg, srcDir) {
-    var pkgPath = _path.resolve(srcDir, 'package.json'),
+function saveProjPackage(pkg, projDir) {
+    var pkgPath = _path.resolve(projDir, 'package.json'),
         content = angular.toJson(pkg, true);
     try {
         _fs.writeFileSync(pkgPath, content);
@@ -145,13 +156,15 @@ function getInitOpt() {
     return {
         id: null,
         projName: '',
-        srcDir: '',
+        projDir: '',
         version: '',
         scOpt: {},
         pcOpt: {},
         alOpt: {},
         upOpt: {},
-        tasks: []
+        tasks: [],
+        innerSrcDir: '',
+        innerDistDir: ''
     };
 }
 

@@ -48,6 +48,19 @@ module.exports = {
     isRunning: function () {
         return running;
     },
+    // 根据项目配置计算出项目源目录
+    getSrcDir: function (params) {
+        var projDir = params.projDir || params.srcDir,
+            innerSrcDir = params.innerSrcDir || '';
+        return innerSrcDir ? _path.resolve(projDir, innerSrcDir) : projDir;
+    },
+    // 根据项目配置计算出项目输出目录
+    getDistDir: function (params, outputDir) {
+        var projDir = params.projDir || params.srcDir,
+            projName = _path.basename(params.projDir),
+            innerDistDir = params.innerDistDir || '';
+        return innerDistDir ? _path.resolve(projDir, innerDistDir) : _path.resolve(outputDir, projName);
+    },
     // 开始处理任务
     process: function (_params, cb) {
         if (running) {
@@ -56,35 +69,45 @@ module.exports = {
         running = true;
 
         params = _params;
+        // 处理项目基本配置
+        var projDir = params.projDir || params.srcDir,
+            projName = _path.basename(params.projDir),
+            version = params.version || '';
 
-        // 提取项目名称和构建、发布文件夹路径
-        params.prjName = _path.basename(params.srcDir);
-        params.buildDir = _path.resolve(_os.tmpdir(), 'FC_BuildDir', params.prjName);
-        params.distDir = _path.resolve(config.outputDir, params.prjName);
+        if (!projDir) {
+            console.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始任务前，请指定一个项目目录。');
+            return;
+        }
+
+        // 处理项目源、构建、发布目录路径
+        var buildDir = _path.resolve(_os.tmpdir(), 'FC_BuildDir', projName),
+            srcDir = this.getSrcDir(params),
+            distDir = this.getDistDir(params, config.outputDir);
+
+        params.projName = projName;
+        params.buildDir = buildDir;
+        params.srcDir = srcDir;
+        params.distDir = !params.keepOldCopy ? distDir : _path.resolve(distDir, version);
 
         // 错误集合
         params.errors = [];
 
         // 生成项目常量并替换参数中的项目常量
         var constFields = {
-            PROJECT: params.buildDir,
-            PROJECT_NAME: params.prjName,
-            VERSION: params.version
-        }, replacer = new ConstReplacer(constFields);
+            PROJECT: buildDir,
+            PROJECT_NAME: projName,
+            VERSION: version
+        };
+        var replacer = new ConstReplacer(constFields);
         replacer.doReplace(params);
         params.constFields = constFields;
 
-        // 保留旧版副本时，生成路径中加上版本号
-        if (params.keepOldCopy) {
-            params.distDir = _path.resolve(params.distDir, params.version);
-        }
-
         var timer = new Timer();
-        console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + params.prjName + ' 任务开始……');
+        console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
 
         var tasks = params.tasks || [];
         tasks.push(function () {
-            console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + params.prjName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
+            console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
             running = false;
             cb && cb();
         });
@@ -489,7 +512,7 @@ var tasks = {
     // 上传：
     // - 将发布文件夹中的文件发到测试服务器
     'do_upload': function (done) {
-        var prjName = params.prjName,
+        var projName = params.projName,
             distDir = params.distDir,
 
             alOpt = params.alOpt,
@@ -514,7 +537,7 @@ var tasks = {
         }
 
         var uploader = new FileUploader({
-            projectName: prjName,
+            projectName: projName,
             pageDir: alOpt.allot ? _path.resolve(distDir, pageDir) : distDir,
             staticDir: alOpt.allot ? _path.resolve(distDir, staticDir) : distDir,
             uploadAll: uploadAll,
