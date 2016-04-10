@@ -35,6 +35,7 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
                 $scope.aceLoaded = function(_editor) {
                     // Options
                     _editor.$blockScrolling = Infinity;
+                    _editor.focus();
                 };
 
                 $scope.hide = function () {

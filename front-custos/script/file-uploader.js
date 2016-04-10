@@ -108,10 +108,7 @@ FileUploader.prototype = {
             uploadForm = self.uploadForm,
             uploadQueue = self.uploadQueue;
 
-        if (typeof uploadForm === 'string') {
-            uploadForm = new Function('return ' + uploadForm)();
-            uploadForm = (typeof uploadForm === 'function') ? uploadForm : null;
-        }
+        uploadForm = Utils.tryParseFunction(uploadForm);
 
         var res = self.uploadResult = {
             succeed: [],

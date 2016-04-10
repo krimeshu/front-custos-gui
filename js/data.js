@@ -160,11 +160,19 @@ function getInitOpt() {
         version: '',
         scOpt: {},
         pcOpt: {},
-        alOpt: {},
-        upOpt: {},
+        alOpt: {
+            allot: false
+        },
+        upOpt: {
+            "delta": true,
+            "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var fileDir = relativeName.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}"
+        },
         tasks: [],
         innerSrcDir: '',
-        innerDistDir: ''
+        innerDistDir: '',
+        preprocessing: 'function (params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n}',
+        postprocessing: 'function (params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n}',
+        keepOldCopy: false
     };
 }
 

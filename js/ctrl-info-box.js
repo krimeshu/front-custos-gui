@@ -56,6 +56,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.aceLoaded = function (_editor) {
         // Options
         _editor.$blockScrolling = Infinity;
+        _editor.focus();
     };
 
     // 打开项目源目录

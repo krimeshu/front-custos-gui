@@ -213,3 +213,18 @@ exports.countLineNumber = function (content, match) {
     }
     return row;
 };
+
+exports.tryParseFunction = function (func) {
+    var type = typeof(func);
+    switch (type) {
+        case 'function':
+            return func;
+        case 'string':
+            func = 'return ' + func;
+            break;
+        default:
+            func = 'return null;';
+            break;
+    }
+    return new Function(func)();
+};

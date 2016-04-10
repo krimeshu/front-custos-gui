@@ -61,7 +61,13 @@ module.exports = {
             innerDistDir = params.innerDistDir || '';
         return innerDistDir ? _path.resolve(projDir, innerDistDir) : _path.resolve(outputDir, projName);
     },
-    // 开始处理任务
+    // 直接执行任务
+    runTasks: function (params, cb) {
+        var tasks = params.tasks || [];
+        tasks.push(cb);
+        runSequenceUseGulp.apply(null, tasks);
+    },
+    // 开始处理并执行任务
     process: function (_params, cb) {
         if (running) {
             return;
@@ -75,7 +81,7 @@ module.exports = {
             version = params.version || '';
 
         if (!projDir) {
-            console.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始任务前，请指定一个项目目录。');
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '开始任务前，请指定一个项目目录。');
             return;
         }
 
@@ -102,16 +108,38 @@ module.exports = {
         replacer.doReplace(params);
         params.constFields = constFields;
 
+        // 预处理和后处理脚本
+        var preprocessing, postprocessing;
+        try {
+            preprocessing = Utils.tryParseFunction(params.preprocessing);
+        } catch (e) {
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理脚本格式有误，请检查相关配置。');
+            return;
+        }
+        try {
+            postprocessing = Utils.tryParseFunction(params.postprocessing);
+        } catch (e) {
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理脚本格式有误，请检查相关配置。');
+            return;
+        }
+
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
-
-        var tasks = params.tasks || [];
-        tasks.push(function () {
+        try {
+            preprocessing && preprocessing(params, console);
+        } catch (e) {
+            console.error(e);
+        }
+        this.runTasks(params, function () {
+            try {
+                postprocessing && postprocessing(params, console);
+            } catch (e) {
+                console.error(e);
+            }
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
             running = false;
             cb && cb();
         });
-        runSequenceUseGulp.apply(null, tasks);
     }
 };
 
@@ -525,12 +553,8 @@ var tasks = {
             uploadPage = upOpt.page,
             uploadForm = upOpt.form,
 
-            uploadCallback = config.uploadCallback,
+            uploadCallback = Utils.tryParseFunction(config.uploadCallback),
             concurrentLimit = config.concurrentLimit | 0;
-
-        if (typeof uploadCallback === 'string') {
-            uploadCallback = new Function('return ' + uploadCallback)();
-        }
 
         if (concurrentLimit < 1) {
             concurrentLimit = Infinity;
@@ -558,7 +582,7 @@ var tasks = {
                 var logId = console.genUniqueId && console.genUniqueId();
                 uploader.start(function onProgress(err, filePath, response, results) {
                     // 完成一个文件时
-                    var sof = !err && uploadCallback(response),
+                    var sof = !err && uploadCallback && uploadCallback(response),
 
                     //relativePath = _path.relative(distDir, filePath),
                         succeedCount = results.succeed.length + sof,

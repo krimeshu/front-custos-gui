@@ -70,8 +70,9 @@ var doUpload = function (params, cb) {
     if (isRunning()) {
         return;
     }
+    params.errors = [];
     params.tasks = ['do_upload'];
-    FrontCustos.process(params, function () {
+    FrontCustos.runTasks(params, function () {
         cb && cb(params);
     });
 };
