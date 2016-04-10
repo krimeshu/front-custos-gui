@@ -37,8 +37,8 @@
     ],
     "innerSrcDir": "./src",
     "innerDistDir": "./dist",
-    "preprocessing": "function (params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n    console.log('项目源目录：%s', srcDir);\n}",
-    "postprocessing": "function (params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n    console.log('项目输出目录：%s', distDir);\n}",
+    "preprocessing": "function preprocessing(params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n    console.log('项目源目录：%s', srcDir);\n}",
+    "postprocessing": "function postprocessing(params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n    console.log('项目输出目录：%s', distDir);\n}",
     "keepOldCopy": false
   },
   "watchToRebuilding": false

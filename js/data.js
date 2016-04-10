@@ -170,8 +170,8 @@ function getInitOpt() {
         tasks: [],
         innerSrcDir: '',
         innerDistDir: '',
-        preprocessing: 'function (params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n}',
-        postprocessing: 'function (params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n}',
+        preprocessing: 'function preprocessing(params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n}',
+        postprocessing: 'function postprocessing(params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n}',
         keepOldCopy: false
     };
 }
