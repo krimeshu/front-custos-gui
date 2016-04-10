@@ -84,12 +84,12 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             .cancel('取消');
         $mdDialog.show(confirm).then(function () {
             var id = $scope.curProj.id,
-                res = Model.removeProjById(id),
                 projName = $scope.curProj.projName,
+                res = Model.removeProjById(id),
                 msg = res ?
                 '项目 ' + projName + ' 已被移除' :
                 '项目 ' + projName + ' 移除失败，请稍后重试';
-            unwatch(id);
+            CustosProxy.unwatch(id);
             $scope.toastMsg(msg);
         });
     };
