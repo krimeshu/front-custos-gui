@@ -62,7 +62,8 @@ module.exports = {
         return innerDistDir ? _path.resolve(projDir, innerDistDir) : _path.resolve(outputDir, projName);
     },
     // 直接执行任务
-    runTasks: function (params, cb) {
+    runTasks: function (_params, cb) {
+        params = _params;
         var tasks = params.tasks || [];
         tasks.push(cb);
         runSequenceUseGulp.apply(null, tasks);
