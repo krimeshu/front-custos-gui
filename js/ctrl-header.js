@@ -31,8 +31,8 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
             controller: function configDialogController($scope, $mdDialog) {
                 $scope.config = Utils.deepCopy(Model.config);
                 $scope.allThemes = Model.allThemes;
-                
-                $scope.aceLoaded = function(_editor) {
+
+                $scope.aceLoaded = function (_editor) {
                     // Options
                     _editor.$blockScrolling = Infinity;
                     _editor.focus();
@@ -43,6 +43,9 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
                 };
 
                 $scope.save = function () {
+                    if ($scope.config.watchDelayTime < 10) {
+                        $scope.config.watchDelayTime = 10;
+                    }
                     Data.saveConfig($scope.config);
                     Utils.deepCopy($scope.config, Model.config);
                     console.log($scope.config);

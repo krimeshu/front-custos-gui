@@ -10,6 +10,10 @@ var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js');
 
+var getDelayTime = function () {
+    return Model.config.watchDelayTime;
+};
+
 var FrontCustos = {
     unloaded: true,
     loadPlugin: function () {
@@ -102,7 +106,7 @@ var watch = function (_projWithOpt) {
                 Logger.info('监听构建上传完毕：%c%s', 'color: white;', projName);
             });
         });
-    }, 500);
+    }, getDelayTime);
 
     Logger.info('开始监听项目：%c%s', 'color: white;', projName);
     _watch.watchTree(projDir, {
@@ -155,10 +159,11 @@ var debounce = function (func, wait, immediate) {
 
     var later = function () {
         // 据上一次触发时间间隔
-        var last = Date.now() - timestamp;
+        var last = Date.now() - timestamp,
+            waitTime = typeof(wait) === 'function' ? wait() : wait;
         // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
-        if (last < wait && last > 0) {
-            timeout = setTimeout(later, wait - last);
+        if (last < waitTime && last > 0) {
+            timeout = setTimeout(later, waitTime - last);
         } else {
             timeout = null;
             // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
@@ -173,9 +178,10 @@ var debounce = function (func, wait, immediate) {
         context = this;
         args = arguments;
         timestamp = Date.now();
-        var callNow = immediate && !timeout;
+        var callNow = immediate && !timeout,
+            waitTime = typeof(wait) === 'function' ? wait() : wait;
         // 如果延时不存在，重新设定延时
-        if (!timeout) timeout = setTimeout(later, wait);
+        if (!timeout) timeout = setTimeout(later, waitTime);
         if (callNow) {
             result = func.apply(context, args);
             context = args = null;

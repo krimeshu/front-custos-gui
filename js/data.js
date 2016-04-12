@@ -35,7 +35,7 @@ function getTemplates() {
 // 加载默认配置
 function loadConfig() {
     var configPath = _path.resolve(__dirname, '../fc-config.json'),
-        config = {
+        initConfig = {
             "outputDir": "D:\\FC_Output",
             "htmlEnhanced": false,
             "delUnusedFiles": true,
@@ -51,8 +51,10 @@ function loadConfig() {
             },
             "concurrentLimit": 1,
             "watchToUploading": false,
+            "watchDelayTime": 1000,
             "lastWorkingId": null
-        };
+        },
+        config = initConfig;
     if (!_fs.existsSync(configPath)) {
         saveConfig(config);
     } else {
@@ -62,6 +64,12 @@ function loadConfig() {
         } catch (e) {
             console.log('loadConfig 时发生异常: ', e);
             saveConfig(config);
+        }
+        // 补全升级后的字段
+        for (var k in initConfig) {
+            if (initConfig.hasOwnProperty(k) && config[k] === undefined) {
+                config[k] = initConfig[k];
+            }
         }
     }
     return config;
