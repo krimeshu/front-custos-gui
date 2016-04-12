@@ -43,8 +43,8 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
                 };
 
                 $scope.save = function () {
-                    if ($scope.config.watchDelayTime < 10) {
-                        $scope.config.watchDelayTime = 10;
+                    if ($scope.config.watchDelayTime < 100) {
+                        $scope.config.watchDelayTime = 100;
                     }
                     Data.saveConfig($scope.config);
                     Utils.deepCopy($scope.config, Model.config);

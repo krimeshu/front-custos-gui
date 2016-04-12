@@ -111,6 +111,7 @@ var watch = function (_projWithOpt) {
     Logger.info('开始监听项目：%c%s', 'color: white;', projName);
     _watch.watchTree(projDir, {
         ignoreDotFiles: true,
+        interval: 2004,
         filter: function (f) {
             var baseName = _path.basename(f),
                 ignoreNames = ['package.json'];
