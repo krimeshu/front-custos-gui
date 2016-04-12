@@ -127,10 +127,6 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
                 $scope.tempPath = null;
 
-                $scope.hide = function () {
-                    $mdDialog.hide();
-                };
-
                 $scope.answer = function (answer) {
                     $mdDialog.hide(answer);
                 };
@@ -144,13 +140,20 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             clickOutsideToClose: true,
             targetEvent: ev
         }).then(function (tempPath) {
-            //console.log(tempPath);
+            // 读取模板设定初始配置
             var pkg = Data.loadProjPackage(projName, projDir),
                 content = tempPath ?
                     _fs.readFileSync(tempPath).toString() :
                     Data.getInitOpt(),
                 temp = angular.fromJson(content),
                 fcOpt = Model.extractFcOpt(temp);
+            pkg.fcOpt = Utils.deepCopy(fcOpt);
+            Data.saveProjPackage(pkg, projDir);
+            $scope.addProj(projName, projDir);
+        }, function () {
+            // 不取模板，直接按默认配置
+            var pkg = Data.loadProjPackage(projName, projDir),
+                fcOpt = Data.getInitOpt();
             pkg.fcOpt = Utils.deepCopy(fcOpt);
             Data.saveProjPackage(pkg, projDir);
             $scope.addProj(projName, projDir);

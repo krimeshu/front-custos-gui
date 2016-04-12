@@ -144,6 +144,9 @@ FileLinker.prototype = {
                     continue;
                 }
             }
+            if (!_fs.statSync(_file).isFile()) {
+                continue;
+            }
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
@@ -201,6 +204,9 @@ FileLinker.prototype = {
                     continue;
                 }
             }
+            if (!_fs.statSync(_file).isFile()) {
+                continue;
+            }
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
@@ -250,6 +256,9 @@ FileLinker.prototype = {
                     self.onError && self.onError(err);
                     continue;
                 }
+            }
+            if (!_fs.statSync(_file).isFile()) {
+                continue;
             }
             usedFiles.push(_file);
             if (cb) {

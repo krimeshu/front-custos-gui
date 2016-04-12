@@ -132,7 +132,7 @@ function loadProjPackage(projName, projDir) {
         pkg = {
             name: projName,
             version: '0.1.0',
-            fcOpt: getInitOpt()
+            fcOpt: null
         };
     if (!_fs.existsSync(pkgPath)) {
         saveProjPackage(pkg, projDir);
