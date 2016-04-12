@@ -114,8 +114,9 @@ var watch = function (_projWithOpt) {
         interval: 2004,
         filter: function (f) {
             var baseName = _path.basename(f),
-                ignoreNames = ['package.json'];
-            return ignoreNames.indexOf(baseName) < 0;
+                ignoreNames = ['package.json'],
+                regJetBrainsTempFile = /___jb_tmp___$/;
+            return ignoreNames.indexOf(baseName) < 0 && !regJetBrainsTempFile.test(baseName);
         }
     }, function (f, curr, prev) {
         if (typeof f == "object" && prev === null && curr === null) {
