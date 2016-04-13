@@ -11,6 +11,7 @@ var _os = require('os'),
 
     Utils = require('./script/utils.js'),
     Timer = require('./script/timer.js'),
+    DependencyInjector = require('./script/dependency-injector.js'),
     ConstReplacer = require('./script/const-replacer.js'),
     FileIncluder = require('./script/file-includer.js'),
     FileLinker = require('./script/file-linker.js'),
@@ -20,6 +21,11 @@ var _os = require('os'),
     PrefixCrafterProxy = require('./script/prefix-crafter-proxy.js'),
 
     console = global.console;
+
+var config = {delUnusedFiles: true},
+    params = {},
+    running = false,
+    injector = new DependencyInjector();
 
 module.exports = {
     // 注册相关gulp任务、run-sequence插件
@@ -109,6 +115,12 @@ module.exports = {
         replacer.doReplace(params);
         params.constFields = constFields;
 
+        injector.registerMap(params);
+        injector.registerMap({
+            params: params,
+            console: console
+        });
+
         // 预处理和后处理脚本
         var preprocessing, postprocessing;
         try {
@@ -127,13 +139,13 @@ module.exports = {
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
         try {
-            preprocessing && preprocessing(params, console);
+            preprocessing && injector.invoke(preprocessing);
         } catch (e) {
             console.error(e);
         }
         this.runTasks(params, function () {
             try {
-                postprocessing && postprocessing(params, console);
+                postprocessing && injector.invoke(postprocessing);
             } catch (e) {
                 console.error(e);
             }
@@ -143,10 +155,6 @@ module.exports = {
         });
     }
 };
-
-var config = {delUnusedFiles: true},
-    params = {},
-    running = false;
 
 var LazyLoadPlugins = {
     _cached: {},
@@ -523,7 +531,7 @@ var tasks = {
             usedFiles = null;
         }
 
-        LazyLoadPlugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(function () {
+        var afterClean = function () {
             gulp.src(_path.resolve(buildDir, '**/*'))
                 .pipe(LazyLoadPlugins.plumber({
                     'errorHandler': errorHandler
@@ -536,7 +544,13 @@ var tasks = {
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 });
-        });
+        };
+        try {
+            LazyLoadPlugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(afterClean);
+        } catch (e) {
+            errorHandler(e);
+            done();
+        }
     },
     // 上传：
     // - 将发布文件夹中的文件发到测试服务器
@@ -555,14 +569,18 @@ var tasks = {
             uploadForm = upOpt.form,
 
             uploadCallback = Utils.tryParseFunction(config.uploadCallback),
-            concurrentLimit = config.concurrentLimit | 0;
+            concurrentLimit = config.concurrentLimit | 0,
+
+            errorHandler = getTaskErrorHander('do_upload');
 
         if (concurrentLimit < 1) {
             concurrentLimit = Infinity;
         }
 
         var uploader = new FileUploader({
+            console: console,
             projectName: projName,
+            distDir: distDir,
             pageDir: alOpt.allot ? _path.resolve(distDir, pageDir) : distDir,
             staticDir: alOpt.allot ? _path.resolve(distDir, staticDir) : distDir,
             uploadAll: uploadAll,
@@ -576,16 +594,22 @@ var tasks = {
 
         gulp.src(_path.resolve(distDir, '**/*'))
             .pipe(LazyLoadPlugins.plumber({
-                'errorHandler': getTaskErrorHander('do_upload')
+                'errorHandler': errorHandler
             }))
             .pipe(uploader.appendFile())
             .on('end', function () {
                 var logId = console.genUniqueId && console.genUniqueId();
                 uploader.start(function onProgress(err, filePath, response, results) {
                     // 完成一个文件时
-                    var sof = !err && uploadCallback && uploadCallback(response),
-
-                    //relativePath = _path.relative(distDir, filePath),
+                    var sof = false;
+                    try {
+                        sof = !err && uploadCallback && uploadCallback(response);
+                    } catch (e) {
+                        err = new Error('上传结果判断脚本执行异常');
+                        err.detailError = e;
+                        errorHandler(err);
+                    }
+                    var //relativePath = _path.relative(distDir, filePath),
                         succeedCount = results.succeed.length + sof,
                         failedCount = results.failed.length + !sof,
                         queueCount = results.queue.length;
