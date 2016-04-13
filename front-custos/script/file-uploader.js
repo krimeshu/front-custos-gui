@@ -142,6 +142,12 @@ FileUploader.prototype = {
 
         results.queue = uploadQueue;
 
+        var injector = new DependencyInjector(forInjector);
+        injector.registerMap({
+            uploadQueue: uploadQueue,
+            results: results
+        });
+
         if (uploadQueue.length <= 0) {
             onComplete && injector.invoke(onComplete);
         } else {
@@ -158,18 +164,6 @@ FileUploader.prototype = {
 
                     fileStream = _fs.createReadStream(filePath);
 
-
-                var injector = new DependencyInjector(forInjector);
-                injector.registerMap({
-                    uploadQueue: uploadQueue,
-                    results: results
-                });
-                injector.registerMap({
-                    filePath: filePath,
-                    fileStream: fileStream,
-                    relativeName: relativeName
-                });
-
                 var formMap = null,
                     formPreview = {},
                     sp = (uploadPage.indexOf('?') < 0 ? '?' : '&');
@@ -178,6 +172,12 @@ FileUploader.prototype = {
                     uploadPage += sp + 't=' + new Date().getTime();
                     var err = null;
                     try {
+                        injector.registerMap({
+                            filePath: filePath,
+                            fileStream: fileStream,
+                            relativeName: relativeName
+                        });
+
                         formMap = uploadForm && injector.invoke(uploadForm);
                     } catch (e) {
                         err = new Error('表单脚本执行失败');
@@ -209,6 +209,11 @@ FileUploader.prototype = {
                             connection: 'keep-alive'
                         }
                     }, function (err, msg, response) {
+                        injector.registerMap({
+                            filePath: filePath,
+                            fileStream: fileStream,
+                            relativeName: relativeName
+                        });
                         injector.registerMap({
                             err: err,
                             response: response
