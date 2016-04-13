@@ -24,6 +24,16 @@ DependencyInjector.prototype = {
             }
         }
     },
+    'queryAvailableArguments': function () {
+        var argMap = this.argMap,
+            argNames = [];
+        for (var k in argMap) {
+            if (argMap.hasOwnProperty(k)) {
+                argNames.push(k);
+            }
+        }
+        return argNames;
+    },
     'analyseDependencies': function (func) {
         var type = Object.prototype.toString.call(func),
             funcDepArr = null;
@@ -69,7 +79,7 @@ DependencyInjector.prototype = {
             }
             args.push(argMap[dep]);
         }
-        return func.apply(scope || {}, args);
+        return func.apply(scope || this, args);
     }
 };
 

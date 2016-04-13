@@ -5,7 +5,10 @@
 var gulp = require('gulp'),
 
     frontCustos = require('./'),
-    fcOptions = require('./example/package.json').fcOpt;
+    packageOptions = require('./example/package.json'),
+    fcOptions = packageOptions.fcOpt;
+
+fcOptions['projDir'] = './example';
 
 frontCustos.registerTasks(gulp);
 frontCustos.config({

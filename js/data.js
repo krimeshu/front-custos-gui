@@ -162,25 +162,25 @@ function saveProjPackage(pkg, projDir) {
 // 获取默认项目配置
 function getInitOpt() {
     return {
-        id: null,
-        projName: '',
-        projDir: '',
-        version: '',
-        scOpt: {},
-        pcOpt: {},
-        alOpt: {
+        "id": null,
+        "projName": '',
+        "projDir": '',
+        "version": '',
+        "scOpt": {},
+        "pcOpt": {},
+        "alOpt": {
             allot: false
         },
-        upOpt: {
+        "upOpt": {
             "delta": true,
-            "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var fileDir = relativeName.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}"
+            "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var fileDir = relativeName.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}"
         },
-        tasks: [],
-        innerSrcDir: '',
-        innerDistDir: '',
-        preprocessing: 'function preprocessing(params, console) {\n    var srcDir = params.srcDir;\n    // Todo: do something before build.\n}',
-        postprocessing: 'function postprocessing(params, console) {\n    var distDir = params.distDir;\n    // Todo: do something after build.\n}',
-        keepOldCopy: false
+        "tasks": [],
+        "innerSrcDir": '',
+        "innerDistDir": '',
+        "preprocessing": "function preprocessing(console, srcDir) {\n    console.log('项目源目录：', srcDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
+        "postprocessing": "function postprocessing(console, distDir) {\n    var distDir = params.distDir;\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
+        "keepOldCopy": false
     };
 }
 
