@@ -19,6 +19,12 @@ var PrefixCrafterProxy = {
             try {
                 content = PrefixCrafter.addPrefix(content, pcOpt);
             } catch (e) {
+                if (e.source) {
+                    delete e.source;
+                }
+                if (e.input && e.input.source) {
+                    delete e.input.source;
+                }
                 var err = new Error('样式前缀处理异常');
                 err.detailError = e;
                 errorHandler && errorHandler(err);
