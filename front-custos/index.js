@@ -627,12 +627,16 @@ var tasks = {
                         queueCount = results.queue.length,
                         unchangedCount = results.unchanged.length,
                         totalCount = results.totalCount,
-                        resText = '，上传' + queueCount + '个文件，成功' + succeedCount + '个' +
+                        resText = 'do_upload 任务结束' +
+                            (queueCount ? '，上传' + queueCount + '个文件' : '') +
+                            (succeedCount ? '，成功' + succeedCount + '个' : '') +
                             (failedCount ? '，失败' + failedCount + '个' : '') +
-                            '。总共' + totalCount + '个文件' +
-                            (unchangedCount ? '，其中' + unchangedCount + '个无变更。' : '。');
+                            '。总计' + totalCount + '个文件' +
+                            (unchangedCount === totalCount ? '，无任何文件变更' :
+                                (unchangedCount ? '，其中' + unchangedCount + '个无变更' : '')) +
+                            '。';
                     logId && console.useId && console.useId(logId);
-                    console.info(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务结束' + resText + '（' + timer.getTime() + 'ms）');
+                    console.info(Utils.formatTime('[HH:mm:ss.fff]'), resText + '（' + timer.getTime() + 'ms）');
                     if (succeedCount) {
                         console.log(succeedCount, '个文件上传成功：', results.succeed);
                     }

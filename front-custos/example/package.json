@@ -39,37 +39,7 @@
     "innerDistDir": "./dist",
     "preprocessing": "function preprocessing(console, srcDir) {\n    console.log('项目源目录：', srcDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
     "postprocessing": "function postprocessing(console, distDir) {\n    console.log('项目输出目录：', distDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
-    "keepOldCopy": false,
-    "prjName": "guess201602",
-    "buildDir": "C:\\Users\\krimeshu\\AppData\\Local\\Temp\\FC_BuildDir\\guess201602",
-    "distDir": "D:\\FC_Output\\guess201602",
-    "constFields": {
-      "PROJECT": "C:\\Users\\krimeshu\\AppData\\Local\\Temp\\FC_BuildDir\\guess201602",
-      "PROJECT_NAME": "guess201602",
-      "VERSION": "0.1.0"
-    },
-    "usedFiles": [
-      "css/styles.css",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/sc_img_default.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/sc_img_start.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/sc_img_question-titles.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/sc_img_answer.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/sc_img_end.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/start-content.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-1-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-2-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-3-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-4-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-5-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-6-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-7-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-8-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-9-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/question-10-photo.png",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/js/scripts.js",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/static/guess201602/images/share-icon.jpg",
-      "C:/Users/krimeshu/AppData/Local/Temp/FC_BuildDir/guess201602/event/guess201602/index.html"
-    ]
+    "keepOldCopy": false
   },
   "watchToRebuilding": false
 }
