@@ -354,7 +354,9 @@ var tasks = {
     'prefix_crafter': function (done) {
         var buildDir = params.buildDir,
             pattern = _path.resolve(buildDir, '**/*@(.css)'),
-            pcOpt = params.pcOpt;
+            pcOpt = params.pcOpt,
+
+            errorHandler = getTaskErrorHander('prefix_crafter');
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
@@ -362,9 +364,9 @@ var tasks = {
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务开始……');
         gulp.src(pattern)
             .pipe(LazyLoadPlugins.plumber({
-                'errorHandler': getTaskErrorHander('prefix_crafter')
+                'errorHandler': errorHandler
             }))
-            .pipe(PrefixCrafterProxy.process(pcOpt))
+            .pipe(PrefixCrafterProxy.process(pcOpt, errorHandler))
             .pipe(gulp.dest(buildDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
