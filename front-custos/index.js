@@ -141,13 +141,13 @@ module.exports = {
         try {
             preprocessing && injector.invoke(preprocessing);
         } catch (e) {
-            console.error(e);
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
         }
         this.runTasks(params, function () {
             try {
                 postprocessing && injector.invoke(postprocessing);
             } catch (e) {
-                console.error(e);
+                console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理将本执行异常：', e);
             }
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
             running = false;

@@ -179,7 +179,7 @@ function getInitOpt() {
         "innerSrcDir": '',
         "innerDistDir": '',
         "preprocessing": "function preprocessing(console, srcDir) {\n    console.log('项目源目录：', srcDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
-        "postprocessing": "function postprocessing(console, distDir) {\n    var distDir = params.distDir;\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
+        "postprocessing": "function postprocessing(console, distDir) {\n    console.log('项目输出目录：', distDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
         "keepOldCopy": false
     };
 }

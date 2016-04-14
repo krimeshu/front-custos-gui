@@ -71,7 +71,7 @@ module.exports = {
     _format: function (args) {
         var formatStr = args[0];
         if (typeof(formatStr) !== 'string') {
-            formatStr = JSON.stringify(formatStr);
+            formatStr = parseString(formatStr);
         }
         var res = [];
         var formats = formatStr.split('%');
