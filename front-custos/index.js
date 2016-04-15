@@ -569,8 +569,8 @@ var tasks = {
             uploadAll = upOpt.uploadAll,
             uploadPage = upOpt.page,
             uploadForm = upOpt.form,
+            uploadJudge = upOpt.judge,
 
-            uploadCallback = Utils.tryParseFunction(config.uploadCallback),
             concurrentLimit = config.concurrentLimit | 0,
 
             errorHandler = getTaskErrorHander('do_upload');
@@ -581,15 +581,14 @@ var tasks = {
 
         var uploader = new FileUploader({
             console: console,
-            projectName: projName,
-            distDir: distDir,
-            pageDir: alOpt.allot ? _path.resolve(distDir, pageDir) : distDir,
-            staticDir: alOpt.allot ? _path.resolve(distDir, staticDir) : distDir,
+            forInjector: params,
+
             uploadAll: uploadAll,
             uploadPage: uploadPage,
             uploadForm: uploadForm,
+            uploadJudge: uploadJudge,
             concurrentLimit: concurrentLimit
-        });
+        }, errorHandler);
 
         var timer = new Timer();
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务开始……');
@@ -601,25 +600,15 @@ var tasks = {
             .pipe(uploader.appendFile())
             .on('end', function () {
                 var logId = console.genUniqueId && console.genUniqueId();
-                uploader.start(function onProgress(err, filePath, response, results) {
+                uploader.start(function onProgress(results) {
                     // 完成一个文件时
-                    var sof = false;
-                    try {
-                        sof = !err && uploadCallback && uploadCallback(response);
-                    } catch (e) {
-                        err = new Error('上传结果判断脚本执行异常');
-                        err.detailError = e;
-                        errorHandler(err);
-                    }
-                    var //relativePath = _path.relative(distDir, filePath),
-                        succeedCount = results.succeed.length + sof,
-                        failedCount = results.failed.length + !sof,
+                    var succeedCount = results.succeed.length,
+                        failedCount = results.failed.length,
                         queueCount = results.queue.length;
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务进度：' +
                         queueCount + '/' + succeedCount + '/' + failedCount);
                     //console.log('服务器回复：', response);
-                    return sof;
                 }, function onComplete(results) {
                     // 完成所有文件时
                     var succeedCount = results.succeed.length,

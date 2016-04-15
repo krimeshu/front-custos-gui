@@ -12,31 +12,27 @@ var _os = require('os'),
     Utils = require('./utils.js'),
     DependencyInjector = require('./dependency-injector.js');
 
-var FileUploader = function (opts) {
+var FileUploader = function (opts, onError) {
     var self = this,
         console = opts.console,
-        projectName = opts.projectName,
-        distDir = opts.distDir,
-        pageDir = opts.pageDir,
-        staticDir = opts.staticDir,
+        forInjector = Utils.deepCopy(opts.forInjector),
         uploadAll = opts.uploadAll,
         uploadPage = opts.uploadPage,
         uploadForm = opts.uploadForm,
+        uploadJudge = opts.uploadJudge,
         concurrentLimit = opts.concurrentLimit || 1;
 
-    self.forInjector = {
-        console: console,
-        projectName: projectName,
-        distDir: distDir,
-        pageDir: pageDir,
-        staticDir: staticDir
-    };
+    forInjector.console = console;
+    self.forInjector = forInjector;
     self.uploadQueue = [];
     self.uploadAll = uploadAll;
     self.uploadPage = uploadPage;
     self.uploadForm = uploadForm;
+    self.uploadJudge = uploadJudge;
     self.concurrentLimit = concurrentLimit;
     self.concurrentCount = 0;
+
+    self.onError = onError;
 
     self._loadHistory();
 };
@@ -45,19 +41,19 @@ FileUploader.prototype = {
     _getHistoryFilePath: function () {
         var self = this,
             forInjector = self.forInjector,
-            projectName = forInjector.projectName,
+            projDir = forInjector.projDir,
             fileDir = './FC_UploadHistory',
-            fileName = Utils.md5(projectName);
+            fileName = Utils.md5(projDir);
         Utils.makeSureDir(fileDir);
         return _path.resolve(fileDir, fileName + '.json');
     },
     _loadHistory: function () {
         var self = this,
             forInjector = self.forInjector,
-            projectName = forInjector.projectName,
+            projDir = forInjector.projDir,
             filePath = self._getHistoryFilePath(),
             history = {
-                projectName: projectName,
+                projDir: projDir,
                 data: {}
             };
         try {
@@ -117,9 +113,13 @@ FileUploader.prototype = {
             forInjector = self.forInjector,
             uploadAll = self.uploadAll,
             uploadForm = self.uploadForm,
-            uploadQueue = self.uploadQueue;
+            uploadJudge = self.uploadJudge,
+            uploadQueue = self.uploadQueue,
+
+            onError = self.onError;
 
         uploadForm = Utils.tryParseFunction(uploadForm);
+        uploadJudge = Utils.tryParseFunction(uploadJudge);
 
         var results = self.uploadResult = {
             succeed: [],
@@ -154,13 +154,8 @@ FileUploader.prototype = {
             uploadQueue.forEach(function (filePath) {
                 var results = self.uploadResult,
                     uploadPage = self.uploadPage,
-
                     forInjector = self.forInjector,
-                    pageDir = forInjector.pageDir,
-                    staticDir = forInjector.staticDir,
-
-                    isPage = Utils.isPage(filePath),
-                    relativeName = _path.relative(isPage ? pageDir : staticDir, filePath).replace(/\\/g, '/'),
+                    distDir = forInjector.distDir,
 
                     fileStream = _fs.createReadStream(filePath);
 
@@ -170,14 +165,14 @@ FileUploader.prototype = {
 
                 var _upload = function (done) {
                     uploadPage += sp + 't=' + new Date().getTime();
+                    injector.registerMap(forInjector);
+                    injector.registerMap({
+                        filePath: filePath,
+                        fileStream: fileStream
+                    });
+
                     var err = null;
                     try {
-                        injector.registerMap({
-                            filePath: filePath,
-                            fileStream: fileStream,
-                            relativeName: relativeName
-                        });
-
                         formMap = uploadForm && injector.invoke(uploadForm);
                     } catch (e) {
                         err = new Error('表单脚本执行失败');
@@ -212,17 +207,26 @@ FileUploader.prototype = {
                         injector.registerMap({
                             filePath: filePath,
                             fileStream: fileStream,
-                            relativeName: relativeName
-                        });
-                        injector.registerMap({
-                            err: err,
                             response: response
                         });
-                        var progressResult = (!onProgress || injector.invoke(onProgress));
-                        if (!err && progressResult) {
+                        var judgeResult = false;
+                        try {
+                            judgeResult = (!uploadJudge || injector.invoke(uploadJudge));
+                        } catch (e) {
+                            err = new Error('上传结果判断脚本执行异常');
+                            err.detailError = e;
+                        }
+                        if (!err && judgeResult) {
                             _onSucceed(response, done);
                         } else {
                             _onFailed(err, response, done);
+                        }
+                        try {
+                            onProgress && injector.invoke(onProgress);
+                        } catch (e) {
+                            var ex = new Error('上传进度脚本执行异常');
+                            ex.detailError = e;
+                            onError && onError(ex);
                         }
                     });
                     var form = request.form();
@@ -232,18 +236,34 @@ FileUploader.prototype = {
                             form.append(key, value);
                         }
                     }
+                    try {
+                        onProgress && injector.invoke(onProgress);
+                    } catch (e) {
+                        var ex = new Error('上传进度脚本执行异常');
+                        ex.detailError = e;
+                        onError && onError(ex);
+                    }
                 }, _onSucceed = function (response, done) {
                     self._updateFileHash(filePath);
+                    formPreview.file = _path.relative(distDir, filePath);
+                    response !== undefined && (formPreview.response = response);
                     results.succeed.push(formPreview);
                     _checkNext(done);
                 }, _onFailed = function (err, response, done) {
                     err !== undefined && (formPreview.error = err);
+                    formPreview.file = _path.relative(distDir, filePath);
                     response !== undefined && (formPreview.response = response);
                     results.failed.push(formPreview);
                     _checkNext(done);
                 }, _checkNext = function (done) {
                     if (results.succeed.length + results.failed.length >= results.queue.length) {
-                        onComplete && injector.invoke(onComplete);
+                        try {
+                            onComplete && injector.invoke(onComplete);
+                        } catch (e) {
+                            var ex = new Error('上传完成脚本执行异常');
+                            ex.detailError = e;
+                            onError && onError(ex);
+                        }
                     }
                     done();
                 };

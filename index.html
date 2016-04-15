@@ -355,13 +355,20 @@
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-headline">上传表单与页面</span>
+                                        <span class="md-headline">上传表单</span>
                                     </md-card-title-text>
                                 </md-card-title>
                                 <div class="editor" ng-model="curProj.upOpt.form" flex-grow
                                      ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">上传结果判断</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <div class="editor" ng-model="curProj.upOpt.judge" flex-grow
+                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
                                 <md-card-content layout="column">
-                                    <md-input-container class="md-block" flex>
+                                    <md-input-container class="md-block">
                                         <label>上传页面</label>
                                         <input ng-model="curProj.upOpt.page" name="uploadPage"
                                                ng-disabled="curProj.id === null"

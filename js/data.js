@@ -44,7 +44,6 @@ function loadConfig() {
             "outputDir": "D:\\FC_Output",
             "htmlEnhanced": false,
             "delUnusedFiles": true,
-            "uploadCallback": "function uploadCallback(response) {\n    return /^上传成功/.test(response);\n}",
             "flattenMap": {
                 "page": "",
                 "style": "css",
@@ -164,7 +163,27 @@ function saveProjPackage(pkg, projDir) {
     }
 }
 
-var initOpt = require('../initial-options.json');
+var initOpt = {
+    "scOpt": {},
+    "pcOpt": {},
+    "alOpt": {
+        "allot": false
+    },
+    "upOpt": {
+        "delta": true,
+        "form": "function uploadForm(fileStream, filePath) {\r\n    var fileDir = filePath.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}",
+        "judge": "function uploadJudge(response) {\n    return /^上传成功/.test(response);\n}"
+    },
+    "tasks": [
+        "prepare_build",
+        "do_dist"
+    ],
+    "innerSrcDir": "",
+    "innerDistDir": "",
+    "preprocessing": "function preprocessing(console, srcDir) {\n    console.log('项目源目录：', srcDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
+    "postprocessing": "function postprocessing(console, distDir) {\n    console.log('项目输出目录：', distDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
+    "keepOldCopy": false
+};
 // 获取默认项目配置
 function getNewOpt() {
     var opt = Utils.deepCopy(initOpt);

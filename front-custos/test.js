@@ -15,9 +15,6 @@ frontCustos.config({
     outputDir: './example/dist',
     htmlEnhanced: false,
     delUnusedFiles: true,
-    uploadCallback: function (response) {
-        return /^上传成功/.test(response);
-    },
     flattenMap: {
         page: '',
         style: 'css',

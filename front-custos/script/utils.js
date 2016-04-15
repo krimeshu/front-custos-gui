@@ -26,10 +26,38 @@ exports.deepCopy = function (origin, _copy) {
             }
             break;
         case '[object Function]':
-            copy = new Function(origin.toString());
             break;
     }
     return copy;
+};
+
+exports.fillObj = function (refer, target) {
+    var self = arguments.callee,
+        refType = Object.prototype.toString.call(refer),
+        tarType = Object.prototype.toString.call(target);
+    if (refType !== '[object Object]' ||
+        tarType !== '[object Object]') {
+        return false;
+    }
+    for (var k in refer) {
+        if (refer.hasOwnProperty(k)) {
+            var rk = refer[k],
+                tk = target[k] || (target[k] = exports.deepCopy(rk));
+            self(rk, tk);
+        }
+    }
+    return true;
+};
+
+exports.clearObj = function (o) {
+    if (typeof(o) !== 'object') {
+        return;
+    }
+    for (var p in o) {
+        if (o.hasOwnProperty(p)) {
+            delete o[p];
+        }
+    }
 };
 
 //计算16位md5

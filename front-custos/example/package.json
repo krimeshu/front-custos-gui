@@ -20,7 +20,8 @@
     "upOpt": {
       "delta": true,
       "page": "",
-      "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var fileDir = relativeName.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}"
+      "form": "function uploadForm(fileStream, filePath) {\r\n    var fileDir = filePath.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}",
+      "judge": "function uploadJudge(response) {\n    return /^上传成功/.test(response);\n}"
     },
     "tasks": [
       "prepare_build",

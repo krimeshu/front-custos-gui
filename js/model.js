@@ -33,6 +33,7 @@ module.exports = {
     watchingProjIds: [],
     loadCurProj: function (proj) {
         var opts = this.loadProjOptions(proj);
+        Utils.clearObj(this.curProj);
         Utils.deepCopy(opts, this.curProj);
         Utils.deepCopy(proj, this.curProj);
     },
@@ -42,11 +43,7 @@ module.exports = {
             pkg = Data.loadProjPackage(projName, projDir),
             opts = pkg.fcOpt || {},
             needsFields = Data.initOpt;
-        for (var field in needsFields) {
-            if (needsFields.hasOwnProperty(field) && opts[field] === undefined) {
-                opts[field] = needsFields[field];
-            }
-        }
+        Utils.fillObj(needsFields, opts);
         opts.version = pkg.version;
         opts.watchToRebuilding = !!pkg.watchToRebuilding;
         return opts;
