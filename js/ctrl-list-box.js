@@ -144,7 +144,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             var pkg = Data.loadProjPackage(projName, projDir),
                 content = tempPath ?
                     _fs.readFileSync(tempPath).toString() :
-                    Data.getInitOpt(),
+                    Data.initOpt,
                 temp = angular.fromJson(content),
                 fcOpt = Model.extractFcOpt(temp);
             pkg.fcOpt = Utils.deepCopy(fcOpt);
@@ -153,7 +153,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         }, function () {
             // 不取模板，直接按默认配置
             var pkg = Data.loadProjPackage(projName, projDir),
-                fcOpt = Data.getInitOpt();
+                fcOpt = Data.initOpt;
             pkg.fcOpt = Utils.deepCopy(fcOpt);
             Data.saveProjPackage(pkg, projDir);
             $scope.addProj(projName, projDir);

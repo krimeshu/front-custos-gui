@@ -18,7 +18,7 @@ module.exports = {
         {name: 'allot_link', desc: '分发关联文件'},
         {name: 'optimize_image', desc: '压缩图片'},
         {name: 'do_dist', desc: '输出文件', locked: true},
-        {name: 'do_upload', desc: '上传文件', locked: true}
+        {name: 'do_upload', desc: '上传文件', disabled: true}
     ],
     allThemes: {
         'default': {primary: 'blue-grey', accent: 'red'},
@@ -29,7 +29,7 @@ module.exports = {
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
     projList: Data.loadProjList(),
-    curProj: Data.getInitOpt(),
+    curProj: Data.getNewOpt(),
     watchingProjIds: [],
     loadCurProj: function (proj) {
         var opts = this.loadProjOptions(proj);
@@ -41,7 +41,7 @@ module.exports = {
             projDir = proj.projDir,
             pkg = Data.loadProjPackage(projName, projDir),
             opts = pkg.fcOpt || {},
-            needsFields = Data.getInitOpt();
+            needsFields = Data.initOpt;
         for (var field in needsFields) {
             if (needsFields.hasOwnProperty(field) && opts[field] === undefined) {
                 opts[field] = needsFields[field];
@@ -73,7 +73,7 @@ module.exports = {
             projList.splice(pos, 1);
 
             Data.saveProjList(projList);
-            Utils.deepCopy(Data.getInitOpt(), this.curProj);
+            Utils.deepCopy(Data.getNewOpt(), this.curProj);
             return true;
         } catch (e) {
             return false;

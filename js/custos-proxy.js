@@ -28,18 +28,14 @@ var FrontCustos = {
 var fillTasks = function (fcOpt) {
     var tasks = fcOpt.tasks,
         uploadPos = tasks.indexOf('do_upload');
+    if (uploadPos >= 0) {
+        tasks.splice(uploadPos, 1);
+    }
     if (tasks.indexOf('prepare_build') < 0) {
         tasks.splice(0, 0, 'prepare_build');
     }
     if (tasks.indexOf('do_dist') < 0) {
-        if (uploadPos >= 0) {
-            tasks.splice(uploadPos++, 0, 'do_dist');
-        } else {
-            tasks.push('do_dist');
-        }
-    }
-    if (uploadPos >= 0) {
-        tasks.splice(uploadPos, 1);
+        tasks.push('do_dist');
     }
 };
 

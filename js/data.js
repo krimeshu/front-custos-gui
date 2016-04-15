@@ -3,7 +3,9 @@
  */
 
 var _fs = require('fs'),
-    _path = require('path');
+    _path = require('path'),
+
+    Utils = require('./utils.js');
 
 module.exports = {
     getTemplates: getTemplates,
@@ -13,7 +15,10 @@ module.exports = {
     saveProjList: saveProjList,
     loadProjPackage: loadProjPackage,
     saveProjPackage: saveProjPackage,
-    getInitOpt: getInitOpt
+    getNewOpt: getNewOpt,
+    get initOpt() {
+        return initOpt;
+    }
 };
 
 // 读取模板列表
@@ -159,28 +164,13 @@ function saveProjPackage(pkg, projDir) {
     }
 }
 
+var initOpt = require('../initial-options.json');
 // 获取默认项目配置
-function getInitOpt() {
-    return {
-        "id": null,
-        "projName": '',
-        "projDir": '',
-        "version": '',
-        "scOpt": {},
-        "pcOpt": {},
-        "alOpt": {
-            allot: false
-        },
-        "upOpt": {
-            "delta": true,
-            "form": "function uploadForm(fileStream, relativeName, projectName) {\r\n    var fileDir = relativeName.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}"
-        },
-        "tasks": [],
-        "innerSrcDir": '',
-        "innerDistDir": '',
-        "preprocessing": "function preprocessing(console, srcDir) {\n    console.log('项目源目录：', srcDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
-        "postprocessing": "function postprocessing(console, distDir) {\n    console.log('项目输出目录：', distDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
-        "keepOldCopy": false
-    };
+function getNewOpt() {
+    var opt = Utils.deepCopy(initOpt);
+    opt.id = null;
+    opt.projName = '';
+    opt.projDir = '';
+    return opt;
 }
 

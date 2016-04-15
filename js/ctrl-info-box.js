@@ -39,7 +39,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             var _list = [];
             for (var i = 0, task; task = $scope.allTasks[i]; i++) {
                 var pos = list.indexOf(task.name);
-                if (pos >= 0 || task.name === item || task.locked) {
+                if (!task.disabled && (pos >= 0 || task.name === item || task.locked)) {
                     _list.push(task.name);
                 }
             }
