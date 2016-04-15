@@ -65,6 +65,7 @@ input {
   right: 5px;
   width: auto;
   height: auto;
+  overflow: hidden;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   transition: transform 500ms ease, opacity 500ms ease;
   transform: translateZ(0) rotateX(180deg) scale(0.1);
