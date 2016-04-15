@@ -36,15 +36,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
         else {
-            var _list = [];
-            for (var i = 0, task; task = $scope.allTasks[i]; i++) {
-                var pos = list.indexOf(task.name);
-                if (!task.disabled && (pos >= 0 || task.name === item || task.locked)) {
-                    _list.push(task.name);
-                }
-            }
-            var _args = [0, list.length].concat(_list);
-            list.splice.apply(list, _args);
+            list.push(item);
+            Model.fillAndReorderTasks(list);
         }
     };
     $scope.exists = function (item, list) {

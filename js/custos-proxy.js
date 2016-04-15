@@ -31,12 +31,7 @@ var fillTasks = function (fcOpt) {
     if (uploadPos >= 0) {
         tasks.splice(uploadPos, 1);
     }
-    if (tasks.indexOf('prepare_build') < 0) {
-        tasks.splice(0, 0, 'prepare_build');
-    }
-    if (tasks.indexOf('do_dist') < 0) {
-        tasks.push('do_dist');
-    }
+    Model.fillAndReorderTasks(tasks);
 };
 
 var isRunning = function () {

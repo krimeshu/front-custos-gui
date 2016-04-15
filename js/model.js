@@ -20,6 +20,17 @@ module.exports = {
         {name: 'do_dist', desc: '输出文件', locked: true},
         {name: 'do_upload', desc: '上传文件', disabled: true}
     ],
+    fillAndReorderTasks: function (tasks) {
+        var _tasks = [];
+        for (var i = 0, task; task = this.allTasks[i]; i++) {
+            var pos = tasks.indexOf(task.name);
+            if (!task.disabled && (pos >= 0 || task.locked)) {
+                _tasks.push(task.name);
+            }
+        }
+        var _args = [0, tasks.length].concat(_tasks);
+        tasks.splice.apply(tasks, _args);
+    },
     allThemes: {
         'default': {primary: 'blue-grey', accent: 'red'},
         'pink': {primary: 'pink', accent: 'red'},
