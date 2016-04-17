@@ -7,8 +7,7 @@ var mainWindow = require('electron').remote.getCurrentWindow(),
 var Logger = require('./logger.js'),
     Data = require('./data.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js'),
-    CustosProxy = require('./custos-proxy.js');
+    Utils = require('./utils.js');
 
 var _fs = require('fs'),
     _path = require('path');
@@ -43,7 +42,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             $mdDialog.show(
                 $mdDialog.alert()
                     .parent(angular.element(document.querySelector('.window-box')))
-                    .title('项目配置失效，项目目录不存在，已从项目列表中移除')
+                    .title('项目“' + projName + '”配置失效，项目目录不存在，已从列表中移除')
                     .textContent('如项目被移动到其他位置，需要继续处理，请重新导入到工具内后继续操作。')
                     .ariaLabel('项目不存在')
                     .ok('好的')
@@ -54,38 +53,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         }
 
         // 开始加载
-        Model.loadCurProj(proj);
-        Logger.log('<hr/>');
-        Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
-        Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', projDir);
-
-        // 检查是否监听自动构建
-        if (Model.curProj.watchToRebuilding) {
-            CustosProxy.watch(Model.curProj);
-        }
-
-        // 记录上次操作的 Id
-        Model.config.lastWorkingId = id;
-        Data.saveConfig(Model.config);
-
-        $scope.scrollToItem(id);
-    };
-
-    $scope.scrollToItem = function (id) {
-        var listBox = document.querySelector('.list-box'),
-            listItem = listBox.querySelector('.proj-list .proj-item[data-id="' + id + '"]');
-        if (!listItem) {
-            window.setTimeout(function () {
-                $scope.scrollToItem(id);
-            }, 100);
-            return;
-        }
-        var listBoxRect = listBox.getBoundingClientRect(),
-            listItemRect = listItem.getBoundingClientRect(),
-            alignWithTop = listItemRect.bottom < listBoxRect.top ? true :
-                listItemRect.top > listBoxRect.bottom ? false : null;
-        (alignWithTop !== null) ? listItem.scrollIntoView(alignWithTop) :
-            (listBox.querySelector('.list-scroll').scrollTop = 1);  // 激活滚动条
+        Model.selectCurProj(proj);
     };
 
     // 显示打开项目路径对话框

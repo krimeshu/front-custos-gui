@@ -3,9 +3,11 @@
  */
 
 var Data = require('./data.js'),
-    Utils = require('./utils.js');
+    Logger = require('./logger.js'),
+    Utils = require('./utils.js'),
+    CustosProxy = require('./custos-proxy.js');
 
-module.exports = {
+var _this = {
     allTasks: [
         {name: 'prepare_build', desc: '构建预准备', locked: true},
         {name: 'replace_const', desc: '替换定义的常量'},
@@ -42,11 +44,29 @@ module.exports = {
     projList: Data.loadProjList(),
     curProj: Data.getNewOpt(),
     watchingProjIds: [],
-    loadCurProj: function (proj) {
-        var opts = this.loadProjOptions(proj);
+    selectCurProj: function (proj) {
+        var opts = this.loadProjOptions(proj),
+            id = proj.id,
+            projName = proj.projName,
+            projDir = proj.projDir;
         Utils.clearObj(this.curProj);
         Utils.deepCopy(opts, this.curProj);
         Utils.deepCopy(proj, this.curProj);
+
+        Logger.log('<hr/>');
+        Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
+        Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', projDir);
+
+        // 检查是否监听自动构建
+        if (this.curProj.watchToRebuilding) {
+            CustosProxy.watch(this.curProj);
+        }
+
+        // 记录上次操作的 Id
+        this.config.lastWorkingId = id;
+        Data.saveConfig(this.config);
+
+        scrollToItem(id);
     },
     loadProjOptions: function (proj) {
         var projName = proj.projName,
@@ -82,6 +102,15 @@ module.exports = {
 
             Data.saveProjList(projList);
             Utils.deepCopy(Data.getNewOpt(), this.curProj);
+
+            if (pos >= projList.length - 1) {
+                pos = projList.length - 1;
+            }
+            if (pos >= 0) {
+                // 同一位置还有项目时，切换到该项目
+                proj = this.projList[pos];
+                this.selectCurProj(proj);
+            }
             return true;
         } catch (e) {
             return false;
@@ -124,3 +153,28 @@ module.exports = {
         Data.saveProjPackage(pkg, projDir);
     }
 };
+
+
+// 滚动到id对应的列表项位置
+var scrollToItem = function (id) {
+    var listBox = document.querySelector('.list-box'),
+        listItem = listBox.querySelector('.proj-list .proj-item[data-id="' + id + '"]');
+    if (!listItem) {
+        window.setTimeout(function () {
+            scrollToItem(id);
+        }, 100);
+        return;
+    }
+    var listBoxRect = listBox.getBoundingClientRect(),
+        listItemRect = listItem.getBoundingClientRect(),
+        alignWithTop = listItemRect.bottom < listBoxRect.top ? true :
+            listItemRect.top > listBoxRect.bottom ? false : null;
+    (alignWithTop !== null) ? listItem.scrollIntoView(alignWithTop) :
+        (listBox.querySelector('.list-scroll').scrollTop = 1);  // 激活滚动条
+};
+
+for (var p in _this) {
+    if (_this.hasOwnProperty(p)) {
+        module.exports[p] = _this[p];
+    }
+}
