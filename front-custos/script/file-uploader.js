@@ -256,6 +256,7 @@ FileUploader.prototype = {
                     results.failed.push(formPreview);
                     _checkNext(done);
                 }, _checkNext = function (done) {
+                    fileStream.close();
                     if (results.succeed.length + results.failed.length >= results.queue.length) {
                         try {
                             onComplete && injector.invoke(onComplete);

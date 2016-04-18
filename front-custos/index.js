@@ -557,12 +557,7 @@ var tasks = {
     // 上传：
     // - 将发布文件夹中的文件发到测试服务器
     'do_upload': function (done) {
-        var projName = params.projName,
-            distDir = params.distDir,
-
-            alOpt = params.alOpt,
-            pageDir = alOpt.pageDir,
-            staticDir = alOpt.staticDir,
+        var distDir = params.distDir,
 
             upOpt = params.upOpt,
 

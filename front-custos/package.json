@@ -1,6 +1,6 @@
 {
   "name": "front-custos",
-  "version": "0.6.2",
+  "version": "0.6.5",
   "description": "Common front end gulp task collections.",
   "main": "index.js",
   "scripts": {

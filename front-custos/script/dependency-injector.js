@@ -52,7 +52,7 @@ DependencyInjector.prototype = {
             case '[object Function]':
                 // 通过反射解析参数表
                 var args = func.toString().match(/^\s*function\s*[^\(]*\(\s*([^\)]*)\)/m)[1];
-                funcDepArr = args.replace(/ /g, '').split(',');
+                funcDepArr = args.replace(/\s/g, '').split(',');
                 funcDepArr.push(func);
                 break;
         }
