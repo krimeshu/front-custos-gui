@@ -4,6 +4,11 @@
  * Created by krimeshu on 2016/4/2.
  */
 
+var stream = typeof require !== 'undefined' ? require('stream') : null,
+    isStream = stream && function (o) {
+            return o instanceof stream;
+        };
+
 var JSONViewer = function (opts) {
     var eventHandler = this._getUsefulDOM(opts.eventHandler),
         indentSize = opts.indentSize,
@@ -122,6 +127,9 @@ JSONViewer.prototype = {
         if (unfinished.indexOf(target) >= 0) {
             throw new Error('Converting circular structure to JSON');
         }
+        if (isStream && isStream(target)) {
+            type = '[object Stream]';
+        }
         unfinished.push(target);
         switch (type) {
             case '[object Function]':
@@ -141,6 +149,9 @@ JSONViewer.prototype = {
                 break;
             case '[object Undefined]':
                 baseType = 'undefined';
+                break;
+            case '[object Stream]':
+                baseType = 'stream';
                 break;
             case '[object Array]':
                 isEmpty = target.length ? '' : ' empty';
@@ -217,6 +228,8 @@ JSONViewer.prototype = {
                 buffer.push('"');
                 buffer.push(target.replace(/"/g, '\\"'));
                 buffer.push('"');
+            } else if (baseType === 'stream') {
+                buffer.push('Stream');
             } else {
                 buffer.push(String(target));
             }
