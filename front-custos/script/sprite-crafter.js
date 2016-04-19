@@ -147,12 +147,15 @@ function joinImages(opt, cb) {
             imgBuffer = map['imgBuffer'],
             visited = {},
             changed = false;
+        delete opt.fileCache;
+        var newKey = JSON.stringify(opt);
+        opt.fileCache = fileCache;
 
-        if (JSON.stringify(opt) !== key) {
+        if (newKey !== key) {
             // 配置已改变
             changed = true;
         } else {
-            // 组成图片已改变
+            // 组成图片是否已改变
             for (var i = 0, len = srcImg.length; i < len; i++) {
                 var img = srcImg[i],
                     s = stamp[img];
@@ -163,12 +166,14 @@ function joinImages(opt, cb) {
                 visited[img] = true;
                 var md5 = Utils.md5(img, true);
                 if (s != md5) {
+                    // 组成图片已改变
                     changed = true;
                     break;
                 }
             }
             for (var img in stamp) {
                 if (!visited[img]) {
+                    // 组成图片已改变
                     changed = true;
                     break;
                 }
@@ -211,6 +216,7 @@ function joinImages(opt, cb) {
             stamp[imgFile] = md5;
         }
         cacheMap[mapFile] = {
+            key: newKey,
             stamp: stamp,
             data: data,
             imgBuffer: img
