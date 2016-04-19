@@ -479,7 +479,7 @@ var tasks = {
                 'errorHandler': getTaskErrorHander('optimize_image:png')
             }))
             .pipe(LazyLoadPlugins.cache(LazyLoadPlugins.pngquant({
-                quality: '65-80',
+                quality: '50-80',
                 speed: 4
             })(), {
                 fileCache: new LazyLoadPlugins.cache.Cache({cacheDirName: 'imagemin-cache'})

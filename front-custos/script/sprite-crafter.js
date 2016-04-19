@@ -145,12 +145,14 @@ function joinImages(opt, cb) {
             stamp = map['stamp'],
             data = map['data'],
             imgBuffer = map['imgBuffer'],
+            newKey = JSON.stringify(opt, function replacer(key, value) {
+                if (key === 'fileCache') {
+                    value = undefined;
+                }
+                return value;
+            }),
             visited = {},
             changed = false;
-        delete opt.fileCache;
-        var newKey = JSON.stringify(opt);
-        opt.fileCache = fileCache;
-
         if (newKey !== key) {
             // 配置已改变
             changed = true;
