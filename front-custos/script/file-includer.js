@@ -36,13 +36,13 @@ FileIncluder.prototype = {
                 finalList = [],
                 cache = {};
             entryFiles.forEach(function (entryFile) {
-                entryFile = entryFile.replace(/\\/g, '/');
+                entryFile = Utils.replaceBackSlash(entryFile);
                 if (finalList.indexOf(entryFile) >= 0) {
                     return;
                 }
                 var depList = self._getFileDep(entryFile, cache);
                 depList.forEach(function (depFile) {
-                    depFile = depFile.replace(/\\/g, '/');
+                    depFile = Utils.replaceBackSlash(depFile);
                     if (finalList.indexOf(depFile) >= 0) {
                         return;
                     }

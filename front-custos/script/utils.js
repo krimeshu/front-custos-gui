@@ -177,6 +177,9 @@ exports.getFilesOfDir = function (dir, pat, rec) {
 };
 // 文件夹相关 ED
 
+exports.replaceBackSlash = function (filePath) {
+    return typeof(filePath) === 'string' ? filePath.replace(/\\/g, '/') : '';
+};
 
 // 格式验证相关 ST
 exports.getFileType = function (file) {

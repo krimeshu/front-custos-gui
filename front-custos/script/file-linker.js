@@ -44,7 +44,7 @@ FileLinker.prototype = {
         try {
             var entryFiles = Utils.getFilesOfDir(src, '.html|.shtml|.php', true);
             entryFiles.forEach(function (entryFile) {
-                entryFile = entryFile.replace(/\\/g, '/');
+                entryFile = Utils.replaceBackSlash(entryFile);
                 if (finalList.indexOf(entryFile) >= 0) {
                     return;
                 }
@@ -54,7 +54,7 @@ FileLinker.prototype = {
                 }
                 var depList = self._getFileDep(entryFile, cache, src);
                 depList.forEach(function (depFile) {
-                    depFile = depFile.replace(/\\/g, '/');
+                    depFile = Utils.replaceBackSlash(depFile);
                     if (finalList.indexOf(depFile) >= 0) {
                         return;
                     }
@@ -371,7 +371,7 @@ FileLinker.prototype = {
             //console.log('> FileLinker - file:', file.path);
 
             // 分发的新路径
-            var filePath = file.path.replace(/\\/g, '/'),
+            var filePath = Utils.replaceBackSlash(file.path),
                 fileType = Utils.getFileType(filePath),
                 isText = Utils.isText(filePath),
                 isPage = Utils.isPage(filePath),
@@ -394,10 +394,10 @@ FileLinker.prototype = {
                         _path.relative(src, _path.resolve(src, flattenDir, baseName)) :
                         _path.relative(src, filePath)
                 ),
-                newFilePath = (allot ?
+                newFilePath = Utils.replaceBackSlash(allot ?
                         _path.resolve(src, isPage ? pageAllotDir : staticAllotDir, fileRela) :
                         _path.resolve(src, fileRela)
-                ).replace(/\\/g, '/');
+                );
 
             //console.log(_path.relative(src, filePath), '=>', _path.relative(src, newFilePath));
 
@@ -435,7 +435,7 @@ FileLinker.prototype = {
                     }
                     _hash = '?v=' + _hash;
                 }
-                return _newFile.replace(/\\/g, '/') + _hash;
+                return Utils.replaceBackSlash(_newFile) + _hash;
             });
 
             file.path = newFilePath;
@@ -445,7 +445,7 @@ FileLinker.prototype = {
     },
     excludeUnusedFiles: function (usedFiles) {
         return Through2.obj(function (file, enc, cb) {
-            var filePath = file.path.replace(/\\/g, '/'),
+            var filePath = Utils.replaceBackSlash(file.path),
                 fileName = _path.basename(filePath);
 
             //console.log('================================================================================');
@@ -460,7 +460,7 @@ FileLinker.prototype = {
     },
     excludeEmptyDir: function () {
         return Through2.obj(function (file, enc, cb) {
-            var filePath = file.path.replace(/\\/g, '/');
+            var filePath = Utils.replaceBackSlash(file.path);
 
             //console.log('================================================================================');
             //console.log('> FileLinker.excludeEmptyDir - file:', file.path);

@@ -107,7 +107,7 @@ module.exports = {
 
         // 生成项目常量并替换参数中的项目常量
         var constFields = {
-            PROJECT: buildDir,
+            PROJECT: Utils.replaceBackSlash(buildDir),
             PROJECT_NAME: projName,
             VERSION: version
         };
