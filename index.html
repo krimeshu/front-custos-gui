@@ -35,6 +35,16 @@
             <div class="spacer"></div>
             <!-- Top Bar Buttons -->
             <section class="ctrl-btns" layout="row" layout-align="center center" layout-wrap>
+                <md-menu>
+                    <md-button class="clickable md-icon-button"
+                               ng-click="minimizeWindow();">
+                        <md-tooltip md-direction="bottom">
+                            最小化窗口
+                        </md-tooltip>
+                        <md-icon class="material-icons">remove</md-icon>
+                    </md-button>
+                    <md-menu-content></md-menu-content>
+                </md-menu>
                 <md-menu md-position-mode="target-right target">
                     <md-button class="clickable md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                         <md-tooltip md-direction="bottom">
@@ -448,6 +458,7 @@
 
 <script>
     pageRequire('./js/entry.js');
+    window.electron = require('electron');
 
     window.windowCtrl = {
         open: function () {
@@ -462,12 +473,16 @@
                 window.close();
             }, 500);
         },
+        minimize: function () {
+            var currentWindow = electron.remote.getCurrentWindow();
+            currentWindow.minimize();
+        },
         setReloadShortcut: function () {
             var _path = require('path');
             var _pagePath = _path.resolve('./index.html');
             var isDebug = _pagePath === pagePath;
 
-            var ipcRenderer = require('electron').ipcRenderer;
+            var ipcRenderer = electron.ipcRenderer;
             ipcRenderer.on('global-shortcut', function (ev, keys) {
                 switch (keys) {
                     case 'ctrl+alt+r':

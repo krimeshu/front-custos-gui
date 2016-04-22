@@ -13,6 +13,11 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
 
     var originatorEv;
 
+    // 最小化窗口
+    $scope.minimizeWindow = function () {
+        windowCtrl.minimize();
+    };
+
     // 打开顶栏菜单
     $scope.openMenu = function ($mdOpenMenu, ev) {
         originatorEv = ev;
