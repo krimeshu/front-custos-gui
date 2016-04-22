@@ -158,6 +158,19 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         $scope.setCurrent(id, ev);
     };
 
+    // 拖拽控制
+    $scope.dragControlListeners = {
+        // itemMoved: function () {
+        //     console.log('itemMoved:', Model.projList);
+        // },
+        orderChanged: function () {
+            // console.log('orderChanged:', Model.projList);
+            var projList = $scope.projList;
+            Data.saveProjList(projList);
+        },
+        allowDuplicates: false //optional param allows duplicates to be dropped.
+    };
+
     var lastWorkingId = Model.config.lastWorkingId;
     lastWorkingId && $scope.setCurrent(lastWorkingId);
 }];

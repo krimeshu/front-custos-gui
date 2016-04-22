@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css"/>
     <link rel="stylesheet" href="angular-perfect-scrollbar/perfect-scrollbar.min.css"/>
+    <link rel="stylesheet" href="ng-sortable/ng-sortable.min.css"/>
 
     <link rel="stylesheet" href="css/json-viewer.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
@@ -77,15 +78,19 @@
                                wheel-speed="2"
                                min-scrollbar-length="20">
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
-                <md-list class="proj-list not-selectable">
+                <md-list class="proj-list not-selectable"
+                         data-as-sortable="dragControlListeners"
+                         data-ng-model="projList">
                     <md-list-item class="proj-item {{isCurrent(item.id)}}"
                                   data-id="{{item.id}}"
                                   ng-repeat="item in projList"
                                   ng-click="setCurrent(item.id, $event)"
-                                  aria-label="{{item.projName}}">
+                                  aria-label="{{item.projName}}"
+                                  data-as-sortable-item>
                         <p class="proj-name"
                            ng-bind="item.projName"
-                           title="{{item.projName}}"></p>
+                           title="{{item.projName}}"
+                           data-as-sortable-item-handle></p>
                     </md-list-item>
                 </md-list>
             </perfect-scrollbar>
@@ -433,6 +438,7 @@
 
 <script src="angular-perfect-scrollbar/perfect-scrollbar.with-mousewheel.min.js"></script>
 <script src="angular-perfect-scrollbar/angular-perfect-scrollbar.js"></script>
+<script src="ng-sortable/ng-sortable.min.js"></script>
 
 <script src="js/ace/ace.js"></script>
 <script src="js/ace/theme-monokai.js"></script>

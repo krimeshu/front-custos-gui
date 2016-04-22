@@ -7,7 +7,7 @@ var HeaderCtrl = require('./ctrl-header.js'),
     InfoBoxCtrl = require('./ctrl-info-box.js'),
     Model = require('./model.js');
 
-angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace', 'perfect_scrollbar'])
+angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace', 'perfect_scrollbar', 'as.sortable'])
     .config(['$mdThemingProvider', function ($mdThemingProvider) {
         var allThemes = Model.allThemes;
         for (var name in allThemes) {
