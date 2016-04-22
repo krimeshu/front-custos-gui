@@ -8,7 +8,9 @@ var _path = require('path'),
 
 var Logger = require('./logger.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+
+    buildWhenFinished = null;
 
 var getDelayTime = function () {
     return Model.config.watchDelayTime;
@@ -51,6 +53,11 @@ var getDistDir = function () {
 
 var doBuild = function (fcOpt, cb) {
     if (isRunning()) {
+        console.info('有任务尚未结束，将推迟到任务结束后再处理。')
+        buildWhenFinished = {
+            fcOpt: fcOpt,
+            cb: cb
+        };
         return;
     }
     FrontCustos.config(Model.config);
@@ -58,6 +65,16 @@ var doBuild = function (fcOpt, cb) {
     Logger.log('<hr/>');
     FrontCustos.process(params, function () {
         cb && cb(params);
+        if (buildWhenFinished) {
+            console.info('有待处理任务，将自动开始。')
+            var _fcOpt = buildWhenFinished.fcOpt,
+                _cb = buildWhenFinished.cb,
+                _params = Utils.deepCopy(_fcOpt);
+            buildWhenFinished = null;
+            doBuild(_params, function () {
+                _cb && _cb(params);
+            });
+        }
     });
 };
 
@@ -78,7 +95,7 @@ var watch = function (_projWithOpt) {
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        projDir = projWithOpt.projDir;
+        srcDir = getSrcDir(projWithOpt);
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos >= 0) {
@@ -100,7 +117,7 @@ var watch = function (_projWithOpt) {
     }, getDelayTime);
 
     Logger.info('开始监听项目：%c%s', 'color: white;', projName);
-    _watch.watchTree(projDir, {
+    _watch.watchTree(srcDir, {
         ignoreDotFiles: true,
         interval: 2004,
         filter: function (f) {
