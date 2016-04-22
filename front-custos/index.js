@@ -79,7 +79,6 @@ module.exports = {
         if (running) {
             return;
         }
-        running = true;
 
         params = _params;
         // 处理项目基本配置
@@ -121,34 +120,10 @@ module.exports = {
             console: console
         });
 
-        // 预处理和后处理脚本
-        var preprocessing, postprocessing;
-        try {
-            preprocessing = Utils.tryParseFunction(params.preprocessing);
-        } catch (e) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理脚本格式有误，请检查相关配置。');
-            return;
-        }
-        try {
-            postprocessing = Utils.tryParseFunction(params.postprocessing);
-        } catch (e) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理脚本格式有误，请检查相关配置。');
-            return;
-        }
-
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
-        try {
-            preprocessing && injector.invoke(preprocessing);
-        } catch (e) {
-            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
-        }
+        running = true;
         this.runTasks(params, function () {
-            try {
-                postprocessing && injector.invoke(postprocessing);
-            } catch (e) {
-                console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理将本执行异常：', e);
-            }
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
             running = false;
             cb && cb();
@@ -213,6 +188,18 @@ var tasks = {
                 .on('end', function () {
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务结束。（' + timer.getTime() + 'ms）');
+                    // 预处理脚本
+                    var preprocessing;
+                    try {
+                        preprocessing = Utils.tryParseFunction(params.preprocessing);
+                    } catch (e) {
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理脚本格式有误，请检查相关配置。');
+                    }
+                    try {
+                        preprocessing && injector.invoke(preprocessing);
+                    } catch (e) {
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
+                    }
                     done();
                 });
         });
@@ -551,8 +538,20 @@ var tasks = {
             LazyLoadPlugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(afterClean);
         } catch (e) {
             errorHandler(e);
-            done();
         }
+        // 后处理脚本
+        var postprocessing;
+        try {
+            postprocessing = Utils.tryParseFunction(params.postprocessing);
+        } catch (e) {
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理脚本格式有误，请检查相关配置。');
+        }
+        try {
+            postprocessing && injector.invoke(postprocessing);
+        } catch (e) {
+            console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理将本执行异常：', e);
+        }
+        done();
     },
     // 上传：
     // - 将发布文件夹中的文件发到测试服务器
