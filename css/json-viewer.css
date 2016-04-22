@@ -46,7 +46,8 @@
 .json-viewer-number,
 .json-viewer-boolean,
 .json-viewer-null,
-.json-viewer-undefined {
+.json-viewer-undefined,
+.json-viewer-stream {
     display: inline;
 }
 
@@ -60,6 +61,13 @@
 
 .json-viewer-boolean, .json-viewer-null, .json-viewer-undefined {
     color: #585CF6;
+}
+
+.json-viewer-stream {
+    background: #C0C0C0;
+    padding: 0 6px;
+    margin: 0 2px;
+    border-radius: 3px;
 }
 
 /****************************************/
@@ -88,4 +96,8 @@
 .json-viewer-row.theme-dark .json-viewer-null,
 .json-viewer-row.theme-dark .json-viewer-undefined {
     color: #CC7832;
+}
+
+.json-viewer-stream {
+    background: #666666;
 }

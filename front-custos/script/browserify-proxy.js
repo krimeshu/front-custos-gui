@@ -29,6 +29,8 @@ BrowserifyProxy.prototype = {
                 if (!self.reg.test(content)) {
                     return cb();
                 }
+
+                file.contents = new Buffer(content.replace(self.reg, ''));
             } catch (e) {
                 self.onError && self.onError(e);
                 return cb();

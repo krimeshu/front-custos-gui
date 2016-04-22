@@ -37,21 +37,27 @@ FileIncluder.prototype = {
                 cache = {};
             entryFiles.forEach(function (entryFile) {
                 entryFile = Utils.replaceBackSlash(entryFile);
-                if (finalList.indexOf(entryFile) >= 0) {
-                    return;
-                }
+                var entryPos = finalList.indexOf(entryFile);
                 var depList = self._getFileDep(entryFile, cache);
                 depList.forEach(function (depFile) {
                     depFile = Utils.replaceBackSlash(depFile);
-                    if (finalList.indexOf(depFile) >= 0) {
-                        return;
+                    var depPos = finalList.indexOf(depFile);
+                    if (entryPos < 0 && depPos < 0) {
+                        // 没有入口文件的相对位置，且没有依赖文件记录
+                        finalList.push(depFile);
+                    } else if (entryPos >= 0 && depPos < 0) {
+                        // 有入口文件的相对位置，但没有依赖文件记录
+                        finalList.splice(entryPos++, 0, depFile);
+                    } else if (entryPos >= 0 && depPos >= 0 && depPos > entryPos) {
+                        // 有入口文件的相对位置，且有依赖文件记录，并且依赖在后
+                        finalList.splice(depPos, 1);
+                        finalList.splice(entryPos++, 0, depFile);
                     }
-                    finalList.push(depFile);
                 });
                 //console.log('================================================================================');
                 //console.log('> FileIncluder.analyseDepRelation - file:', entryFile);
                 //console.log('  Depend on files:', depList);
-                finalList.push(entryFile);
+                finalList.indexOf(entryFile) < 0 && finalList.push(entryFile);
             });
             return finalList;
         } catch (e) {
@@ -73,15 +79,16 @@ FileIncluder.prototype = {
             match;
         cache[file] = content;
         while ((match = reg.exec(content)) !== null) {
-            var _file = match[1];
+            var _rawFile = match[1],
+                _file = _rawFile && _rawFile.split(/[?#]/)[0]
             if (!_file) {
                 continue;
             }
-            if (!_fs.existsSync(_file)) {
+            if (!_path.isAbsolute(_file)) {
                 _file = _path.resolve(dir, _file);
-                if (!_fs.existsSync(_file)) {
-                    continue;
-                }
+            }
+            if (!_fs.existsSync(_file)) {
+                continue;
             }
             depList = depList.concat(self._getFileDep(_file, cache));
             depList.push(_file);
@@ -92,11 +99,8 @@ FileIncluder.prototype = {
     handleFile: function () {
         var self = this;
         return Through2.obj(function (file, enc, cb) {
-                //console.log('================================================================================');
-                //console.log('> FileIncluder - file:', file.path);
-
-                var basePath = file.base,
-                    filePath = file.path,
+                var basePath = Utils.replaceBackSlash(file.base),
+                    filePath = Utils.replaceBackSlash(file.path),
                     dirPath = _path.dirname(filePath),
                     isDir = file.isDirectory(),
                     isText = !isDir && Utils.isText(filePath),
@@ -105,6 +109,9 @@ FileIncluder.prototype = {
                     extName = _path.extname(filePath),
                     ignoreSass = /\.(scss|sass)/i.test(extName) && baseName.charAt(0) === '_';
 
+                //console.log('================================================================================');
+                //console.log('> FileIncluder - file:', filePath);
+
                 var newContent = content,
                     cache = self.resultCache,
                     reg = self._getRegExp(),
@@ -112,9 +119,10 @@ FileIncluder.prototype = {
 
                 while (!ignoreSass && isText && (match = reg.exec(content)) !== null) {
                     var _str = match[0],
-                        _file = match[1],
-                        _json = match[2];
-                    if (!_file) {
+                        _rawFile = match[1],
+                        _json = match[2],
+                        _file = _rawFile && _rawFile.split(/[?#]/)[0];
+                    if (!_rawFile) {
                         continue;
                     }
                     var _para = null,
@@ -131,13 +139,14 @@ FileIncluder.prototype = {
                             continue;
                         }
                     }
-                    if (!cache.hasOwnProperty(_file)) {
+                    if (!_path.isAbsolute(_file)) {
                         _file = _path.resolve(dirPath, _file);
                     }
+                    _file = Utils.replaceBackSlash(_file);
                     if (!cache.hasOwnProperty(_file)) {
                         var information = '无法包含文件：' + _path.relative(basePath, _file),
                             err = new Error(information);
-                        err.fromFile = _path.relative(basePath, file.path);
+                        err.fromFile = _path.relative(basePath, filePath);
                         err.line = Utils.countLineNumber(content, match);
                         err.targetFile = _path.relative(basePath, _file);
                         self.onError && self.onError(err);
