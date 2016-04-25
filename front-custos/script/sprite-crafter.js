@@ -238,7 +238,7 @@ function replaceStyle(cssFile, rawContent, map, spriteData, useRatio, useRem) {
         newContent = rawContent,
         t = useRatio * useRem;
     var css = [
-        'background: url("' + Utils.replaceBackSlash(relaImg) + '") ', // 0
+        'background: url("' + Utils.replaceBackSlash(relaImg) + '") no-repeat ', // 0
         '0', // 1
         useRem > 1 ? 'rem ' : 'px ',
         '0', // 3
