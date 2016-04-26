@@ -20,9 +20,9 @@ $colorBlueGrey: #607D8B;
 $colorGrey: #9E9E9E;
 $colorDeepOrange: #FF5622;
 
-$themeNames: default, pink, indigo, orange;
-$primaryThemeColors: $colorBlueGrey, $colorPink, $colorIndigo, $colorDeepOrange;
-$accentThemeColors: $colorRed, $colorRed, $colorPink, $colorBlue;
+$themeNames: default, pink, indigo, orange, grey;
+$primaryThemeColors: $colorBlueGrey, $colorPink, $colorIndigo, $colorDeepOrange, $colorGrey;
+$accentThemeColors: $colorRed, $colorRed, $colorPink, $colorBlue, $colorGrey;
 
 html, body {
   background: transparent;

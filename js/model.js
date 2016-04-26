@@ -37,7 +37,8 @@ var _this = {
         'default': {primary: 'blue-grey', accent: 'red'},
         'pink': {primary: 'pink', accent: 'red'},
         'indigo': {primary: 'indigo', accent: 'pink'},
-        'orange': {primary: 'deep-orange', accent: 'blue'}
+        'orange': {primary: 'deep-orange', accent: 'blue'},
+        'grey': {primary: 'grey', accent: 'grey'}
     },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),

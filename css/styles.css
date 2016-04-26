@@ -99,6 +99,9 @@ input {
 
   body[md-theme="orange"] .window-header {
     background: #FF5622; }
+
+  body[md-theme="grey"] .window-header {
+    background: #9E9E9E; }
   .window-header .clickable, .md-clickable {
     -webkit-app-region: no-drag;
     cursor: pointer; }
@@ -177,6 +180,12 @@ input {
     color: #a22600; }
     body[md-theme="orange"] .list-box .proj-list .proj-item.current {
       background-color: #ffb8a2; }
+
+  body[md-theme="grey"] .list-box {
+    background-color: white;
+    color: #5e5e5e; }
+    body[md-theme="grey"] .list-box .proj-list .proj-item.current {
+      background-color: #dedede; }
   .list-box .btn-add-proj {
     bottom: 20px;
     right: 10px; }

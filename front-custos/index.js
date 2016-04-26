@@ -598,10 +598,11 @@ var tasks = {
                     // 完成一个文件时
                     var succeedCount = results.succeed.length,
                         failedCount = results.failed.length,
-                        queueCount = results.queue.length;
+                        queueCount = results.queue.length,
+                        info = 'do_upload 任务进度：' + succeedCount + '/' + queueCount +
+                            (failedCount ? ', 失败：' + failedCount : '');
                     logId && console.useId && console.useId(logId);
-                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务进度：' +
-                        queueCount + '/' + succeedCount + '/' + failedCount);
+                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), info);
                     //console.log('服务器回复：', response);
                 }, function onComplete(results) {
                     // 完成所有文件时
