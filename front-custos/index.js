@@ -69,9 +69,16 @@ module.exports = {
     },
     // 直接执行任务
     runTasks: function (_params, cb) {
+        if (running) {
+            return;
+        }
         params = _params;
         var tasks = params.tasks || [];
-        tasks.push(cb);
+        tasks.push(function () {
+            running = false;
+            cb && cb();
+        });
+        running = true;
         runSequenceUseGulp.apply(null, tasks);
     },
     // 开始处理并执行任务
