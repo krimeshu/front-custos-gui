@@ -67,7 +67,9 @@ var _this = {
         this.config.lastWorkingId = id;
         Data.saveConfig(this.config);
 
-        scrollToItem(id);
+        window.setTimeout(function () {
+            scrollToItem(id);
+        }, 100);
     },
     loadProjOptions: function (proj) {
         var projName = proj.projName,
@@ -166,12 +168,13 @@ var scrollToItem = function (id) {
         }, 100);
         return;
     }
-    var listBoxRect = listBox.getBoundingClientRect(),
+    var scroll = listBox.querySelector('.list-scroll'),
+        listBoxRect = listBox.getBoundingClientRect(),
         listItemRect = listItem.getBoundingClientRect(),
-        alignWithTop = listItemRect.bottom < listBoxRect.top ? true :
-            listItemRect.top > listBoxRect.bottom ? false : null;
-    (alignWithTop !== null) ? listItem.scrollIntoView(alignWithTop) :
-        (listBox.querySelector('.list-scroll').scrollTop = 1);  // 激活滚动条
+        alignWithTop = listItemRect.top < listBoxRect.top ? true :
+            listItemRect.bottom > listBoxRect.bottom ? false : null;
+    (scroll.scrollTop === 0) && (scroll.scrollTop = 1);  // 激活滚动条
+    (alignWithTop !== null) && listItem.scrollIntoView(alignWithTop);
 };
 
 for (var p in _this) {

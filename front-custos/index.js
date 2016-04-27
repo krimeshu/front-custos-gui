@@ -129,10 +129,8 @@ module.exports = {
 
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
-        running = true;
         this.runTasks(params, function () {
             console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务结束。（共计' + timer.getTime() + 'ms）');
-            running = false;
             cb && cb();
         });
     }
