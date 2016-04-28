@@ -6,6 +6,13 @@ var _fs = require('fs'),
     _path = require('path'),
     _crypto = require('crypto');
 
+exports.configDir = function (_fileName) {
+    var dirPath = _path.resolve(process.env.USERPROFILE, 'FrontCustos'),
+        fileName = _fileName || '';
+    exports.makeSureDir(dirPath);
+    return _path.resolve(dirPath, fileName);
+};
+
 exports.deepCopy = function (origin, _copy) {
     var self = arguments.callee,
         type = Object.prototype.toString.call(origin),

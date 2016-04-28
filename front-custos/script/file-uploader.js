@@ -42,7 +42,7 @@ FileUploader.prototype = {
         var self = this,
             forInjector = self.forInjector,
             projDir = forInjector.projDir,
-            fileDir = './FC_UploadHistory',
+            fileDir = Utils.configDir('./fc-upload-history'),
             fileName = Utils.md5(projDir);
         Utils.makeSureDir(fileDir);
         return _path.resolve(fileDir, fileName + '.json');

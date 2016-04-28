@@ -49,7 +49,7 @@ module.exports = {
     },
     // 加载全局配置
     loadConfig: function () {
-        var configPath = _path.resolve(__dirname, '../fc-config.json'),
+        var configPath = Utils.configDir('./fc-config.json'),
             initConfig = this.initConfig,
             config = initConfig;
         if (!_fs.existsSync(configPath)) {
@@ -73,7 +73,7 @@ module.exports = {
     },
     // 保存全局配置
     saveConfig: function (config) {
-        var configPath = _path.resolve(__dirname, '../fc-config.json'),
+        var configPath = Utils.configDir('./fc-config.json'),
             content = angular.toJson(config, true);
         try {
             _fs.writeFileSync(configPath, content);
@@ -83,7 +83,7 @@ module.exports = {
     },
     // 加载项目列表
     loadProjList: function () {
-        var listPath = _path.resolve(__dirname, '../fc-project-list.json'),
+        var listPath = Utils.configDir('./fc-project-list.json'),
             list = [];
         if (!_fs.existsSync(listPath)) {
             this.saveProjList(list);
@@ -101,7 +101,7 @@ module.exports = {
     },
     // 保存项目列表
     saveProjList: function (projList) {
-        var listPath = _path.resolve(__dirname, '../fc-project-list.json'),
+        var listPath = Utils.configDir('./fc-project-list.json'),
             content = angular.toJson(projList, true);
         try {
             _fs.writeFileSync(listPath, content);
@@ -151,7 +151,7 @@ module.exports = {
     // 读取模板列表
     getTemplates: function () {
         var templates = [{name: '空白模板', path: null}],
-            templateDir = _path.resolve(__dirname, '../fc-template');
+            templateDir = Utils.configDir('./fc-template');
         if (!_fs.existsSync(templateDir)) {
             _fs.mkdirSync(templateDir, 511); // 511:dec = 0777:hex
         }
@@ -174,10 +174,5 @@ function projList_update(list) {
         }
     });
 }
-
-
-
-
-
 
 
