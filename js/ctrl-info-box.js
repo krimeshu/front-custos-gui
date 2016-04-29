@@ -184,4 +184,14 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                 break;
         }
     });
+    windowCtrl.bindPageShortCut('ctrl+s', function () {
+        $scope.$apply(function () {
+            $scope.saveProj();
+        });
+    });
+    windowCtrl.bindPageShortCut('ctrl+d', function () {
+        $scope.$apply(function () {
+            $scope.removeProj();
+        });
+    });
 }];

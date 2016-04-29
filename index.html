@@ -490,6 +490,54 @@
                         break;
                 }
             });
+        },
+        bindPageShortCut: function (key, func) {
+            var listeners = this.pageShortCutListeners;
+            if (!listeners) {
+                listeners = this.pageShortCutListeners = [];
+                window.addEventListener('keydown', function (e) {
+                    var keys = [], key;
+                    e.ctrlKey && keys.push('ctrl');
+                    e.shiftKey && keys.push('shift');
+                    e.altKey && keys.push('alt');
+                    keys.push(String.fromCharCode(e.keyCode).toLowerCase());
+                    key = keys.join('+');
+                    listeners.forEach(function (listener) {
+                        var _key = listener.key, _func = listener.func;
+                        if (_key === key) {
+                            _func(e);
+                        }
+                    });
+                });
+            }
+            var _keyParts = key.split('+').map(function (_keyPart) {
+                return _keyPart.toLowerCase().trim();
+            });
+            var keys = [], pos;
+
+            pos = _keyParts.indexOf('ctrl');
+            if (pos >= 0) {
+                keys.push('ctrl');
+                _keyParts.splice(pos, 1);
+            }
+            pos = _keyParts.indexOf('shift');
+            if (pos >= 0) {
+                keys.push('shift');
+                _keyParts.splice(pos, 1);
+            }
+            pos = _keyParts.indexOf('alt');
+            if (pos >= 0) {
+                keys.push('alt');
+                _keyParts.splice(pos, 1);
+            }
+            if (_keyParts[0]) {
+                keys.push(_keyParts[0]);
+            }
+            key = keys.join('+');
+            listeners.push({
+                key: key,
+                func: func
+            });
         }
     };
 
