@@ -185,7 +185,7 @@ var tasks = {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
         LazyLoadPlugins.del([_path.resolve(buildDir, '**/*')], {force: true}).then(function () {
-            gulp.src(_path.resolve(srcDir, '**/*'))
+            gulp.src([_path.resolve(srcDir, '**/*'), '!*___jb_tmp___'])
                 .pipe(LazyLoadPlugins.plumber({
                     'errorHandler': getTaskErrorHander('prepare_build')
                 }))
