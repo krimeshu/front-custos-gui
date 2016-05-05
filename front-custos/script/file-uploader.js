@@ -155,15 +155,21 @@ FileUploader.prototype = {
                 var results = self.uploadResult,
                     uploadPage = self.uploadPage,
                     forInjector = self.forInjector,
-                    distDir = forInjector.distDir,
+                    distDir = forInjector.distDir;
 
-                    fileStream = _fs.createReadStream(filePath);
+                var fileStream = _fs.createReadStream(filePath);
 
                 var formMap = null,
                     formPreview = {},
-                    sp = (uploadPage.indexOf('?') < 0 ? '?' : '&');
+                    sp = (uploadPage && uploadPage.indexOf('?') < 0 ? '?' : '&');
 
                 var _upload = function (done) {
+
+                    if (!uploadPage) {
+                        _onFailed(new Error('未指定上传页面地址'), undefined, done);
+                        return;
+                    }
+                    
                     uploadPage += sp + 't=' + new Date().getTime();
                     injector.registerMap(forInjector);
                     injector.registerMap({
@@ -268,6 +274,7 @@ FileUploader.prototype = {
                     }
                     done();
                 };
+
                 self.doUpload(_upload);
             });
         }
