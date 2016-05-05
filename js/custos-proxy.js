@@ -85,7 +85,7 @@ var doUpload = function (params, cb) {
     params.errors = [];
     params.tasks = ['do_upload'];
     FrontCustos.runTasks(params, function () {
-        Utils.playSE('upload-finished');
+        Model.config.noticeWhenUploadFinished && Utils.playSE('upload-finished');
         cb && cb(params);
     });
 };

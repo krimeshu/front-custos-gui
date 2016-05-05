@@ -24,6 +24,7 @@ module.exports = {
         "concurrentLimit": 1,
         "watchToUploading": false,
         "watchDelayTime": 1000,
+        "noticeWhenUploadFinished": true,
         "lastWorkingId": null
     },
     initOpt: {
