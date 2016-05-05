@@ -55,3 +55,10 @@ module.exports = _this;
 
     _this.refluxToFind = refluxToFind;
 })(_this);
+
+(function () {
+    _this.playSE = function (seName) {
+        var se = document.querySelector('audio[data-se="' + seName + '"]');
+        se && se.play();
+    };
+})(_this);
