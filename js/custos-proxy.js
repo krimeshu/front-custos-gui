@@ -201,6 +201,13 @@ var debounce = function (func, wait, immediate) {
     };
 };
 
+Model.onCurrentChanged(function () {
+    // 检查是否监听自动构建
+    if (Model.curProj.watchToRebuilding) {
+        watch(Model.curProj);
+    }
+});
+
 module.exports = {
     fillTasks: fillTasks,
     isRunning: isRunning,

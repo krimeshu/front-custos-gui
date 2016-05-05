@@ -4,10 +4,9 @@
 
 var Data = require('./data.js'),
     Logger = require('./logger.js'),
-    Utils = require('./utils.js'),
-    CustosProxy = require('./custos-proxy.js');
+    Utils = require('./utils.js');
 
-var _this = {
+var _this = module.exports = {
     allTasks: [
         {name: 'prepare_build', desc: '构建预准备', locked: true},
         {name: 'replace_const', desc: '替换定义的常量'},
@@ -58,10 +57,7 @@ var _this = {
         Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
         Logger.info('切换到项目：%c%s %c(%s)', 'color: white;', projName, 'color: #cccc81;', projDir);
 
-        // 检查是否监听自动构建
-        if (this.curProj.watchToRebuilding) {
-            CustosProxy.watch(this.curProj);
-        }
+        this.onCurrentChanged();
 
         // 记录上次操作的 Id
         this.config.lastWorkingId = id;
@@ -157,6 +153,22 @@ var _this = {
     }
 };
 
+var _onCurrentChangedCallbacks = [];
+_this.onCurrentChanged = function (_func, _context) {
+    if (_func) {
+        _onCurrentChangedCallbacks.push({
+            func: _func,
+            context: _context
+        });
+        return;
+    }
+    _onCurrentChangedCallbacks.forEach(function (callback) {
+        var func = callback.func,
+            context = callback.context;
+        typeof func === 'function' && func.call(context);
+    });
+};
+
 
 // 滚动到id对应的列表项位置
 var scrollToItem = function (id) {
@@ -176,9 +188,3 @@ var scrollToItem = function (id) {
     (scroll.scrollTop === 0) && (scroll.scrollTop = 1);  // 激活滚动条
     (alignWithTop !== null) && listItem.scrollIntoView(alignWithTop);
 };
-
-for (var p in _this) {
-    if (_this.hasOwnProperty(p)) {
-        module.exports[p] = _this[p];
-    }
-}
