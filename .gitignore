@@ -1,13 +1,7 @@
 .idea
-start.bat
 node_modules
-fc-template
-fc-config.json
-fc-project-list.json
 *.css.map
-FC_UploadHistory
 
 front-custos/.idea
 front-custos/node_modules
-front-custos/dist
-front-custos/FC_UploadHistory
+front-custos/example/dist
