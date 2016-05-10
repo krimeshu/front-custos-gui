@@ -1,11 +1,11 @@
 {
   "name": "front-custos-gui",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js",
+    "start": "electron launcher.js",
     "pack-win64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=x64 --overwrite=true --ignore=\"(.idea|fc-template|fc-config.json|fc-project-list.json|FC_UploadHistory|front-custos/(dist))\"",
     "pack": "npm run-script pack-win64"
   },
@@ -28,6 +28,7 @@
     "angular-route": "^1.4.8",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.37.5",
+    "request-progress": "^2.0.1",
     "watch": "^0.17.1"
   }
 }
