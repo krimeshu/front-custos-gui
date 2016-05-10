@@ -3,7 +3,8 @@
  */
 
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    childProcess = require('child_process');
 
 var LaunchState = {
     start: function () {
@@ -65,8 +66,17 @@ var LaunchState = {
                 typeof callback === 'function' && callback.apply(context, arguments || []);
             }
         })(this);
-        // Todo: 解压补丁包
-        applyCallback();
+        var cp = childProcess.spawn('7z', ['e', patchPath]);
+        cp.stdout.on('data', function (data) {
+            // console.log(String(data));
+        });
+        cp.stderr.on('data', function (data) {
+            // console.error(String(data));
+        });
+        cp.on('exit', function (code) {
+            // console.log('7z child process exited with code ' + code);
+            applyCallback(code);
+        });
     }
 };
 
