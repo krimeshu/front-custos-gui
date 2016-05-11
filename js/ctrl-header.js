@@ -6,7 +6,8 @@ var _path = require('path');
 
 var Data = require('./data.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    Updater = require('./updater.js');
 
 module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDialog) {
     $scope.version = appPackageFile.version;
@@ -66,6 +67,11 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
             clickOutsideToClose: true,
             targetEvent: ev
         });
+    };
+
+    // 检查更新
+    $scope.checkUpdate = function () {
+        Updater.checkForUpdate();
     };
 
     // 显示关于对话框

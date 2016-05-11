@@ -2,10 +2,13 @@
  * Created by krimeshu on 2016/1/10.
  */
 
-var Utils = require('../front-custos/script/utils.js'),
-    _this = Utils.deepCopy(Utils);
+var Utils = require('../front-custos/script/utils.js');
 
-module.exports = _this;
+function UtilsGUI() {
+}
+UtilsGUI.prototype = Utils;
+
+var _this = new UtilsGUI();
 
 // DOM相关
 (function (_parent) {
@@ -62,3 +65,5 @@ module.exports = _this;
         se && se.play();
     };
 })(_this);
+
+module.exports = _this;

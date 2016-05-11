@@ -5,6 +5,8 @@
 var DataMigration = require('./data-migration.js');
 DataMigration.checkForMigration();
 
+require('./proxy.js');
+
 var HeaderCtrl = require('./ctrl-header.js'),
     ListBoxCtrl = require('./ctrl-list-box.js'),
     InfoBoxCtrl = require('./ctrl-info-box.js'),
