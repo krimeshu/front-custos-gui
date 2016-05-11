@@ -5,7 +5,8 @@
 var _fs = require('fs'),
     _path = require('path'),
 
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    SessionProxy = require('./session-proxy.js');
 
 module.exports = {
     initConfig: {
@@ -22,6 +23,7 @@ module.exports = {
             "other": "raw"
         },
         "concurrentLimit": 1,
+        "proxyRule": "",
         "watchToUploading": false,
         "watchDelayTime": 1000,
         "noticeWhenUploadFinished": true,
@@ -69,6 +71,8 @@ module.exports = {
                     config[k] = initConfig[k];
                 }
             }
+            // 应用代理规则
+            SessionProxy.setProxy(config.proxyRule);
         }
         return config;
     },
@@ -81,6 +85,8 @@ module.exports = {
         } catch (e) {
             console.log('saveConfig 时发生异常: ', e);
         }
+        // 应用代理规则
+        SessionProxy.setProxy(config.proxyRule);
     },
     // 加载项目列表
     loadProjList: function () {

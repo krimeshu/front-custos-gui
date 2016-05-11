@@ -19,9 +19,10 @@ var Updater = {
     checkForUpdate: function () {
         var versionListPath = _path.resolve(updaterDir, 'version-list.json'),
             logId = Logger.genUniqueId();
+        Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载版本列表文件...');
         _progress(_request(VERSION_LIST_URL), {
-            throttle: 1000,
-            delay: 500
+            throttle: 100,
+            delay: 0
         }).on('progress', function (state) {
             // The state is an object that looks like this:
             // {
@@ -51,14 +52,14 @@ var Updater = {
                 's...'
             ];
             Logger.useId(logId);
-            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
         }).on('error', function (e) {
             var err = new Error('版本列表文件下载出现异常：');
             err.detail = e;
             Logger.error(err);
         }).on('end', function () {
             Logger.useId(logId);
-            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '版本列表文件加载完毕。');
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '版本列表文件加载完毕。');
         }).pipe(_fs.createWriteStream(versionListPath));
     }
 };

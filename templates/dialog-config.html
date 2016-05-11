@@ -41,6 +41,14 @@
                         </md-input-container>
                         <md-switch ng-model="config.noticeWhenUploadFinished">上传结束后声音提示</md-switch>
                     </div>
+                    <div layout="row">
+                        <md-input-container flex>
+                            <label>网络代理规则</label>
+                            <input ng-model="config.proxyRule"
+                                   name="proxyRule"
+                                   placeholder="需要使用代理访问网络时，可在此配置代理规则"/>
+                        </md-input-container>
+                    </div>
                 </md-card-content>
             </md-card>
             <md-card>
