@@ -17,8 +17,40 @@ Utils.makeSureDir(updaterDir);
 
 var Updater = {
     checkForUpdate: function () {
+        var self = this;
+        self.downVerList(function () {
+            self.checkVerPatch(function (patch) {
+                if (patch) {
+                    Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '发现可用更新补丁：', patch);
+                } else {
+                    Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '恭喜，您的版本暂时不需要更新~');
+                }
+            });
+        });
+    },
+    checkVerPatch: function (callback) {
+        var versionListPath = _path.resolve(updaterDir, 'version-list.json'),
+            currentVersion = appPackageFile.version;
+        try {
+            var str = _fs.readFileSync(versionListPath, 'utf-8'),
+                list = JSON.parse(str),
+                curPatch = null;
+            list.forEach(function (patch) {
+                if (patch.from === currentVersion) {
+                    curPatch = patch;
+                }
+            });
+            callback && callback(curPatch);
+        } catch (e) {
+            var err = new Error('检查匹配的更新版本时出现异常：');
+            err.detail = e;
+            Logger.error(err);
+        }
+    },
+    downVerList: function (callback) {
         var versionListPath = _path.resolve(updaterDir, 'version-list.json'),
             logId = Logger.genUniqueId();
+        Logger.log('<hr/>');
         Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载版本列表文件...');
         _progress(_request(VERSION_LIST_URL), {
             throttle: 100,
@@ -60,6 +92,7 @@ var Updater = {
         }).on('end', function () {
             Logger.useId(logId);
             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '版本列表文件加载完毕。');
+            callback && callback();
         }).pipe(_fs.createWriteStream(versionListPath));
     }
 };
