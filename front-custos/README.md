@@ -16,3 +16,7 @@ npm install
 ```bash
 node test
 ```
+
+更多内容请参考：
+
+[https://github.com/Moonshell/front-custos-gui](https://github.com/Moonshell/front-custos-gui)
