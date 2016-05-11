@@ -34,13 +34,14 @@ var LaunchState = {
         });
         return patches;
     },
+    wrapCallback: function (callback, context) {
+        return function () {
+            typeof callback === 'function' && callback.apply(context, arguments || []);
+        }
+    },
     checkForPatch: function (callback) {
+        var applyCallback = this.wrapCallback(callback, this);
         var patches = this.getPatches();
-        var applyCallback = (function (context) {
-            return function () {
-                typeof callback === 'function' && callback.apply(context, arguments || []);
-            }
-        })(this);
         if (!patches || !patches.length) {
             applyCallback(0);
         }
@@ -61,12 +62,8 @@ var LaunchState = {
         }
     },
     extractPatch: function (patchPath, callback) {
-        var applyCallback = (function (context) {
-            return function () {
-                typeof callback === 'function' && callback.apply(context, arguments || []);
-            }
-        })(this);
-        var cp = childProcess.spawn('7z', ['e', patchPath]);
+        var applyCallback = this.wrapCallback(callback, this);
+        var cp = childProcess.spawn('7z', ['e', patchPath, '-y']);
         cp.stdout.on('data', function (data) {
             // console.log(String(data));
         });
@@ -75,6 +72,9 @@ var LaunchState = {
         });
         cp.on('exit', function (code) {
             // console.log('7z child process exited with code ' + code);
+            if (code === 0) {
+                fs.unlink(patchPath);
+            }
             applyCallback(code);
         });
     }
