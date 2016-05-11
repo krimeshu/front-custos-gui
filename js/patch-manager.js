@@ -1,17 +1,14 @@
 /**
- * Created by krimeshu on 2016/5/10.
+ * Created by krimeshu on 2016/5/11.
  */
 
 var fs = require('fs'),
     path = require('path'),
     childProcess = require('child_process');
 
-var LaunchState = {
-    start: function () {
-        require('./main');
-    },
+module.exports = {
     getPatches: function () {
-        var dirPath = __dirname,
+        var dirPath = path.resolve(__dirname, '../'),
             children = fs.readdirSync(dirPath),
             patches = [];
         children.forEach(function (child) {
@@ -39,14 +36,13 @@ var LaunchState = {
             typeof callback === 'function' && callback.apply(context, arguments || []);
         }
     },
-    checkForPatch: function (callback) {
+    checkLocalPatch: function (callback) {
         var applyCallback = this.wrapCallback(callback, this);
         var patches = this.getPatches();
         if (!patches || !patches.length) {
             applyCallback(0);
         }
-        var packageFile = require('./package.json'),
-            currentVersion = packageFile.version,
+        var currentVersion = appPackageFile.version,
             currentPatch = null;
         patches.forEach(function (patch) {
             if (patch.from === currentVersion) {
@@ -79,7 +75,3 @@ var LaunchState = {
         });
     }
 };
-
-LaunchState.checkForPatch(function () {
-    this.start();
-});

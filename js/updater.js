@@ -12,9 +12,6 @@ var _fs = require('fs'),
 
 var VERSION_LIST_URL = 'https://github.com/Moonshell/front-custos-gui/raw/master/version-list.json';
 
-var updaterDir = Utils.configDir('./fc-update');
-Utils.makeSureDir(updaterDir);
-
 var Updater = {
     checkForUpdate: function () {
         var self = this;
@@ -22,6 +19,9 @@ var Updater = {
             self.checkVerPatch(function (patch) {
                 if (patch) {
                     Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '发现可用更新补丁：', patch);
+                    self.downPatch(patch, function (err) {
+
+                    });
                 } else {
                     Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '恭喜，您的版本暂时不需要更新~');
                 }
@@ -48,29 +48,27 @@ var Updater = {
         }
     },
     downVerList: function (callback) {
-        var versionListPath = _path.resolve(updaterDir, 'version-list.json'),
-            logId = Logger.genUniqueId();
+        var updaterDir = Utils.configDir('./fc-update');
+        this._download('版本列表', VERSION_LIST_URL, updaterDir, callback);
+    },
+    downPatch: function (patch, callback) {
+        var patchDir = _path.resolve(__dirname, '..');
+        this._download('补丁文件', patch.url, patchDir, callback);
+    },
+    _download: function (name, url, saveDirPath, callback) {
+        var baseName = String(url.split('/').pop()).split(/\?#/g)[0],
+            savePath = _path.resolve(saveDirPath, baseName);
+        Utils.makeSureDir(saveDirPath);
+
+        var logId = Logger.genUniqueId();
         Logger.log('<hr/>');
-        Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载版本列表文件...');
-        _progress(_request(VERSION_LIST_URL), {
+        Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载' + name + '...');
+        _progress(_request(url), {
             throttle: 100,
             delay: 0
         }).on('progress', function (state) {
-            // The state is an object that looks like this:
-            // {
-            //     percentage: 0.5,            // Overall percentage (between 0 to 1)
-            //     speed: 554732,              // The download speed in bytes/sec
-            //     size: {
-            //         total: 90044871,        // The total payload size in bytes
-            //         transferred: 27610959   // The transferred payload size in bytes
-            //     },
-            //     time: {
-            //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
-            //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
-            //     }
-            // }
             var progressText = [
-                '版本列表加载中：',
+                name + '加载中：',
                 (state['percentage'] * 100).toFixed(2) + '%（',
                 Utils.formatSize(state.size['transferred']),
                 '/',
@@ -86,14 +84,14 @@ var Updater = {
             Logger.useId(logId);
             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
         }).on('error', function (e) {
-            var err = new Error('版本列表文件下载出现异常：');
+            var err = new Error(name + '下载异常：');
             err.detail = e;
             Logger.error(err);
         }).on('end', function () {
             Logger.useId(logId);
-            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '版本列表文件加载完毕。');
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '加载完毕。');
             callback && callback();
-        }).pipe(_fs.createWriteStream(versionListPath));
+        }).pipe(_fs.createWriteStream(savePath));
     }
 };
 
