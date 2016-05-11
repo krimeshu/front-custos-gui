@@ -13,7 +13,7 @@ var BrowserifyProxy = function (onError) {
 };
 
 BrowserifyProxy.prototype = {
-    reg: new RegExp('(^|\n)\\s*(//|/\\*)\\s*browserify\\s+entry\\s*(\\*/\\s*)?($|\r?\n)', 'i'),
+    reg: new RegExp('(^|\n)\\s*((/\\*|\'|")\\s*browserify\\s+entry\\s*(\\*/|\';?|";?)|//\\s*browserify\\s+entry)\\s*($|\r?\n)', 'i'),
     findEntryFiles: function () {
         var self = this;
         return Through2.obj(function (file, enc, cb) {
