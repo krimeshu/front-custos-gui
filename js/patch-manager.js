@@ -14,12 +14,6 @@ var Utils = require('./utils.js'),
 
 var VERSION_LIST_URL = 'https://github.com/Moonshell/front-custos-gui/raw/master/version-list.json';
 
-function wrapCallback(callback, context) {
-    return function () {
-        typeof callback === 'function' && callback.apply(context, arguments || []);
-    }
-}
-
 module.exports = {
     // 获取本地已有的补丁包列表
     getLocalPatches: function () {
@@ -47,69 +41,85 @@ module.exports = {
         return patches;
     },
     // 检查是否有可用的本地补丁包
-    checkLocalPatch: function (callback) {
-        var applyCallback = wrapCallback(callback, this);
-        var patches = this.getLocalPatches(),
-            currentVersion = appPackageFile.version,
-            currentPatch = null;
-        if (!patches || !patches.length) {
-            applyCallback(currentPatch);
-        }
-        patches.forEach(function (patch) {
-            if (patch.from === currentVersion) {
-                currentPatch = patch;
+    checkLocalPatch: function () {
+        return new Promise((resolve, reject)=> {
+            var patches = this.getLocalPatches(),
+                currentVersion = appPackageFile.version,
+                currentPatch = null;
+            if (!patches || !patches.length) {
+                reject();
             }
+            patches.forEach(function (patch) {
+                if (patch.from === currentVersion) {
+                    currentPatch = patch;
+                }
+            });
+            resolve(currentPatch);
         });
-        applyCallback(currentPatch);
     },
     // 解压补丁包
-    extractPatch: function (patchPath, callback) {
-        var applyCallback = wrapCallback(callback, this);
-        var cp = _childProcess.spawn('7z', ['e', patchPath, '-y']);
-        cp.stdout.on('data', function (data) {
-            // console.log(String(data));
-        });
-        cp.stderr.on('data', function (data) {
-            // console.error(String(data));
-        });
-        cp.on('exit', function (code) {
-            // console.log('7z child process exited with code ' + code);
-            if (code === 0) {
-                _fs.unlink(patchPath);
-            }
-            applyCallback(code);
+    extractPatch: function (patchPath) {
+        return new Promise((resolve, reject)=> {
+            var cp = _childProcess.spawn('7z', ['e', patchPath, '-y']),
+                console = Logger;
+            cp.stdout.on('data', function (data) {
+                console.log(String(data));
+            });
+            cp.stderr.on('data', function (data) {
+                console.error(String(data));
+            });
+            cp.on('exit', function (code) {
+                console.log('7z child process exited with code ' + code);
+                if (code === 0) {
+                    _fs.unlink(patchPath);
+                    resolve(code);
+                } else {
+                    reject(code);
+                }
+            });
         });
     },
     // 下载在线版本列表
-    downVerList: function (callback) {
-        var updaterDir = Utils.configDir('./fc-update');
-        this._download('版本列表', VERSION_LIST_URL, updaterDir, callback);
+    downVerList: function () {
+        return new Promise((resolve)=> {
+            var updaterDir = Utils.configDir('./fc-update');
+            this._download('版本列表', VERSION_LIST_URL, updaterDir, ()=> {
+                resolve();
+            });
+        });
     },
     // 检查在线版本列表中是否有可用补丁
-    checkVerPatch: function (callback) {
-        var updaterDir = Utils.configDir('./fc-update'),
-            versionListPath = _path.resolve(updaterDir, 'version-list.json'),
-            currentVersion = appPackageFile.version;
-        try {
-            var str = _fs.readFileSync(versionListPath, 'utf-8'),
-                list = JSON.parse(str),
-                curPatch = null;
-            list.forEach(function (patch) {
-                if (patch.from === currentVersion) {
-                    curPatch = patch;
-                }
-            });
-            callback && callback(curPatch);
-        } catch (e) {
-            var err = new Error('检查匹配的更新版本时出现异常：');
-            err.detail = e;
-            Logger.error(err);
-        }
+    checkVerPatch: function () {
+        return new Promise((resolve, reject)=> {
+            var updaterDir = Utils.configDir('./fc-update'),
+                versionListPath = _path.resolve(updaterDir, 'version-list.json'),
+                currentVersion = appPackageFile.version;
+            try {
+                var str = _fs.readFileSync(versionListPath, 'utf-8'),
+                    list = JSON.parse(str),
+                    curPatch = null;
+                list.forEach(function (patch) {
+                    if (patch.from === currentVersion) {
+                        curPatch = patch;
+                    }
+                });
+                resolve(curPatch);
+            } catch (e) {
+                var err = new Error('检查匹配的更新版本时出现异常：');
+                err.detail = e;
+                Logger.error(err);
+                reject();
+            }
+        });
     },
     // 下载补丁
-    downPatch: function (patch, callback) {
-        var patchDir = _path.resolve(__dirname, '..');
-        this._download('补丁文件', patch.url, patchDir, callback);
+    downPatch: function (patch) {
+        return new Promise((resolve)=> {
+            var patchDir = _path.resolve(__dirname, '..');
+            this._download('补丁文件', patch.url, patchDir, ()=> {
+                resolve();
+            });
+        });
     },
     // 下载文件并进度提示
     _download: function (name, url, saveDirPath, callback) {
