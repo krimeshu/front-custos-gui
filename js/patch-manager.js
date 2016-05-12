@@ -61,7 +61,11 @@ module.exports = {
     // 解压补丁包
     extractPatch: function (patchPath) {
         return new Promise((resolve, reject)=> {
-            var cp = _childProcess.spawn('7z', ['e', patchPath, '-y']),
+            var dirPath = _path.resolve(__dirname, '../'),
+                cmdPath = _path.resolve(dirPath, '7z'),
+                cp = _childProcess.spawn(cmdPath, ['e', patchPath, '-y'], {
+                    cwd: dirPath
+                }),
                 console = Logger;
             cp.stdout.on('data', function (data) {
                 console.log(String(data));
@@ -130,7 +134,6 @@ module.exports = {
         Utils.makeSureDir(saveDirPath);
 
         var logId = Logger.genUniqueId();
-        Logger.log('<hr/>');
         Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载' + name + '...');
         _progress(_request(url), {
             throttle: 100,

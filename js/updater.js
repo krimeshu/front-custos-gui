@@ -31,6 +31,7 @@ var Updater = {
         //         }
         //     });
         // });
+        Logger.log('<hr/>');
         PatchManager.downVerList().then(function () {
             return PatchManager.checkVerPatch();
         }).then(function (patch) {
@@ -41,6 +42,8 @@ var Updater = {
             return PatchManager.extractPatch(patch.path)
         }).then(function () {
             Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
+        }).catch(function(e){
+            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', e);
         });
     }
 };
