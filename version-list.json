@@ -1,7 +1,13 @@
-[
-  {
-    "from": "0.8.2",
-    "to": "0.8.7",
-    "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_0.8.2_0.8.7.7z"
-  }
-]
+{
+  "latest": {
+    "version": "0.8.2",
+    "url": "https://github.com/Moonshell/front-custos-gui/releases/tag/v0.8.2"
+  },
+  "patches": [
+    {
+      "from": "0.8.2",
+      "to": "0.8.7",
+      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_0.8.2_0.8.7.7z"
+    }
+  ]
+}

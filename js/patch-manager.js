@@ -2,14 +2,29 @@
  * Created by krimeshu on 2016/5/11.
  */
 
-var fs = require('fs'),
-    path = require('path'),
-    childProcess = require('child_process');
+var _fs = require('fs'),
+    _path = require('path'),
+    _request = require('request'),
+    _progress = require('request-progress'),
+
+    _childProcess = require('child_process');
+
+var Utils = require('./utils.js'),
+    Logger = require('./logger.js');
+
+var VERSION_LIST_URL = 'https://github.com/Moonshell/front-custos-gui/raw/master/version-list.json';
+
+function wrapCallback(callback, context) {
+    return function () {
+        typeof callback === 'function' && callback.apply(context, arguments || []);
+    }
+}
 
 module.exports = {
-    getPatches: function () {
-        var dirPath = path.resolve(__dirname, '../'),
-            children = fs.readdirSync(dirPath),
+    // 获取本地已有的补丁包列表
+    getLocalPatches: function () {
+        var dirPath = _path.resolve(__dirname, '../'),
+            children = _fs.readdirSync(dirPath),
             patches = [];
         children.forEach(function (child) {
             var ms = /^patch_([\n\.]+)_([\n\.]+)\.zip$/i.exec(child);
@@ -18,8 +33,8 @@ module.exports = {
             }
             var fromVersion = ms[1],
                 toVersion = ms[2],
-                childPath = path.resolve(dirPath, child),
-                childStat = fs.statSync(childPath);
+                childPath = _path.resolve(dirPath, child),
+                childStat = _fs.statSync(childPath);
             if (childStat.isDirectory()) {
                 return;
             }
@@ -31,35 +46,26 @@ module.exports = {
         });
         return patches;
     },
-    wrapCallback: function (callback, context) {
-        return function () {
-            typeof callback === 'function' && callback.apply(context, arguments || []);
-        }
-    },
+    // 检查是否有可用的本地补丁包
     checkLocalPatch: function (callback) {
-        var applyCallback = this.wrapCallback(callback, this);
-        var patches = this.getPatches();
-        if (!patches || !patches.length) {
-            applyCallback(0);
-        }
-        var currentVersion = appPackageFile.version,
+        var applyCallback = wrapCallback(callback, this);
+        var patches = this.getLocalPatches(),
+            currentVersion = appPackageFile.version,
             currentPatch = null;
+        if (!patches || !patches.length) {
+            applyCallback(currentPatch);
+        }
         patches.forEach(function (patch) {
             if (patch.from === currentVersion) {
                 currentPatch = patch;
             }
         });
-        if (!currentPatch) {
-            applyCallback(-1);
-        } else {
-            this.extractPatch(currentPatch.path, function () {
-                applyCallback(1);
-            });
-        }
+        applyCallback(currentPatch);
     },
+    // 解压补丁包
     extractPatch: function (patchPath, callback) {
-        var applyCallback = this.wrapCallback(callback, this);
-        var cp = childProcess.spawn('7z', ['e', patchPath, '-y']);
+        var applyCallback = wrapCallback(callback, this);
+        var cp = _childProcess.spawn('7z', ['e', patchPath, '-y']);
         cp.stdout.on('data', function (data) {
             // console.log(String(data));
         });
@@ -69,9 +75,79 @@ module.exports = {
         cp.on('exit', function (code) {
             // console.log('7z child process exited with code ' + code);
             if (code === 0) {
-                fs.unlink(patchPath);
+                _fs.unlink(patchPath);
             }
             applyCallback(code);
         });
+    },
+    // 下载在线版本列表
+    downVerList: function (callback) {
+        var updaterDir = Utils.configDir('./fc-update');
+        this._download('版本列表', VERSION_LIST_URL, updaterDir, callback);
+    },
+    // 检查在线版本列表中是否有可用补丁
+    checkVerPatch: function (callback) {
+        var updaterDir = Utils.configDir('./fc-update'),
+            versionListPath = _path.resolve(updaterDir, 'version-list.json'),
+            currentVersion = appPackageFile.version;
+        try {
+            var str = _fs.readFileSync(versionListPath, 'utf-8'),
+                list = JSON.parse(str),
+                curPatch = null;
+            list.forEach(function (patch) {
+                if (patch.from === currentVersion) {
+                    curPatch = patch;
+                }
+            });
+            callback && callback(curPatch);
+        } catch (e) {
+            var err = new Error('检查匹配的更新版本时出现异常：');
+            err.detail = e;
+            Logger.error(err);
+        }
+    },
+    // 下载补丁
+    downPatch: function (patch, callback) {
+        var patchDir = _path.resolve(__dirname, '..');
+        this._download('补丁文件', patch.url, patchDir, callback);
+    },
+    // 下载文件并进度提示
+    _download: function (name, url, saveDirPath, callback) {
+        var baseName = String(url.split('/').pop()).split(/\?#/g)[0],
+            savePath = _path.resolve(saveDirPath, baseName);
+        Utils.makeSureDir(saveDirPath);
+
+        var logId = Logger.genUniqueId();
+        Logger.log('<hr/>');
+        Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载' + name + '...');
+        _progress(_request(url), {
+            throttle: 100,
+            delay: 0
+        }).on('progress', function (state) {
+            var progressText = [
+                name + '加载中：',
+                (state['percentage'] * 100).toFixed(2) + '%（',
+                Utils.formatSize(state.size['transferred']),
+                '/',
+                Utils.formatSize(state.size['total']),
+                '），速度：',
+                Utils.formatSize(state.speed),
+                '/s，时间：',
+                state.time['elapsed'],
+                's，预计剩余：',
+                state.time['remaining'],
+                's...'
+            ];
+            Logger.useId(logId);
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
+        }).on('error', function (e) {
+            var err = new Error(name + '下载异常：');
+            err.detail = e;
+            Logger.error(err);
+        }).on('end', function () {
+            Logger.useId(logId);
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '加载完毕。');
+            callback && callback();
+        }).pipe(_fs.createWriteStream(savePath));
     }
 };
