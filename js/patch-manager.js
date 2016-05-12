@@ -21,7 +21,7 @@ module.exports = {
             children = _fs.readdirSync(dirPath),
             patches = [];
         children.forEach(function (child) {
-            var ms = /^patch_([\n\.]+)_([\n\.]+)\.zip$/i.exec(child);
+            var ms = /^patch_([0-9\.]+)_([0-9\.]+)\.7z/i.exec(child);
             if (!ms) {
                 return;
             }
@@ -48,6 +48,7 @@ module.exports = {
                 currentPatch = null;
             if (!patches || !patches.length) {
                 reject();
+                return;
             }
             patches.forEach(function (patch) {
                 if (patch.from === currentVersion) {
