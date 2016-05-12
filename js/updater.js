@@ -40,7 +40,7 @@ var Updater = {
         }).then(function (patch) {
             return PatchManager.extractPatch(patch.path)
         }).then(function () {
-
+            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
         });
     }
 };

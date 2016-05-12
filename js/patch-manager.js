@@ -96,9 +96,10 @@ module.exports = {
                 currentVersion = appPackageFile.version;
             try {
                 var str = _fs.readFileSync(versionListPath, 'utf-8'),
-                    list = JSON.parse(str),
+                    verList = JSON.parse(str),
+                    patches = verList['patches'],
                     curPatch = null;
-                list.forEach(function (patch) {
+                patches.forEach(function (patch) {
                     if (patch.from === currentVersion) {
                         curPatch = patch;
                     }
