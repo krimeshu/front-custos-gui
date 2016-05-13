@@ -159,15 +159,17 @@ document.body.appendChild(styleDOM);
 
 为了合并这些模块脚本，除了通过传统方式的`window`命名空间，配合`#include()`语句实现之外，我们还可以使用`CommonJS`标准编写脚本模块，然后通过`browserify`来对脚本进行打包。
 
-具体只需要在任务列表中勾选`run_browserify`，再在打包脚本的入口文件内加入注释标记：`Browserify Entry` 即可。如：
+具体只需要在任务列表中勾选`run_browserify`，再在打包脚本的入口文件内加入标记：`Browserify Entry` 即可。如：
 
 ```javascript
 /* a.js 文件内容 */
 
-// Browserify Entry
+'browserify entry';
 
 var b = require('./b.js');
 ```
+
+**注：** 也可使用注释的形式进行标记，如：`// Browserify entry`或`/* Browserify Entry */`。
 
 ### 4. 链接文件地址
 
@@ -186,4 +188,4 @@ var appLogoSrc = '#link("../images/app-logo.png")',
 appLogoDOM.src = appLogoSrc;
 ```
 
-==注意：== 所有链接文件路径都请使用相对于当前标记文件的路径，`js`脚本中也是（而非相对被引用页面的路径）
+**注：** 所有链接文件路径都请使用相对于当前标记文件的路径，`js`脚本中也是（而非相对被引用页面的路径）
