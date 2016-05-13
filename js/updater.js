@@ -33,18 +33,10 @@ var Updater = {
         // });
         Logger.log('<hr/>');
         PatchManager.downVerList()
-            .then(function () {
-                return PatchManager.checkVerPatch();
-            })
-            .then(function (patch) {
-                return PatchManager.downPatch(patch);
-            })
-            .then(function () {
-                return PatchManager.checkLocalPatch();
-            })
-            .then(function (patch) {
-                return PatchManager.extractPatch(patch.path)
-            })
+            .then(PatchManager.checkVerPatch.bind(PatchManager))
+            .then(PatchManager.downPatch.bind(PatchManager))
+            .then(PatchManager.checkLocalPatch.bind(PatchManager))
+            .then(PatchManager.extractPatch.bind(PatchManager))
             .then(function () {
                 Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
             })

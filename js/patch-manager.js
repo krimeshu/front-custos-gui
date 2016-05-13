@@ -59,10 +59,11 @@ module.exports = {
         });
     },
     // 解压补丁包
-    extractPatch: function (patchPath) {
+    extractPatch: function (patch) {
         return new Promise((resolve, reject)=> {
             var dirPath = _path.resolve(__dirname, '../'),
                 cmdPath = _path.resolve(dirPath, '7z'),
+                patchPath = patch.path,
                 cp = _childProcess.spawn(cmdPath, ['e', patchPath, '-y'], {
                     cwd: dirPath
                 }),
