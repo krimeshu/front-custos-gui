@@ -114,9 +114,9 @@ module.exports = {
                     resolve(curPatch);
                 } else {
                     if (this._compareVer(currentVersion, latest.version) >= 0) {
-                        reject(null, '恭喜，您已经是最新版本了！');
+                        reject('恭喜，您已经是最新版本了！');
                     } else {
-                        reject(null, '抱歉，您的版本太旧，未找到匹配补丁，请直接下载程序本体包：' +
+                        reject('抱歉，您的版本太旧，未找到匹配补丁，请直接下载程序本体包：' +
                             '<a href="javascript: windowCtrl.openExternal(\'' + latest.url + '\');">点击访问下载页</a>');
                     }
                 }
@@ -143,13 +143,13 @@ module.exports = {
         Utils.makeSureDir(saveDirPath);
 
         var logId = Logger.genUniqueId();
-        Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '开始加载' + name + '...');
+        Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '开始下载' + name + '...');
         _progress(_request(url), {
             throttle: 100,
             delay: 0
         }).on('progress', function (state) {
             var progressText = [
-                name + '加载中：',
+                name + '下载中：',
                 (state['percentage'] * 100).toFixed(2) + '%（',
                 Utils.formatSize(state.size['transferred']),
                 '/',
@@ -170,7 +170,7 @@ module.exports = {
             Logger.error(err);
         }).on('end', function () {
             Logger.useId(logId);
-            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '加载完毕。');
+            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '下载完毕。');
             callback && callback();
         }).pipe(_fs.createWriteStream(savePath));
     },

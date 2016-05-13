@@ -32,20 +32,30 @@ var Updater = {
         //     });
         // });
         Logger.log('<hr/>');
-        PatchManager.downVerList().then(function () {
-            return PatchManager.checkVerPatch();
-        }, updateFailed).then(function (patch) {
-            return PatchManager.downPatch(patch);
-        }, updateFailed).then(function () {
-            return PatchManager.checkLocalPatch();
-        }, updateFailed).then(function (patch) {
-            return PatchManager.extractPatch(patch.path)
-        }, updateFailed).then(function () {
-            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
-        }, updateFailed).catch(updateFailed);
-        function updateFailed(err, msg) {
-            err && Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', err);
-            msg && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), msg);
+        PatchManager.downVerList()
+            .then(function () {
+                return PatchManager.checkVerPatch();
+            })
+            .then(function (patch) {
+                return PatchManager.downPatch(patch);
+            })
+            .then(function () {
+                return PatchManager.checkLocalPatch();
+            })
+            .then(function (patch) {
+                return PatchManager.extractPatch(patch.path)
+            })
+            .then(function () {
+                Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
+            })
+            .catch(updateFailed);
+        function updateFailed(errOrMsg) {
+            var isError = errOrMsg instanceof Error;
+            if (isError) {
+                Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', errOrMsg);
+            } else {
+                Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), errOrMsg);
+            }
         }
     }
 };
