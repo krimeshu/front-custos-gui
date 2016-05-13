@@ -47,7 +47,7 @@ module.exports = {
                 currentVersion = appPackageFile.version,
                 currentPatch = null;
             if (!patches || !patches.length) {
-                reject();
+                reject(new Error('未找到可用的本地补丁包。'));
                 return;
             }
             patches.forEach(function (patch) {
@@ -77,9 +77,9 @@ module.exports = {
                 console.log('7z child process exited with code ' + code);
                 if (code === 0) {
                     _fs.unlink(patchPath);
-                    resolve(code);
+                    resolve();
                 } else {
-                    reject(code);
+                    reject(new Error('补丁包解压异常，状态码：' + code));
                 }
             });
         });
@@ -102,6 +102,7 @@ module.exports = {
             try {
                 var str = _fs.readFileSync(versionListPath, 'utf-8'),
                     verList = JSON.parse(str),
+                    latest = verList['latest'],
                     patches = verList['patches'],
                     curPatch = null;
                 patches.forEach(function (patch) {
@@ -109,12 +110,20 @@ module.exports = {
                         curPatch = patch;
                     }
                 });
-                resolve(curPatch);
+                if (curPatch) {
+                    resolve(curPatch);
+                } else {
+                    if (this._compareVer(currentVersion, latest.version) >= 0) {
+                        reject(null, '恭喜，您已经是最新版本了！');
+                    } else {
+                        reject(null, '抱歉，您的版本太旧，未找到匹配补丁，请直接下载程序本体包：' +
+                            '<a href="javascript: windowCtrl.openExternal(\'' + latest.url + '\');">点击访问下载页</a>');
+                    }
+                }
             } catch (e) {
                 var err = new Error('检查匹配的更新版本时出现异常：');
                 err.detail = e;
-                Logger.error(err);
-                reject();
+                reject(err);
             }
         });
     },
@@ -164,5 +173,17 @@ module.exports = {
             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '加载完毕。');
             callback && callback();
         }).pipe(_fs.createWriteStream(savePath));
+    },
+    // 版本比较
+    _compareVer: function (ver1, ver2) {
+        var ver1Arr = ver1.split('.'),
+            ver2Arr = ver2.split('.'),
+            pos = 0,
+            len = Math.max(ver1Arr.length, ver2Arr.length),
+            sub;
+        while (pos < len && !(sub = ver1Arr[pos] - ver2Arr[pos])) {
+            pos++;
+        }
+        return Number(sub + new Array(len - pos).join('0'));
     }
 };

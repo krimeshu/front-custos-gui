@@ -546,6 +546,10 @@
                 key: key,
                 func: func
             });
+        },
+        openExternal: function (url) {
+            var shell = electron.shell;
+            shell.openExternal(url);
         }
     };
 

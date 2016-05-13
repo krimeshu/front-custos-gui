@@ -34,17 +34,19 @@ var Updater = {
         Logger.log('<hr/>');
         PatchManager.downVerList().then(function () {
             return PatchManager.checkVerPatch();
-        }).then(function (patch) {
+        }, updateFailed).then(function (patch) {
             return PatchManager.downPatch(patch);
-        }).then(function () {
+        }, updateFailed).then(function () {
             return PatchManager.checkLocalPatch();
-        }).then(function (patch) {
+        }, updateFailed).then(function (patch) {
             return PatchManager.extractPatch(patch.path)
-        }).then(function () {
+        }, updateFailed).then(function () {
             Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
-        }).catch(function(e){
-            Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', e);
-        });
+        }, updateFailed).catch(updateFailed);
+        function updateFailed(err, msg) {
+            err && Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', err);
+            msg && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), msg);
+        }
     }
 };
 
