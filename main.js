@@ -45,6 +45,7 @@ function createWindow() {
     var bounds = mainWindow.getBounds(),
         width = initWindowSize.width,
         height = initWindowSize.height;
+    
     mainWindow.setBounds({
         x: bounds.x - width / 2,
         y: bounds.y - height / 2,

@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "0.8.13",
+  "version": "0.9.1",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
@@ -28,7 +28,6 @@
     "angular-route": "^1.4.8",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.37.5",
-    "https-proxy-agent": "^1.0.0",
     "request-progress": "^2.0.1",
     "watch": "^0.17.1"
   }
