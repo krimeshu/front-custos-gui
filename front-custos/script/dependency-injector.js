@@ -68,8 +68,9 @@ DependencyInjector.prototype = {
             err.targetFunction = func;
             throw err;
         }
-        func = funcDepArr.pop();
-        for (var i = 0, l = funcDepArr.length, dep; i < l; i++) {
+        var depCount = funcDepArr.length - 1;
+        func = funcDepArr[depCount];
+        for (var i = 0, dep; i < depCount; i++) {
             dep = funcDepArr[i];
             if (!argMap.hasOwnProperty(dep)) {
                 err = new Error('未知依赖参数名: ' + dep);

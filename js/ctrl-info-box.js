@@ -14,7 +14,7 @@ var Logger = require('./logger.js'),
     CustosProxy = require('./custos-proxy.js');
 
 Model.onCurrentChanged(function(){
-    CustosProxy.fillTasks(Model.curProj);
+    CustosProxy.fillTasks(Model.curProj.tasks);
 });
 
 module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
@@ -121,7 +121,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
         }
-        CustosProxy.fillTasks(fcOpt);
+        CustosProxy.fillTasks(fcOpt.tasks);
         CustosProxy.doBuild(fcOpt, function () {
             $scope.$apply(function () {
                 $scope.toastMsg('任务执行完毕');
@@ -137,7 +137,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             return;
         }
         $scope.toastMsg('任务开始……');
-        CustosProxy.fillTasks(fcOpt);
+        CustosProxy.fillTasks(fcOpt.tasks);
         CustosProxy.doBuild(fcOpt, function (params) {
             $scope.$apply(function () {
                 remindErrorAndUpload(params, '构建过程中发生了一些错误，是否要继续上传？', function () {

@@ -15,9 +15,8 @@ var Logger = require('./logger.js'),
     buildWhenFinished = null;
 
 // 补充可能缺少的默认任务参数
-var fillTasks = function (fcOpt) {
-    var tasks = fcOpt.tasks,
-        uploadPos = tasks.indexOf('do_upload');
+var fillTasks = function (tasks) {
+    var uploadPos = tasks.indexOf('do_upload');
     if (uploadPos >= 0) {
         tasks.splice(uploadPos, 1);
     }

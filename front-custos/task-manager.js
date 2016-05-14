@@ -46,7 +46,7 @@ TaskManager.prototype = {
         } else if (typeof mod === 'object') {
             for (var subName in mod) {
                 if (mod.hasOwnProperty(subName)) {
-                    this._doDefine(subName ? name + ':' + subName : name, mod);
+                    this._doDefine(subName ? name + ':' + subName : name, mod[subName]);
                 }
             }
         }
