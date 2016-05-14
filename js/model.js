@@ -4,34 +4,11 @@
 
 var Data = require('./data.js'),
     Logger = require('./logger.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    FrontCustos = require('../front-custos');
 
 var _this = module.exports = {
-    allTasks: [
-        {name: 'compile_sass', desc: '编译SASS文件'},
-        {name: 'prepare_build', desc: '构建预准备', locked: true},
-        {name: 'replace_const', desc: '替换定义的常量'},
-        {name: 'prefix_crafter', desc: '添加CSS3前缀'},
-        {name: 'sprite_crafter', desc: '自动合并雪碧图'},
-        {name: 'run_csso', desc: '压缩样式'},
-        {name: 'join_include', desc: '合并包含的文件'},
-        {name: 'run_browserify', desc: '通过browserify打包脚本'},
-        {name: 'allot_link', desc: '分发关联文件'},
-        {name: 'optimize_image', desc: '压缩图片'},
-        {name: 'do_dist', desc: '输出文件', locked: true},
-        {name: 'do_upload', desc: '上传文件', disabled: true}
-    ],
-    fillAndReorderTasks: function (tasks) {
-        var _tasks = [];
-        for (var i = 0, task; task = this.allTasks[i]; i++) {
-            var pos = tasks.indexOf(task.name);
-            if (!task.disabled && (pos >= 0 || task.locked)) {
-                _tasks.push(task.name);
-            }
-        }
-        var _args = [0, tasks.length].concat(_tasks);
-        tasks.splice.apply(tasks, _args);
-    },
+    allTasks: FrontCustos.availableTasks,
     allThemes: {
         'default': {primary: 'blue-grey', accent: 'red'},
         'pink': {primary: 'pink', accent: 'red'},

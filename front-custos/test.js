@@ -2,16 +2,13 @@
  * Created by shu on 2016/2/19.
  */
 
-var gulp = require('gulp'),
-
-    frontCustos = require('./'),
+var frontCustos = require('./'),
     packageOptions = require('./example/package.json'),
     fcOptions = packageOptions.fcOpt;
 
 fcOptions['projDir'] = './example';
 
-frontCustos.registerTasks(gulp);
-frontCustos.config({
+frontCustos.setConfig({
     outputDir: './example/dist',
     htmlEnhanced: false,
     delUnusedFiles: true,

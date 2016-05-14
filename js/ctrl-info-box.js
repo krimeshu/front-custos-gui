@@ -41,7 +41,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         if (idx > -1) list.splice(idx, 1);
         else {
             list.push(item);
-            Model.fillAndReorderTasks(list);
+            CustosProxy.fillTasks(list);
         }
     };
     $scope.exists = function (item, list) {
@@ -132,7 +132,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     // 构建上传
     $scope.buildUpload = function () {
         var fcOpt = Model.curProj;
-        if (CustosProxy.isRunning()) {
+        if (CustosProxy.FrontCustos.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
         }
@@ -152,7 +152,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     };
 
     var remindErrorAndUpload = function (params, msg, cb) {
-        var errors = params.errors;
+        var errors = CustosProxy.FrontCustos.getErrorRecords();
         if (errors.length) {
             var logId = Logger.genUniqueId();
             Logger.useId(logId).warn(msg + $scope.optionsConfirmTemplate);
