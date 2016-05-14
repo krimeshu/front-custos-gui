@@ -24,8 +24,7 @@ var _os = require('os'),
 
 var config = {delUnusedFiles: true},
     params = {},
-    running = false,
-    injector = new DependencyInjector();
+    running = false;
 
 module.exports = {
     // 注册相关gulp任务、run-sequence插件
@@ -107,25 +106,20 @@ module.exports = {
         params.buildDir = buildDir;
         params.srcDir = srcDir;
         params.distDir = !params.keepOldCopy ? distDir : _path.resolve(distDir, version);
+        params.version = version;
+
+        params.workDir = params.workDir || params.srcDir;
 
         // 错误集合
         params.errors = [];
 
         // 生成项目常量并替换参数中的项目常量
-        var constFields = {
-            PROJECT: Utils.replaceBackSlash(buildDir),
-            PROJECT_NAME: projName,
-            VERSION: version
-        };
-        var replacer = new ConstReplacer(constFields);
-        replacer.doReplace(params);
-        params.constFields = constFields;
-
-        injector.registerMap(params);
-        injector.registerMap({
-            params: params,
-            console: console
+        var replacer = new ConstReplacer({
+            PROJECT: Utils.replaceBackSlash(params.workDir),
+            PROJECT_NAME: params.projName,
+            VERSION: params.version
         });
+        replacer.doReplace(params);
 
         var timer = new Timer();
         console.info(Utils.formatTime('[HH:mm:ss.fff]'), '项目 ' + projName + ' 任务开始……');
@@ -173,83 +167,11 @@ var getTaskErrorHander = function (taskName) {
 };
 
 var tasks = {
-    // 准备构建环境：
-    // - 清理构建文件夹
-    // - 复制源文件到构建文件夹
-    'prepare_build': function (done) {
-        var srcDir = params.srcDir,
-            buildDir = params.buildDir,
-
-            errorHandler = getTaskErrorHander('prepare_build');
-
-        var timer = new Timer();
-        var logId = console.genUniqueId && console.genUniqueId();
-        logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
-        var afterClean = function () {
-            gulp.src([_path.resolve(srcDir, '**/*'), '!*___jb_tmp___'])
-                .pipe(LazyLoadPlugins.plumber({
-                    'errorHandler': errorHandler
-                }))
-                .pipe(gulp.dest(buildDir))
-                .on('end', function () {
-                    // 预处理脚本
-                    var preprocessing;
-                    try {
-                        preprocessing = Utils.tryParseFunction(params.preprocessing);
-                    } catch (e) {
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理脚本格式有误，请检查相关配置。');
-                    }
-                    try {
-                        preprocessing && injector.invoke(preprocessing);
-                    } catch (e) {
-                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
-                    }
-                    logId && console.useId && console.useId(logId);
-                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务结束。（' + timer.getTime() + 'ms）');
-                    done();
-                });
-        };
-        var cleanFailed = function (e) {
-            var err = new Error('输出目录清理失败，请检查浏览器是否占用目录');
-            err.detail = e;
-            errorHandler(err);
-
-            afterClean();
-        };
-        LazyLoadPlugins.del([_path.resolve(buildDir, '**/*')], {force: true}).then(afterClean).catch(cleanFailed);
-    },
-    // 替换常量：
-    // - 替换常见常量（项目路径、项目名字等）
-    'replace_const': function (done) {
-        var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.js|.css|.scss|.html|.shtml|.php)'),
-            constFields = params.constFields;
-
-        var timer = new Timer();
-        var logId = console.genUniqueId && console.genUniqueId();
-        logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务开始……');
-
-        var replacer = new ConstReplacer(constFields);
-        //replacer.doReplace(params);
-        gulp.src(pattern)
-            .pipe(LazyLoadPlugins.plumber({
-                'errorHandler': getTaskErrorHander('replace_const')
-            }))
-            .pipe(replacer.handleFile())
-            .pipe(gulp.dest(buildDir))
-            .on('end', function () {
-                logId && console.useId && console.useId(logId);
-                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务结束。（' + timer.getTime() + 'ms）');
-                done();
-            });
-    },
     // 编译SASS:
     // - 通过 gulp-sass (基于 node-sass) 编译 scss 文件
     'compile_sass': function (done) {
-        var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.scss)');
+        var workDir = params.workDir,
+            pattern = _path.resolve(workDir, '**/*@(.scss)');
 
         var errorHandler = getTaskErrorHander('compile_sass');
 
@@ -265,17 +187,102 @@ var tasks = {
                 // errorHandler(err);
                 this.emit('end');
             }))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'compile_sass 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     },
+    // 准备构建环境：
+    // - 清理构建目录
+    // - 复制工作目录文件到构建目录
+    // - 工作目录转移至构建目录
+    'prepare_build': function (done) {
+        var workDir = params.workDir,
+            buildDir = params.buildDir,
+
+            errorHandler = getTaskErrorHander('prepare_build');
+
+        var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
+        var afterClean = function () {
+            gulp.src([_path.resolve(workDir, '**/*'), '!*___jb_tmp___'])
+                .pipe(LazyLoadPlugins.plumber({
+                    'errorHandler': errorHandler
+                }))
+                .pipe(gulp.dest(buildDir))
+                .on('end', function () {
+                    // 工作目录转到构建目录
+                    params.workDir = buildDir;
+
+                    // 预处理脚本
+                    var preprocessing;
+                    try {
+                        preprocessing = Utils.tryParseFunction(params.preprocessing);
+                    } catch (e) {
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理脚本格式有误，请检查相关配置。');
+                    }
+                    try {
+                        var injector = new DependencyInjector(params);
+                        injector.registerMap({
+                            params: params,
+                            console: console
+                        });
+                        preprocessing && injector.invoke(preprocessing);
+                    } catch (e) {
+                        console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
+                    }
+                    logId && console.useId && console.useId(logId);
+                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务结束。（' + timer.getTime() + 'ms）');
+
+                    done();
+                });
+        };
+        var cleanFailed = function (e) {
+            var err = new Error('输出目录清理失败，请检查浏览器是否占用目录');
+            err.detail = e;
+            errorHandler(err);
+
+            afterClean();
+        };
+        LazyLoadPlugins.del([_path.resolve(buildDir, '**/*')], {force: true}).then(afterClean).catch(cleanFailed);
+    },
+    // 替换常量：
+    // - 替换常见常量（项目路径、项目名字等）
+    'replace_const': function (done) {
+        var workDir = params.workDir,
+            pattern = _path.resolve(workDir, '**/*@(.js|.css|.scss|.html|.shtml|.php)');
+
+        var timer = new Timer();
+        var logId = console.genUniqueId && console.genUniqueId();
+        logId && console.useId && console.useId(logId);
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务开始……');
+
+        var replacer = new ConstReplacer({
+            PROJECT: Utils.replaceBackSlash(params.workDir),
+            PROJECT_NAME: params.projName,
+            VERSION: params.version
+        });
+        //replacer.doReplace(params);
+        gulp.src(pattern)
+            .pipe(LazyLoadPlugins.plumber({
+                'errorHandler': getTaskErrorHander('replace_const')
+            }))
+            .pipe(replacer.handleFile())
+            .pipe(gulp.dest(workDir))
+            .on('end', function () {
+                logId && console.useId && console.useId(logId);
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务结束。（' + timer.getTime() + 'ms）');
+                done();
+            });
+    },
     // 使用Browserify打包JS:
     'run_browserify': function (done) {
-        var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.js)');
+        var workDir = params.workDir,
+            pattern = _path.resolve(workDir, '**/*@(.js)');
 
         var errorHandler = getTaskErrorHander('run_browserify'),
             browserify = new BrowserifyProxy(errorHandler);
@@ -290,7 +297,7 @@ var tasks = {
             }))
             .pipe(browserify.findEntryFiles())
             .pipe(browserify.handleFile())
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_browserify 任务结束。（' + timer.getTime() + 'ms）');
@@ -300,7 +307,7 @@ var tasks = {
     // 合并文件：
     // - 根据 #include 包含关系，合并涉及到的文件
     'join_include': function (done) {
-        var buildDir = params.buildDir;
+        var workDir = params.workDir;
         var errorHandler = getTaskErrorHander('join_include'),
             includer = new FileIncluder(errorHandler);
 
@@ -308,13 +315,13 @@ var tasks = {
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务开始……');
-        var fileList = includer.analyseDepRelation(buildDir);
-        gulp.src(fileList, {base: buildDir})
+        var fileList = includer.analyseDepRelation(workDir);
+        gulp.src(fileList, {base: workDir})
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': errorHandler
             }))
             .pipe(includer.handleFile())
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务结束。（' + timer.getTime() + 'ms）');
@@ -324,8 +331,8 @@ var tasks = {
     // 雪碧图处理：
     // - 使用 Sprite Crafter（基于 spritesmith）解析CSS，自动合并雪碧图
     'sprite_crafter': function (done) {
-        var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.css)'),
+        var workDir = params.workDir,
+            pattern = _path.resolve(workDir, '**/*@(.css)'),
             scOpt = params.scOpt;
 
         var timer = new Timer();
@@ -334,13 +341,13 @@ var tasks = {
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'sprite_crafter 任务开始……');
         var files = [],
             maps = {};
-        scOpt.src = buildDir;
+        scOpt.src = workDir;
         gulp.src(pattern)
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': getTaskErrorHander('sprite_crafter')
             }))
             .pipe(SpriteCrafterProxy.analyseUsedImageMap(files, maps))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 scOpt.files = files;
                 scOpt.maps = maps;
@@ -354,8 +361,8 @@ var tasks = {
     // 前缀处理：
     // - 使用 Prefix Crafter（基于 autoprefixer）处理CSS，自动添加需要的浏览器前缀
     'prefix_crafter': function (done) {
-        var buildDir = params.buildDir,
-            pattern = _path.resolve(buildDir, '**/*@(.css)'),
+        var workDir = params.workDir,
+            pattern = _path.resolve(workDir, '**/*@(.css)'),
             pcOpt = params.pcOpt,
 
             errorHandler = getTaskErrorHander('prefix_crafter');
@@ -369,7 +376,7 @@ var tasks = {
                 'errorHandler': errorHandler
             }))
             .pipe(PrefixCrafterProxy.process(pcOpt, errorHandler))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prefix_crafter 任务结束。（' + timer.getTime() + 'ms）');
@@ -380,13 +387,13 @@ var tasks = {
     // - 根据文件类型分发文件到不同的目录
     // - 根据 #link 语法、CSS中 url() 匹配和 HTML 解析，自动提取并替换静态资源的链接
     'allot_link': function (done) {
-        var buildDir = params.buildDir,
+        var workDir = params.workDir,
             alOpt = params.alOpt,
 
             htmlEnhanced = config.htmlEnhanced,
             flattenMap = config.flattenMap;
 
-        alOpt.src = buildDir;
+        alOpt.src = workDir;
         alOpt.flattenMap = flattenMap;
 
         var timer = new Timer();
@@ -399,14 +406,14 @@ var tasks = {
                 htmlEnhanced: htmlEnhanced
             }, errorHandler);
         var fileAllotMap = {},                               // 用于记录文件分发前后的路径关系
-            usedFiles = linker.analyseDepRelation(buildDir); //记录分发前的文件依赖表
-        // 1. 将构建文件夹中的文件进行分发和重链接，生成到分发文件夹中
-        gulp.src(_path.resolve(buildDir, '**/*'))
+            usedFiles = linker.analyseDepRelation(workDir); //记录分发前的文件依赖表
+        // 1. 将构建目录中的文件进行分发和重链接，生成到分发目录中
+        gulp.src(_path.resolve(workDir, '**/*'))
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': errorHandler
             }))
             .pipe(linker.handleFile(alOpt, fileAllotMap))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 // 2. 更新分发后的使用文件依赖关系表
                 var recycledFiles = [],
@@ -425,7 +432,7 @@ var tasks = {
 
                 //console.log('recycledFiles:', recycledFiles);
                 //console.log('allotedUsedFiles:', allotedUsedFiles);
-                // 3. 清空构建文件夹的过期旧文件
+                // 3. 清空构建目录的过期旧文件
                 var afterClean = function () {
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务结束。（' + timer.getTime() + 'ms）');
@@ -443,13 +450,13 @@ var tasks = {
     },
     // 压缩CSS
     'run_csso': function (done) {
-        var buildDir = params.buildDir;
+        var workDir = params.workDir;
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
-        gulp.src(_path.resolve(buildDir, '**/*.css'))
+        gulp.src(_path.resolve(workDir, '**/*.css'))
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': getTaskErrorHander('run_csso')
             }))
@@ -458,7 +465,7 @@ var tasks = {
                 sourceMap: false,
                 debug: false
             }))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
                 console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务结束。（' + timer.getTime() + 'ms）');
@@ -482,9 +489,9 @@ var tasks = {
         });
     },
     'optimize_image:png': function (done) {
-        var buildDir = params.buildDir;
+        var workDir = params.workDir;
 
-        gulp.src(_path.resolve(buildDir, '**/*.png'))
+        gulp.src(_path.resolve(workDir, '**/*.png'))
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': getTaskErrorHander('optimize_image:png')
             }))
@@ -494,13 +501,13 @@ var tasks = {
             })(), {
                 fileCache: new LazyLoadPlugins.cache.Cache({cacheDirName: 'imagemin-cache'})
             }))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', done);
     },
     'optimize_image:other': function (done) {
-        var buildDir = params.buildDir;
+        var workDir = params.workDir;
 
-        gulp.src(_path.resolve(buildDir, '**/*.{jpg,gif}'))
+        gulp.src(_path.resolve(workDir, '**/*.{jpg,gif}'))
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': getTaskErrorHander('optimize_image:other')
             }))
@@ -510,14 +517,15 @@ var tasks = {
             }), {
                 fileCache: new LazyLoadPlugins.cache.Cache({cacheDirName: 'imagemin-cache'})
             }))
-            .pipe(gulp.dest(buildDir))
+            .pipe(gulp.dest(workDir))
             .on('end', done);
     },
     // 发布：
-    // - 清理发布文件夹
-    // - 将构建文件夹中的文件发布到发布文件夹
+    // - 清理发布目录
+    // - 将构建目录中的文件输出到发布目录
+    // - 工作目录转到发布目录
     'do_dist': function (done) {
-        var buildDir = params.buildDir,
+        var workDir = params.workDir,
             distDir = params.distDir,
             usedFiles = params.usedFiles,
 
@@ -537,14 +545,14 @@ var tasks = {
         //console.log('usedFiles:', usedFiles);
         if (delUnusedFiles) {
             if (!usedFiles) {
-                usedFiles = params.usedFiles = linker.analyseDepRelation(buildDir);
+                usedFiles = params.usedFiles = linker.analyseDepRelation(workDir);
             }
         } else {
             usedFiles = null;
         }
 
         var afterClean = function () {
-            gulp.src(_path.resolve(buildDir, '**/*'))
+            gulp.src(_path.resolve(workDir, '**/*'))
                 .pipe(LazyLoadPlugins.plumber({
                     'errorHandler': errorHandler
                 }))
@@ -552,6 +560,9 @@ var tasks = {
                 .pipe(linker.excludeEmptyDir())
                 .pipe(gulp.dest(distDir))
                 .on('end', function () {
+                    // 工作目录转移到发布目录
+                    params.workDir = distDir;
+
                     // 后处理脚本
                     var postprocessing;
                     try {
@@ -560,12 +571,18 @@ var tasks = {
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理脚本格式有误，请检查相关配置。');
                     }
                     try {
+                        var injector = new DependencyInjector(params);
+                        injector.registerMap({
+                            params: params,
+                            console: console
+                        });
                         postprocessing && injector.invoke(postprocessing);
                     } catch (e) {
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理将本执行异常：', e);
                     }
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务结束。（' + timer.getTime() + 'ms）');
+
                     done();
                 });
         };
@@ -579,9 +596,9 @@ var tasks = {
         LazyLoadPlugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(afterClean).catch(cleanFailed);
     },
     // 上传：
-    // - 将发布文件夹中的文件发到测试服务器
+    // - 将工作目录中的文件发到测试服务器
     'do_upload': function (done) {
-        var distDir = params.distDir,
+        var workDir = params.workDir,
 
             upOpt = params.upOpt,
 
@@ -612,7 +629,7 @@ var tasks = {
         var timer = new Timer();
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_upload 任务开始……');
 
-        gulp.src(_path.resolve(distDir, '**/*'))
+        gulp.src(_path.resolve(workDir, '**/*'))
             .pipe(LazyLoadPlugins.plumber({
                 'errorHandler': errorHandler
             }))

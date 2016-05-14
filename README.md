@@ -19,17 +19,17 @@
 
 ## 二、主要任务说明
 
+* **compile_sass**
+
+将目录中的`.sass`和`.scss`编译成浏览器支持的`.css`样式文件。
+
 * **prepare_build**
 
-准备构建的阶段，清理构建目录中的旧文件，将需要的文件复制到构建目录中。
+将源目录中的文件转到构建目录，开始后续需要避免对源文件影响的任务。
 
 * **replace_const**
 
 其它任务开始之前，将各类文件中的`{PROJECT}`、`{PROJECT_NAME}`、`{VERSION}`等常量替换成相应的值。
-
-* **compile_sass**
-
-将构建目录中的`.sass`和`.scss`编译成浏览器支持的`.css`样式文件。
 
 * **prefix_crafter**
 

@@ -13,6 +13,10 @@ var Logger = require('./logger.js'),
     Utils = require('./utils.js'),
     CustosProxy = require('./custos-proxy.js');
 
+Model.onCurrentChanged(function(){
+    CustosProxy.fillTasks(Model.curProj);
+});
+
 module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
     var self = this;
     self.isOpenExpanded = false;
@@ -54,14 +58,14 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 打开项目源目录
     $scope.openSrcDir = function () {
-        var srcDir = CustosProxy.getSrcDir(Model.curProj);
+        var srcDir = CustosProxy.FrontCustos.getSrcDir(Model.curProj);
         Utils.makeSureDir(srcDir);
         shell.openExternal(srcDir);
     };
 
     // 打开项目生成目录
     $scope.openDistDir = function () {
-        var distDir = CustosProxy.getDistDir(Model.curProj, Model.config.outputDir);
+        var distDir = CustosProxy.FrontCustos.getDistDir(Model.curProj, Model.config.outputDir);
         Utils.makeSureDir(distDir);
         shell.openExternal(distDir);
     };
@@ -113,7 +117,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     // 本地构建
     $scope.buildLocally = function () {
         var fcOpt = Model.curProj;
-        if (CustosProxy.isRunning()) {
+        if (CustosProxy.FrontCustos.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
         }

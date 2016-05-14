@@ -2,7 +2,7 @@
  * Created by krimeshu on 2016/3/12.
  */
 var mainWindow = require('electron').remote.getCurrentWindow(),
-    dialog = require('electron').remote.require('dialog');
+    dialog = require('electron').dialog;
 
 var Logger = require('./logger.js'),
     Data = require('./data.js'),

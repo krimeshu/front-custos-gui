@@ -37,6 +37,7 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
             controller: function configDialogController($scope, $mdDialog) {
                 $scope.config = Utils.deepCopy(Model.config);
                 $scope.allThemes = Model.allThemes;
+                $scope.watchTaskRanges = Model.watchTaskRanges;
 
                 $scope.aceLoaded = function (_editor) {
                     // Options

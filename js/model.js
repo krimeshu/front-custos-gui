@@ -8,9 +8,9 @@ var Data = require('./data.js'),
 
 var _this = module.exports = {
     allTasks: [
+        {name: 'compile_sass', desc: '编译SASS文件'},
         {name: 'prepare_build', desc: '构建预准备', locked: true},
         {name: 'replace_const', desc: '替换定义的常量'},
-        {name: 'compile_sass', desc: '编译SASS文件'},
         {name: 'prefix_crafter', desc: '添加CSS3前缀'},
         {name: 'sprite_crafter', desc: '自动合并雪碧图'},
         {name: 'run_csso', desc: '压缩样式'},
@@ -44,6 +44,19 @@ var _this = module.exports = {
     projList: Data.loadProjList(),
     curProj: Data.getNewOpt(),
     watchingProjIds: [],
+    watchTaskRanges: {
+        '': {name: '无限制'},
+        'prepare_build': {name: '跳转构建之前'},
+        'do_upload': {name: '开始上传之前'}
+    },
+    getTasksInRange: function (tasks, limit) {
+        var pos = tasks.indexOf(limit);
+        if (!limit || pos < 0) {
+            return tasks.slice(0);
+        } else {
+            return tasks.slice(0, pos);
+        }
+    },
     selectCurProj: function (proj) {
         var opts = this.loadProjOptions(proj),
             id = proj.id,

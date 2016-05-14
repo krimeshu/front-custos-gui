@@ -24,7 +24,7 @@ module.exports = {
         },
         "concurrentLimit": 1,
         "proxyRule": "",
-        "watchToUploading": false,
+        "watchTaskLimit": "",
         "watchDelayTime": 1000,
         "noticeWhenUploadFinished": true,
         "lastWorkingId": null

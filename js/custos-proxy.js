@@ -16,13 +16,17 @@ var getDelayTime = function () {
     return Model.config.watchDelayTime;
 };
 
-var FrontCustos = {
-    unloaded: true,
-    loadPlugin: function () {
-        var gulp = require('../front-custos/node_modules/gulp');
-        FrontCustos = require('../front-custos');
-        FrontCustos.takeOverConsole(Logger);
-        FrontCustos.registerTasks(gulp);
+var LazyLoader = {
+    _cached: {},
+    get FrontCustos() {
+        var _cached = this._cached['FrontCustos'];
+        if (!_cached) {
+            var gulp = require('../front-custos/node_modules/gulp');
+            _cached = this._cached['FrontCustos'] = require('../front-custos');
+            _cached.takeOverConsole(Logger);
+            _cached.registerTasks(gulp);
+        }
+        return _cached;
     }
 };
 
@@ -36,21 +40,6 @@ var fillTasks = function (fcOpt) {
     Model.fillAndReorderTasks(tasks);
 };
 
-var isRunning = function () {
-    FrontCustos.unloaded && FrontCustos.loadPlugin();
-    return FrontCustos.isRunning.apply(FrontCustos, arguments);
-};
-
-var getSrcDir = function (fcOpt) {
-    FrontCustos.unloaded && FrontCustos.loadPlugin();
-    return FrontCustos.getSrcDir.apply(FrontCustos, arguments);
-};
-
-var getDistDir = function () {
-    FrontCustos.unloaded && FrontCustos.loadPlugin();
-    return FrontCustos.getDistDir.apply(FrontCustos, arguments);
-};
-
 var doBuild = function (fcOpt, cb) {
     if (isRunning()) {
         console.info('有任务尚未结束，将推迟到任务结束后再处理。')
@@ -60,10 +49,10 @@ var doBuild = function (fcOpt, cb) {
         };
         return;
     }
-    FrontCustos.config(Model.config);
+    LazyLoader.FrontCustos.config(Model.config);
     var params = Utils.deepCopy(fcOpt);
     Logger.log('<hr/>');
-    FrontCustos.process(params, function () {
+    LazyLoader.FrontCustos.process(params, function () {
         cb && cb(params);
         if (buildWhenFinished) {
             console.info('有待处理任务，将自动开始。')
@@ -83,8 +72,9 @@ var doUpload = function (params, cb) {
         return;
     }
     params.errors = [];
+    params.workDir = params.distDir;
     params.tasks = ['do_upload'];
-    FrontCustos.runTasks(params, function () {
+    LazyLoader.FrontCustos.runTasks(params, function () {
         Model.config.noticeWhenUploadFinished && Utils.playSE('upload-finished');
         cb && cb(params);
     });
@@ -96,7 +86,8 @@ var watch = function (_projWithOpt) {
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        srcDir = getSrcDir(projWithOpt);
+        srcDir = getSrcDir(projWithOpt),
+        tasks = projWithOpt.tasks;
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos >= 0) {
@@ -105,15 +96,13 @@ var watch = function (_projWithOpt) {
         Model.watchingProjIds.push(id);
     }
 
-    fillTasks(projWithOpt);
     var rebuild = debounce(function () {
         Logger.info('<hr/>');
-        Logger.info('监听到变化，执行项目构建：%c%s', 'color: white;', projName);
-        doBuild(projWithOpt, function (params) {
-            Logger.info('监听项目构建完毕：%c%s', 'color: white;', projName);
-            Model.config.watchToUploading && doUpload(params, function () {
-                Logger.info('监听构建上传完毕：%c%s', 'color: white;', projName);
-            });
+        Logger.info('监听到变化，开始自动处理任务：%c%s', 'color: white;', projName);
+        // 根据配置，限制自动监听时执行的任务
+        projWithOpt.tasks = Model.getTasksInRange(tasks, Model.config.watchTaskLimit);
+        doBuild(projWithOpt, function () {
+            Logger.info('监听自动处理任务执行完毕：%c%s', 'color: white;', projName);
         });
     }, getDelayTime);
 
@@ -209,6 +198,9 @@ Model.onCurrentChanged(function () {
 });
 
 module.exports = {
+    get FrontCustos() {
+        return LazyLoader.FrontCustos;
+    },
     fillTasks: fillTasks,
     isRunning: isRunning,
     getSrcDir: getSrcDir,

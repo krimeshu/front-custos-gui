@@ -40,15 +40,14 @@ var Updater = {
             .then(function () {
                 Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
             })
-            .catch(updateFailed);
-        function updateFailed(errOrMsg) {
-            var isError = errOrMsg instanceof Error;
-            if (isError) {
-                Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', errOrMsg);
-            } else {
-                Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), errOrMsg);
-            }
-        }
+            .catch(function (errOrMsg) {
+                var isError = errOrMsg instanceof Error;
+                if (isError) {
+                    Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新失败：', errOrMsg);
+                } else {
+                    Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), errOrMsg);
+                }
+            });
     }
 };
 
