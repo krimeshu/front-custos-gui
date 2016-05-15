@@ -4,16 +4,20 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
     Timer = require('../script/timer.js'),
-    DependencyInjector = require('../script/dependency-injector.js'),
-    FileLinker = require('../script/file-linker.js');
+    DependencyInjector = require('../script/dependency-injector.js');
+
+PluginLoader.add({'FileLinker': ()=> require('../script/file-linker.js')});
 
 // 发布：
 // - 清理发布目录
 // - 将构建目录中的文件输出到发布目录
 // - 工作目录转到发布目录
-module.exports = function (console, gulp, plugins, params, config, errorHandler) {
+module.exports = function (console, gulp, params, config, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             distDir = params.distDir,
@@ -27,7 +31,7 @@ module.exports = function (console, gulp, plugins, params, config, errorHandler)
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务开始……');
 
-        var linker = new FileLinker({
+        var linker = new plugins.FileLinker({
             // php代码处理异常时，请关闭 cheerio 解析
             htmlEnhanced: htmlEnhanced
         }, errorHandler);

@@ -4,12 +4,15 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
     Timer = require('../script/timer.js');
 
 // 压缩CSS
 // - 消除 css 文件中的缩进、换行符等字符，减小文件体积
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir;
 

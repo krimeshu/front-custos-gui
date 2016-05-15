@@ -4,16 +4,20 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    FileIncluder = require('../script/file-includer.js');
+    Timer = require('../script/timer.js');
+
+PluginLoader.add({'FileIncluder': ()=> require('../script/file-includer.js')});
 
 // 合并文件：
 // - 根据 #include 包含关系，合并涉及到的文件
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir;
-        var includer = new FileIncluder(errorHandler);
+        var includer = new plugins.FileIncluder(errorHandler);
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();

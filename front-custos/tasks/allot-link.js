@@ -4,14 +4,18 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    FileLinker = require('../script/file-linker.js');
+    Timer = require('../script/timer.js');
+
+PluginLoader.add({'FileLinker': ()=> require('../script/file-linker.js')});
 
 // 分发链接：
 // - 根据文件类型分发文件到不同的目录
 // - 根据 #link 语法、CSS中 url() 匹配和 HTML 解析，自动提取并替换静态资源的链接
-module.exports = function (console, gulp, plugins, params, config, errorHandler) {
+module.exports = function (console, gulp, params, config, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             alOpt = params.alOpt,
@@ -27,7 +31,7 @@ module.exports = function (console, gulp, plugins, params, config, errorHandler)
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务开始……');
 
-        var linker = new FileLinker({
+        var linker = new plugins.FileLinker({
             // php代码处理异常时，请关闭 cheerio 解析
             htmlEnhanced: htmlEnhanced
         }, errorHandler);

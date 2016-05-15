@@ -4,13 +4,16 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
     Timer = require('../script/timer.js'),
     ConstReplacer = require('../script/const-replacer.js');
 
 // 替换常量：
 // - 替换常见常量（项目路径、项目名字等）
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             pattern = _path.resolve(workDir, '**/*@(.js|.css|.scss|.html|.shtml|.php)');

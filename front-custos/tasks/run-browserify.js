@@ -4,18 +4,22 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    BrowserifyProxy = require('../script/browserify-proxy.js');
+    Timer = require('../script/timer.js');
+
+PluginLoader.add({'BrowserifyProxy': ()=> require('../script/browserify-proxy.js')});
 
 // 使用Browserify打包JS:
 // - 内容中存在某行 'browserify entry'; 标记的脚本将被识别为入口进行打包
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             pattern = _path.resolve(workDir, '**/*@(.js)');
 
-        var browserify = new BrowserifyProxy(errorHandler);
+        var browserify = new plugins.BrowserifyProxy(errorHandler);
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();

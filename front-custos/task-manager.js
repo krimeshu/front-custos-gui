@@ -4,7 +4,9 @@
 
 var gulp = require('gulp'),
 
-    LazyLoadPlugins = require('./script/lazy-load-plugins.js'),
+    PluginLoader = require('./script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+    
     ConsoleProxy = require('./script/console-proxy.js'),
     DependencyInjector = require('./script/dependency-injector.js'),
     TaskErrorHandler = require('./script/task-error-handler.js');
@@ -16,8 +18,7 @@ function TaskManager() {
 
     this._injector = new DependencyInjector({
         // 固定不变的依赖
-        gulp: gulp,
-        plugins: LazyLoadPlugins
+        gulp: gulp
     });
 
     this._define('compile_sass', require('./tasks/compile-sass'), '编译SASS文件');
@@ -106,7 +107,7 @@ TaskManager.prototype = {
             config: config,
             params: params
         });
-        var runSequence = LazyLoadPlugins.runSequence.use(gulp);
+        var runSequence = plugins.runSequence.use(gulp);
         runSequence.apply(null, tasks);
     }
 };

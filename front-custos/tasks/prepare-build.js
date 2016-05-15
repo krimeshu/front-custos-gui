@@ -4,6 +4,9 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
     Timer = require('../script/timer.js'),
     DependencyInjector = require('../script/dependency-injector.js');
@@ -12,7 +15,7 @@ var _path = require('path'),
 // - 清理构建目录
 // - 复制工作目录文件到构建目录
 // - 工作目录转移至构建目录
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             buildDir = params.buildDir;

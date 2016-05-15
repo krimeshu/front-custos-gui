@@ -4,6 +4,9 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
     Timer = require('../script/timer.js');
 
@@ -12,7 +15,7 @@ var _path = require('path'),
 // - Jpg图片转为渐进式
 // - Gif图片转为隔行加载
 module.exports = {
-    '': function (console, gulp, plugins) {
+    '': function (console, gulp) {
         return function (done) {
             var runSequence = plugins.runSequence.use(gulp);
 
@@ -28,7 +31,7 @@ module.exports = {
             });
         };
     },
-    'png': function (console, gulp, plugins, params, errorHandler) {
+    'png': function (console, gulp, params, errorHandler) {
         return function (done) {
             var workDir = params.workDir;
 
@@ -44,7 +47,7 @@ module.exports = {
                 .on('end', done);
         };
     },
-    'other': function (console, gulp, plugins, params, errorHandler) {
+    'other': function (console, gulp, params, errorHandler) {
         return function (done) {
             var workDir = params.workDir;
 

@@ -4,13 +4,17 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    SpriteCrafterProxy = require('../script/sprite-crafter-proxy.js');
+    Timer = require('../script/timer.js');
+
+PluginLoader.add({'spriteCrafterProxy': ()=> require('../script/sprite-crafter-proxy.js')});
 
 // 雪碧图处理：
 // - 使用 Sprite Crafter（基于 spritesmith）解析CSS，自动合并雪碧图
-module.exports = function (console, gulp, plugins, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
             pattern = _path.resolve(workDir, '**/*@(.css)'),
@@ -25,12 +29,12 @@ module.exports = function (console, gulp, plugins, params, errorHandler) {
         scOpt.src = workDir;
         gulp.src(pattern)
             .pipe(plugins.plumber({'errorHandler': errorHandler}))
-            .pipe(SpriteCrafterProxy.analyseUsedImageMap(files, maps))
+            .pipe(plugins.spriteCrafterProxy.analyseUsedImageMap(files, maps))
             .pipe(gulp.dest(workDir))
             .on('end', function () {
                 scOpt.files = files;
                 scOpt.maps = maps;
-                SpriteCrafterProxy.process(scOpt, function () {
+                plugins.spriteCrafterProxy.process(scOpt, function () {
                     logId && console.useId && console.useId(logId);
                     console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'sprite_crafter 任务结束。（' + timer.getTime() + 'ms）');
                     done();

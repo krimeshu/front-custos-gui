@@ -4,13 +4,17 @@
 
 var _path = require('path'),
 
+    PluginLoader = require('../script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
+
     Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    FileUploader = require('../script/file-uploader.js');
+    Timer = require('../script/timer.js');
+
+PluginLoader.add({'FileUploader': ()=> require('../script/file-uploader.js')});
 
 // 上传：
 // - 将工作目录中的文件发到测试服务器
-module.exports = function (console, gulp, plugins, params, config, errorHandler) {
+module.exports = function (console, gulp, params, config, errorHandler) {
     return function (done) {
         var workDir = params.workDir,
 
@@ -27,7 +31,7 @@ module.exports = function (console, gulp, plugins, params, config, errorHandler)
             concurrentLimit = Infinity;
         }
 
-        var uploader = new FileUploader({
+        var uploader = new plugins.FileUploader({
             console: console,
             forInjector: params,
 
