@@ -144,7 +144,7 @@ module.exports = {
         Utils.makeSureDir(saveDirPath);
 
         var logId = Logger.genUniqueId();
-        Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '开始下载' + name + '...');
+        Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '开始下载' + name + '……');
         _progress(_request(url), {
             throttle: 100,
             delay: 0
@@ -161,7 +161,7 @@ module.exports = {
                 state.time['elapsed'],
                 's，预计剩余：',
                 state.time['remaining'],
-                's...'
+                's。'
             ];
             Logger.useId(logId);
             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));

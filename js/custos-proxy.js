@@ -97,7 +97,11 @@ var watch = function (_projWithOpt) {
             var baseName = _path.basename(f),
                 ignoreNames = ['package.json'],
                 regJetBrainsTempFile = /___jb_tmp___$/;
-            return ignoreNames.indexOf(baseName) < 0 && !regJetBrainsTempFile.test(baseName);
+            if (ignoreNames.indexOf(baseName) >= 0 || regJetBrainsTempFile.test(baseName)) {
+                return false;
+            }
+            // 排除生成文件的情况
+            return !FrontCustos.FilenameHelper.getOriginalPathFromCompiled(f);
         }
     }, function (f, curr, prev) {
         if (typeof f == "object" && prev === null && curr === null) {
@@ -105,15 +109,15 @@ var watch = function (_projWithOpt) {
         } else if (prev === null) {
             // f is a new file
             console.log(Utils.formatTime('[HH:mm:ss.fff]') + ' - 创建了文件: ', f);
-            rebuild();
+            rebuild(f);
         } else if (curr.nlink === 0) {
             // f was removed
             console.log(Utils.formatTime('[HH:mm:ss.fff]') + ' - 删除了文件: ', f);
-            rebuild();
+            rebuild(f);
         } else {
             // f was changed
             console.log(Utils.formatTime('[HH:mm:ss.fff]') + ' - 修改了文件: ', f);
-            rebuild();
+            rebuild(f);
         }
     });
 };
@@ -124,7 +128,7 @@ var unwatch = function (_projWithOpt) {
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        projDir = projWithOpt.projDir;
+        srcDir = FrontCustos.getSrcDir(projWithOpt);
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos < 0) {
@@ -134,7 +138,7 @@ var unwatch = function (_projWithOpt) {
     }
 
     Logger.info('停止监听项目：%c%s', 'color: white;', projName);
-    _watch.unwatchTree(projDir);
+    _watch.unwatchTree(srcDir);
 };
 
 var debounce = function (func, wait, immediate) {

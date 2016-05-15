@@ -72,11 +72,12 @@ TaskManager.prototype = {
         this._data.forEach(function (t) {
             var name = t.name,
                 task = t.task,
-                funcWithDep = injector.analyseDependencies(task);
+                funcWithDep = injector.analyseDependencies(task),
+                errorHandler = TaskErrorHandler.create(name);
             gulp.task(name, function (done) {
                 injector.registerMap({
                     // 每个任务中都会变化的依赖
-                    errorHandler: TaskErrorHandler.create(name)
+                    errorHandler: errorHandler
                 });
                 var executor = injector.invoke(funcWithDep);
                 return executor(done);

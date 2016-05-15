@@ -13,7 +13,7 @@ var Logger = require('./logger.js'),
     Utils = require('./utils.js'),
     CustosProxy = require('./custos-proxy.js');
 
-Model.onCurrentChanged(function(){
+Model.onCurrentChanged(function () {
     CustosProxy.fillTasks(Model.curProj.tasks);
 });
 
@@ -95,11 +95,18 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 保存项目配置
     $scope.saveProj = function () {
-        var res = Model.updateProj($scope.curProj),
-            projName = $scope.curProj.projName,
+        var proj = $scope.curProj,
+            res = Model.updateProj(proj),
+            projName = proj.projName,
             msg = res ?
             '项目 ' + projName + ' 配置保存完毕' :
             '项目 ' + projName + ' 配置保存失败，请稍后重试';
+        if (res && proj.watchToRebuilding) {
+            Logger.log('<hr/>');
+            Logger.info('项目配置发生变化，重新启动监听……');
+            CustosProxy.unwatch(proj);
+            CustosProxy.watch(proj);
+        }
         $scope.toastMsg(msg);
     };
 
@@ -151,6 +158,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         });
     };
 
+    // 提示出错询问上传信息
     var remindErrorAndUpload = function (params, msg, cb) {
         var errors = CustosProxy.FrontCustos.getErrorRecords();
         if (errors.length) {

@@ -11,13 +11,16 @@ var _os = require('os'),
     Timer = require('./script/timer.js'),
     ConsoleProxy = require('./script/console-proxy.js'),
     TaskErrorHandler = require('./script/task-error-handler.js'),
-    ConstReplacer = require('./script/const-replacer.js');
+    ConstReplacer = require('./script/const-replacer.js'),
+    FilenameHelper = require('./script/filename-helper.js');
 
 var config = {delUnusedFiles: true},
     running = false,
     taskManager = new TaskManager();
 
 module.exports = {
+    // 编译前后文件名转换管理
+    FilenameHelper: FilenameHelper,
     // 接管console
     takeOverConsole: ConsoleProxy.takeOverConsole.bind(ConsoleProxy),
     // 所有可用任务列表
