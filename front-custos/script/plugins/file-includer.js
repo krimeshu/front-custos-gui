@@ -5,7 +5,7 @@
 var _fs = require('fs'),
     _path = require('path'),
 
-    Utils = require('./utils.js');
+    Utils = require('../utils.js');
 
 var Through2 = require('through2');
 

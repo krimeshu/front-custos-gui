@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'FileUploader': ()=> require('../script/file-uploader.js')});
+PluginLoader.add({'FileUploader': ()=> require('../plugins/file-uploader.js')});
 
 // 上传：
 // - 将工作目录中的文件发到测试服务器

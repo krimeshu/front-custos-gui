@@ -4,12 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    ConstReplacer = require('../script/const-replacer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
+
+PluginLoader.add({'ConstReplacer': ()=> require('../plugins/const-replacer.js')});
 
 // 替换常量：
 // - 替换常见常量（项目路径、项目名字等）
@@ -23,7 +24,7 @@ module.exports = function (console, gulp, params, errorHandler) {
         logId && console.useId && console.useId(logId);
         console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'replace_const 任务开始……');
 
-        var replacer = new ConstReplacer({
+        var replacer = new plugins.ConstReplacer({
             PROJECT: Utils.replaceBackSlash(params.workDir),
             PROJECT_NAME: params.projName,
             VERSION: params.version

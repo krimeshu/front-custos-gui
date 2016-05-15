@@ -6,7 +6,7 @@ var _spritesmith = require('spritesmith'),
     _fs = require('fs'),
     _path = require('path'),
 
-    Utils = require('./utils.js'),
+    Utils = require('../utils.js'),
     FileCache = require('./file-cache.js');
 
 var ruleJson = {

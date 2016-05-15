@@ -5,14 +5,17 @@
 var _os = require('os'),
     _path = require('path'),
 
-    TaskManager = require('./task-manager.js'),
+    TaskManager = require('./script/task-manager.js'),
+    PluginLoader = require('./script/plugin-loader.js'),
+    plugins = PluginLoader.plugins,
 
     Utils = require('./script/utils.js'),
     Timer = require('./script/timer.js'),
     ConsoleProxy = require('./script/console-proxy.js'),
     TaskErrorHandler = require('./script/task-error-handler.js'),
-    ConstReplacer = require('./script/const-replacer.js'),
     FilenameHelper = require('./script/filename-helper.js');
+
+PluginLoader.add({'ConstReplacer': ()=> require('./script/plugins/const-replacer.js')});
 
 var config = {delUnusedFiles: true},
     running = false,
@@ -97,7 +100,7 @@ module.exports = {
         params.workDir = params.workDir || params.srcDir;
 
         // 生成项目常量并替换参数中的项目常量
-        var replacer = new ConstReplacer({
+        var replacer = new plugins.ConstReplacer({
             PROJECT: Utils.replaceBackSlash(params.workDir),
             PROJECT_NAME: params.projName,
             VERSION: params.version

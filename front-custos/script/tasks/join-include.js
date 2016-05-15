@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'FileIncluder': ()=> require('../script/file-includer.js')});
+PluginLoader.add({'FileIncluder': ()=> require('../plugins/file-includer.js')});
 
 // 合并文件：
 // - 根据 #include 包含关系，合并涉及到的文件

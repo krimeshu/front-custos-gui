@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'prefixCrafterProxy': ()=> require('../script/prefix-crafter-proxy.js')});
+PluginLoader.add({'prefixCrafterProxy': ()=> require('../plugins/prefix-crafter-proxy.js')});
 
 // 前缀处理：
 // - 使用 Prefix Crafter（基于 autoprefixer）处理CSS，自动添加需要的浏览器前缀

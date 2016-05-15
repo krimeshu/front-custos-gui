@@ -4,14 +4,14 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js'),
-    DependencyInjector = require('../script/dependency-injector.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js'),
+    DependencyInjector = require('../dependency-injector.js');
 
-PluginLoader.add({'FileLinker': ()=> require('../script/file-linker.js')});
+PluginLoader.add({'FileLinker': ()=> require('../plugins/file-linker.js')});
 
 // 发布：
 // - 清理发布目录

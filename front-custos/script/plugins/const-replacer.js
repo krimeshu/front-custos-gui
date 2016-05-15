@@ -2,7 +2,7 @@
  * Created by krimeshu on 2016/2/18.
  */
 
-var Utils = require('./utils.js');
+var Utils = require('../utils.js');
 
 var Through2 = require('through2');
 

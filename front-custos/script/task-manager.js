@@ -4,12 +4,12 @@
 
 var gulp = require('gulp'),
 
-    PluginLoader = require('./script/plugin-loader.js'),
+    PluginLoader = require('./plugin-loader.js'),
     plugins = PluginLoader.plugins,
     
-    ConsoleProxy = require('./script/console-proxy.js'),
-    DependencyInjector = require('./script/dependency-injector.js'),
-    TaskErrorHandler = require('./script/task-error-handler.js');
+    ConsoleProxy = require('./console-proxy.js'),
+    DependencyInjector = require('./dependency-injector.js'),
+    TaskErrorHandler = require('./task-error-handler.js');
 
 function TaskManager() {
     this._availableTasks = [];

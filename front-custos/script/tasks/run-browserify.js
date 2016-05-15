@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'BrowserifyProxy': ()=> require('../script/browserify-proxy.js')});
+PluginLoader.add({'BrowserifyProxy': ()=> require('../plugins/browserify-proxy.js')});
 
 // 使用Browserify打包JS:
 // - 内容中存在某行 'browserify entry'; 标记的脚本将被识别为入口进行打包

@@ -9,8 +9,8 @@ var _os = require('os'),
     Through2 = require('through2'),
     Request = require('request'),
 
-    Utils = require('./utils.js'),
-    DependencyInjector = require('./dependency-injector.js');
+    Utils = require('../utils.js'),
+    DependencyInjector = require('../dependency-injector.js');
 
 var FileUploader = function (opts, onError) {
     var self = this,

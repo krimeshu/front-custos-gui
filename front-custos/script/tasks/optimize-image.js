@@ -4,11 +4,11 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
 // 优化图片：
 // - Png图片有损压缩（PngQuant）

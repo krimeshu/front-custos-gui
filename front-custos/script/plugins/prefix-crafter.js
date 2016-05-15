@@ -3,7 +3,7 @@
  */
 
 var _fs = require('fs'),
-    _utils = require('./utils.js'),
+    _utils = require('../utils.js'),
     _postcss = require('postcss'),
     //_unprefix = require('postcss-unprefix'),
     _autoprefixer = require('autoprefixer');

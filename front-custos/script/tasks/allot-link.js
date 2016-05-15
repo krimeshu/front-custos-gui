@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'FileLinker': ()=> require('../script/file-linker.js')});
+PluginLoader.add({'FileLinker': ()=> require('../plugins/file-linker.js')});
 
 // 分发链接：
 // - 根据文件类型分发文件到不同的目录

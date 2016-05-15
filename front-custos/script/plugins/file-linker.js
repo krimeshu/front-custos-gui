@@ -8,7 +8,7 @@ var Through2 = require('through2'),
 var _fs = require('fs'),
     _path = require('path'),
 
-    Utils = require('./utils.js');
+    Utils = require('../utils.js');
 
 /**
  * 文件分发链接器

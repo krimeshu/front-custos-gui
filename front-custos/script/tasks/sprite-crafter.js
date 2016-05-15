@@ -4,13 +4,13 @@
 
 var _path = require('path'),
 
-    PluginLoader = require('../script/plugin-loader.js'),
+    PluginLoader = require('../plugin-loader.js'),
     plugins = PluginLoader.plugins,
 
-    Utils = require('../script/utils.js'),
-    Timer = require('../script/timer.js');
+    Utils = require('../utils.js'),
+    Timer = require('../timer.js');
 
-PluginLoader.add({'spriteCrafterProxy': ()=> require('../script/sprite-crafter-proxy.js')});
+PluginLoader.add({'spriteCrafterProxy': ()=> require('../plugins/sprite-crafter-proxy.js')});
 
 // 雪碧图处理：
 // - 使用 Sprite Crafter（基于 spritesmith）解析CSS，自动合并雪碧图
