@@ -63,6 +63,9 @@ function createWindow() {
     globalShortcut.register('ctrl+alt+r', function () {
         mainWindow.webContents.send('global-shortcut', 'ctrl+alt+r');
     });
+    globalShortcut.register('ctrl+alt+d', function () {
+        mainWindow.webContents.openDevTools();
+    });
 }
 
 // This method will be called when Electron has finished

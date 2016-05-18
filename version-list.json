@@ -5,20 +5,10 @@
   },
   "patches": [
     {
-      "from": "0.8.2",
-      "to": "0.8.7",
-      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_0.8.2_0.8.7.7z"
-    },
-    {
       "from": "0.8.11",
       "to": "0.8.11",
       "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_0.8.11_0.8.11.7z",
       "desc": "Just for testing."
-    },
-    {
-      "from": "1.0.5",
-      "to": "1.0.6",
-      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.0.5_1.0.6.7z"
     }
   ]
 }

@@ -62,12 +62,16 @@ module.exports = {
     extractPatch: function (patch) {
         return new Promise((resolve, reject)=> {
             var dirPath = _path.resolve(__dirname, '../'),
-                cmdPath = _path.resolve(dirPath, '7z'),
+                _7zPath = _path.resolve(dirPath, '7z'),
+                appRootPath = _path.resolve('./'),
                 patchPath = patch.path,
-                cp = _childProcess.spawn(cmdPath, ['e', patchPath, '-y'], {
-                    cwd: dirPath
+                args = ['x', _path.relative(appRootPath, patchPath), '-y'],
+                cp = _childProcess.spawn(_7zPath, args, {
+                    cwd: appRootPath
                 }),
                 console = Logger;
+            console.info(appRootPath);
+            console.log('%c$ %c' + _7zPath + ' ' + args.join(' '), 'color: #7c7c7c;', 'color: white;');
             cp.stdout.on('data', function (data) {
                 console.log(String(data));
             });
