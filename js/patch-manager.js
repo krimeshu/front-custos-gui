@@ -61,9 +61,9 @@ module.exports = {
     // 解压补丁包
     extractPatch: function (patch) {
         return new Promise((resolve, reject)=> {
-            var dirPath = _path.resolve(__dirname, '../'),
-                _7zPath = _path.resolve(dirPath, '7z'),
-                appRootPath = _path.resolve('./'),
+            var appRootPath = _path.resolve('./'),
+                dirPath = _path.resolve(__dirname, '../'),
+                _7zPath = _path.relative(appRootPath, _path.resolve(dirPath, '7z')),
                 patchPath = patch.path,
                 args = ['x', _path.relative(appRootPath, patchPath), '-y'],
                 cp = _childProcess.spawn(_7zPath, args, {
