@@ -63,5 +63,7 @@ _this.add({'cache': ()=> require('gulp-cache')});
 _this.add({'csso': ()=> require('gulp-csso')});
 _this.add({'imagemin': ()=> require('gulp-imagemin')});
 _this.add({'sass': ()=> require('gulp-sass')});
+_this.add({'babel': ()=> require('gulp-babel')});
+_this.add({'babelPresetEs2015': ()=> require('babel-preset-es2015')})
 
 module.exports = _this;

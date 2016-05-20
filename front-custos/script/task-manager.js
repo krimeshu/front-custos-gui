@@ -22,6 +22,7 @@ function TaskManager() {
     });
 
     this._define('compile_sass', require('./tasks/compile-sass'), '编译SASS文件');
+    this._define('run_babel', require('./tasks/run-babel'), '使用babel转换es6脚本');
     this._define('prepare_build', require('./tasks/prepare-build'), '准备项目构建', 'locked');
     this._define('replace_const', require('./tasks/replace-const'), '替换定义的常量');
     this._define('prefix_crafter', require('./tasks/prefix-crafter'), '添加CSS3前缀');
