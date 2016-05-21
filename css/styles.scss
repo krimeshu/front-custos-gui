@@ -131,8 +131,14 @@ input {
 }
 
 .window-header {
-  position: relative;
-  z-index: 2;
+  //position: relative;
+  //z-index: 2;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
 
   @at-root {
     @for $i from 1 through length($themeNames) {
@@ -182,9 +188,15 @@ input {
 }
 
 .window-content {
-  position: relative;
-  z-index: 1;
-  flex: 1;
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  //position: relative;
+  //z-index: 1;
+  //flex: 1;
 
   .not-selectable, .md-tab {
     -webkit-user-select: none;

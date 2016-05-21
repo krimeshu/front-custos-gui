@@ -471,8 +471,15 @@
 
     window.windowCtrl = {
         open: function () {
+            var fixTabPosition = function () {
+                $('md-tabs-content-wrapper')
+                        .css({'position': 'relative'})
+                        .each(new Function('this.clientWidth'))
+                        .css({'position': 'absolute'});
+            };
             window.setTimeout(function () {
                 document.querySelector('.shadow-box').classList.add('in');
+                window.setTimeout(fixTabPosition, 500);
             }, 100);
         },
         close: function () {

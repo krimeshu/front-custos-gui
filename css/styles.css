@@ -22,7 +22,6 @@ input {
 
 .ps-container .ps-scrollbar-y-rail, .ps-container .ps-scrollbar-y-rail:hover, .ps-container .ps-scrollbar-y-rail.hover, .ps-container .ps-scrollbar-y-rail:active, .ps-container .ps-scrollbar-y-rail.active, .ps-container .ps-scrollbar-y-rail.in-scrolling {
   background: transparent; }
-
 .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y {
   width: 6px; }
 
@@ -84,19 +83,27 @@ input {
   flex-direction: column; }
 
 .window-header {
-  position: relative;
-  z-index: 2;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   -webkit-user-select: none;
   -webkit-app-region: drag; }
   body[md-theme="default"] .window-header {
     background: #607D8B; }
+
   body[md-theme="pink"] .window-header {
     background: #E91C63; }
+
   body[md-theme="indigo"] .window-header {
     background: #3F51B5; }
+
   body[md-theme="orange"] .window-header {
     background: #FF5622; }
+
   body[md-theme="grey"] .window-header {
     background: #9E9E9E; }
   .window-header .clickable, .md-clickable {
@@ -117,9 +124,12 @@ input {
       flex: 1; }
 
 .window-content {
-  position: relative;
-  z-index: 1;
-  flex: 1; }
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto; }
   .window-content .not-selectable, .window-content .md-tab {
     -webkit-user-select: none; }
 
@@ -159,21 +169,25 @@ input {
     color: #2c3940; }
     body[md-theme="default"] .list-box .proj-list .proj-item.current {
       background-color: #a8bac3; }
+
   body[md-theme="pink"] .list-box {
     background-color: #fdedf3;
     color: #7a0c32; }
     body[md-theme="pink"] .list-box .proj-list .proj-item.current {
       background-color: #f490b3; }
+
   body[md-theme="indigo"] .list-box {
     background-color: #e4e7f6;
     color: #1e2756; }
     body[md-theme="indigo"] .list-box .proj-list .proj-item.current {
       background-color: #98a2db; }
+
   body[md-theme="orange"] .list-box {
     background-color: white;
     color: #a22600; }
     body[md-theme="orange"] .list-box .proj-list .proj-item.current {
       background-color: #ffb8a2; }
+
   body[md-theme="grey"] .list-box {
     background-color: white;
     color: #5e5e5e; }
@@ -261,3 +275,5 @@ input {
 .editor {
   position: relative;
   height: 200px; }
+
+/*# sourceMappingURL=styles.css.map */
