@@ -25,6 +25,7 @@
     },
     "tasks": [
       "compile_sass",
+      "run_babel",
       "prepare_build",
       "replace_const",
       "prefix_crafter",
