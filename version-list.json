@@ -9,6 +9,12 @@
       "to": "0.8.11",
       "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_0.8.11_0.8.11.7z",
       "desc": "Just for testing."
+    },
+    {
+      "from": "1.0.7",
+      "to": "1.1.2",
+      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.0.7_1.1.2.7z",
+      "desc": "Add babel task."
     }
   ]
 }
