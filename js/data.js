@@ -50,6 +50,11 @@ module.exports = {
         "postprocessing": "function postprocessing(console, distDir) {\n    console.log('项目输出目录：', distDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
         "keepOldCopy": false
     },
+    exampleProj: {
+        "id": "default_example_project_" + Date.now(),
+        "projName": "example",
+        "projDir": _path.resolve(__dirname, "../front-custos/example")
+    },
     // 加载全局配置
     loadConfig: function () {
         var configPath = Utils.configDir('./fc-config.json'),
@@ -91,7 +96,7 @@ module.exports = {
     // 加载项目列表
     loadProjList: function () {
         var listPath = Utils.configDir('./fc-project-list.json'),
-            list = [];
+            list = [this.exampleProj];
         if (!_fs.existsSync(listPath)) {
             this.saveProjList(list);
         } else {
