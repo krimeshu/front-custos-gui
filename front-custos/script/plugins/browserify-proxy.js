@@ -41,11 +41,11 @@ BrowserifyProxy.prototype = {
     handleFile: function () {
         var self = this;
         return Through2.obj(function (file, enc, cb) {
-            console.log('================================================================================');
-            console.log('> BrowserifyProxy.handleFile - file:', file.path);
+            // console.log('================================================================================');
+            // console.log('> BrowserifyProxy.handleFile - file:', file.path);
             var errReturned = false;
             _browserify(file.path).bundle(function (err, res) {
-                console.log('> BrowserifyProxy.handleFile.bundle - file:', file.path);
+                // console.log('> BrowserifyProxy.handleFile.bundle - file:', file.path);
                 err && self.onError && self.onError(err);
                 res && (file.contents = res);
                 !errReturned && cb(null, file);
