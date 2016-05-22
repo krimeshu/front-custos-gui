@@ -1,0 +1,38 @@
+body {
+  /*! 开启 prefix_crafter 任务还可自动添加CSS3样式前缀 */
+  display: flex;
+  justify-content: center;
+}
+
+article {
+  width: 800px;
+}
+
+pre {
+  margin: 1.5em 0;
+  padding: 1em;
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+
+  background: #f6f6f6;
+
+  code {
+    color: #657b83;
+    font-family: Source Code Pro, Consolas, Menlo, Monaco, Courier New, monospace;
+  }
+}
+
+%icon {
+  display: block;
+  width: 600px;
+  height: 600px;
+  background-size: 300px 300px;
+}
+
+@for $i from 1 through 2 {
+  .icon-#{$i} {
+    @extend %icon;
+    background: url("../images/icon-#{$i}.png#sc");
+  }
+}

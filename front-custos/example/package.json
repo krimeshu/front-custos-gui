@@ -1,9 +1,9 @@
 {
-  "version": "0.1.0",
+  "version": "1.0.1",
   "fcOpt": {
     "scOpt": {
-      "useRatio": 2,
-      "useRem": 10
+      "useRatio": "2",
+      "useRem": "1"
     },
     "pcOpt": {
       "browsers": "Android > 2.3, iOS > 6.0"
@@ -30,7 +30,6 @@
       "replace_const",
       "prefix_crafter",
       "sprite_crafter",
-      "run_csso",
       "join_include",
       "run_browserify",
       "allot_link",

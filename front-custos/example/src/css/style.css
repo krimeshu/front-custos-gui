@@ -1,15 +1,31 @@
+@charset "UTF-8";
+body {
+  /*! 开启 prefix_crafter 任务还可自动添加CSS3样式前缀 */
+  display: flex;
+  justify-content: center; }
+
+article {
+  width: 800px; }
+
+pre {
+  margin: 1.5em 0;
+  padding: 1em;
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+  background: #f6f6f6; }
+  pre code {
+    color: #657b83;
+    font-family: Source Code Pro, Consolas, Menlo, Monaco, Courier New, monospace; }
+
 .icon-1, .icon-2 {
-    display: block;
-    width: 600px;
-    height: 600px;
-}
+  display: block;
+  width: 600px;
+  height: 600px;
+  background-size: 300px 300px; }
 
 .icon-1 {
-    background: url("../images/icon-1.png#sc");
-    background-size: 300px 300px;
-}
+  background: url("../images/icon-1.png#sc"); }
 
 .icon-2 {
-    background: url("../images/icon-2.png#sc");
-    background-size: 300px 300px;
-}
+  background: url("../images/icon-2.png#sc"); }
