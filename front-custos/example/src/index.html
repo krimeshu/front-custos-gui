@@ -19,7 +19,10 @@
         <i class="icon-2"></i>
     </p>
 
-    <h2>3. SASS编译（compile_sass）：</h2>
+    <h2>3. 文件内容并入（join_include）：</h2>
+    #include('inc/_parts.html') <!-- 注：以_开头的文件，构建完成后会被清理掉 -->
+
+    <h2>4. SASS编译（compile_sass）：</h2>
     <p>
         <strong>源scss文件：</strong><br/>
     <pre><code>
@@ -33,13 +36,7 @@
 </code></pre>
     </p>
 
-    <h2>4. 文件内容并入（join_include）：</h2>
-    #include('inc/_parts.html') <!-- 注：以_开头的文件，构建完成后会被清理掉 -->
-
-    <h2>5. 用browserify打包脚本（run_browserify）：</h2>
-    <script src="js/bundle-entry.js"></script>
-
-    <h2>6. 用babel转换es6脚本（run_babel）：</h2>
+    <h2>5. 用babel转换es6脚本（run_babel）：</h2>
     <p>
         <strong>源es6文件：</strong><br/>
     <pre><code>
@@ -51,6 +48,11 @@
     <pre><code>
 #include('js/lib/es6-tests.js')
 </code></pre>
+    </p>
+
+    <h2>6. 用browserify打包脚本（run_browserify）：</h2>
+    <p>
+        <script src="js/bundle-entry.js"></script>
     </p>
 
     <h2>7. 分发并替换文件链接：</h2>
