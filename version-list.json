@@ -7,13 +7,13 @@
     {
       "from": "1.0.7",
       "to": "1.1.5",
-      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.0.7_1.1.2.7z",
+      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.0.7_1.1.5.7z",
       "desc": "Add babel task, bugs fixed."
     },
     {
       "from": "1.1.2",
       "to": "1.1.5",
-      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.0.7_1.1.2.7z",
+      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.1.2_1.1.5.7z",
       "desc": "Bugs fixed."
     }
   ]
