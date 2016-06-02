@@ -30,7 +30,6 @@ BrowserifyProxy.prototype = {
                     return cb();
                 }
 
-                file.contents = new Buffer(content.replace(self.reg, ''));
             } catch (e) {
                 self.onError && self.onError(e);
                 return cb();
@@ -47,7 +46,7 @@ BrowserifyProxy.prototype = {
             _browserify(file.path).bundle(function (err, res) {
                 console.log('> BrowserifyProxy.handleFile.bundle - file:', file.path);
                 err && self.onError && self.onError(err);
-                res && (file.contents = res);
+                res && (file.contents = new Buffer(String(res).replace(self.reg, '\n')));
                 !errReturned && cb(null, file);
                 errReturned = true;
             });
