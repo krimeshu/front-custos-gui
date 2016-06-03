@@ -55,12 +55,21 @@ var doUpload = function (params, cb) {
     if (FrontCustos.isRunning()) {
         return;
     }
+    FrontCustos.takeOverConsole(Logger);
     params.workDir = params.distDir;
     params.tasks = ['do_upload'];
     FrontCustos.runTasks(params, function () {
         Model.config.noticeWhenUploadFinished && Utils.playSE('upload-finished');
         cb && cb(params);
     });
+};
+
+var runTasks = function (params, cb) {
+    if (FrontCustos.isRunning()) {
+        return;
+    }
+    FrontCustos.takeOverConsole(Logger);
+    FrontCustos.runTasks(params, cb);
 };
 
 var watch = function (_projWithOpt) {
@@ -191,6 +200,7 @@ module.exports = {
     fillTasks: fillTasks,
     doBuild: doBuild,
     doUpload: doUpload,
+    runTasks: runTasks,
     watch: watch,
     unwatch: unwatch
 };

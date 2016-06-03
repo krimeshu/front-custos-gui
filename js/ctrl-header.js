@@ -7,7 +7,9 @@ var _path = require('path');
 var Data = require('./data.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
-    Updater = require('./updater.js');
+    Updater = require('./updater.js'),
+
+    CustosProxy = require('./custos-proxy');
 
 module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDialog) {
     $scope.version = appPackageFile.version;
@@ -28,6 +30,13 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
     // 关闭窗口
     $scope.closeWindow = function () {
         windowCtrl.close();
+    };
+
+    // 清空缓存
+    $scope.clearCache = function () {
+        CustosProxy.runTasks({
+            tasks: ['optimize_image:clear_cache']
+        });
     };
 
     // 显示配置对话框

@@ -62,5 +62,18 @@ module.exports = {
                 .pipe(gulp.dest(workDir))
                 .on('end', done);
         };
+    },
+    'clear_cache': function (console) {
+        return function (done) {
+            var timer = new Timer();
+            var logId = console.genUniqueId && console.genUniqueId();
+            logId && console.useId && console.useId(logId);
+            console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image:clear_cache 清空缓存中……');
+            return plugins.cache.clearAll(function(){
+                logId && console.useId && console.useId(logId);
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'optimize_image:clear_cache 缓存清空完毕。（' + timer.getTime() + 'ms）');
+                done();
+            });
+        };
     }
 };
