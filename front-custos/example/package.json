@@ -33,6 +33,7 @@
       "join_include",
       "run_browserify",
       "allot_link",
+      "optimize_image",
       "do_dist"
     ],
     "innerSrcDir": "./src",

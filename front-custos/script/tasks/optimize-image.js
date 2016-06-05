@@ -37,10 +37,7 @@ module.exports = {
 
             gulp.src(_path.resolve(workDir, '**/*.png'))
                 .pipe(plugins.plumber({'errorHandler': errorHandler}))
-                .pipe(plugins.cache(plugins.pngquant({
-                    quality: '50-80',
-                    speed: 4
-                })(), {
+                .pipe(plugins.cache(plugins.pngquant({quality: '50-80',speed: 4}), {
                     fileCache: new plugins.cache.Cache({cacheDirName: 'imagemin-cache'})
                 }))
                 .pipe(gulp.dest(workDir))
@@ -51,12 +48,14 @@ module.exports = {
         return function (done) {
             var workDir = params.workDir;
 
-            gulp.src(_path.resolve(workDir, '**/*.{jpg,gif}'))
+            gulp.src(_path.resolve(workDir, '**/*.{jpg,gif,svg}'))
                 .pipe(plugins.plumber({'errorHandler': errorHandler}))
-                .pipe(plugins.cache(plugins.imagemin({
-                    progressive: true,
-                    interlaced: true
-                }), {
+                .pipe(plugins.cache(plugins.imagemin([
+					plugins.imagemin.gifsicle({interlaced: true}),
+					plugins.imagemin.jpegtran({progressive: true}),
+					// plugins.imagemin.optipng({optimizationLevel: 5}),
+					plugins.imagemin.svgo({plugins: [{removeViewBox: false}]})
+				]), {
                     fileCache: new plugins.cache.Cache({cacheDirName: 'imagemin-cache'})
                 }))
                 .pipe(gulp.dest(workDir))
