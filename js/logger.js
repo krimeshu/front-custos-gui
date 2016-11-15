@@ -71,7 +71,7 @@ module.exports = {
     _format: function (args) {
         var formatStr = args[0];
         if (typeof(formatStr) !== 'string') {
-            formatStr = parseString(formatStr);
+            formatStr = this._stringify(formatStr);
         }
         var res = [];
         var formats = formatStr.split('%');
@@ -107,7 +107,7 @@ module.exports = {
                         break;
                     case 's':
                         try {
-                            res.push(parseString(arg));
+                            res.push(this._stringify(arg));
                         } catch (ex) {
                             res.push('');
                         }
@@ -115,7 +115,7 @@ module.exports = {
                     case 'O':
                     case 'o':
                         try {
-                            res.push(parseString(arg));
+                            res.push(this._stringify(arg));
                         } catch (ex) {
                             res.push('');
                         }
@@ -127,11 +127,22 @@ module.exports = {
         for (var len = args.length, restArg; offset < len; offset++) {
             restArg = args[offset];
             res.push(' ');
-            res.push(parseString(restArg));
+            res.push(this._stringify(restArg));
         }
         res = '<span>' + res.join('') + '</span>';
         res = res.replace(/\n/g, '<br/>');
         return res;
+    },
+    _stringify: function (arg) {
+        var type = typeof(arg);
+        switch (type) {
+            case 'string':
+                return arg;
+            case 'object':
+                return jsonViewer.toJSON(arg);
+            default:
+                return String(arg);
+        }
     }
 };
 
@@ -141,18 +152,6 @@ var jsonViewer = new JSONViewer({
     expand: 1,
     theme: 'dark'
 });
-
-var parseString = function (arg) {
-    var type = typeof(arg);
-    switch (type) {
-        case 'string':
-            return arg;
-        case 'object':
-            return jsonViewer.toJSON(arg);
-        default:
-            return String(arg);
-    }
-};
 
 // ----------------------------------------
 

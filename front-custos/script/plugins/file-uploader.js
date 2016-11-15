@@ -142,6 +142,11 @@ FileUploader.prototype = {
 
         results.queue = uploadQueue;
 
+        // 临时增加 cookie 配置
+        var cookieDir = Utils.configDir('./'),
+            cookiePath = _path.resolve(cookieDir, 'cookie.json'),
+            cookieStr = _fs.existsSync(cookiePath) ? _fs.readFileSync(cookiePath).toString() : '';
+
         var injector = new DependencyInjector(forInjector);
         injector.registerMap({
             uploadQueue: uploadQueue,
@@ -169,7 +174,7 @@ FileUploader.prototype = {
                         _onFailed(new Error('未指定上传页面地址'), undefined, done);
                         return;
                     }
-                    
+
                     uploadPage += sp + 't=' + new Date().getTime();
                     injector.registerMap(forInjector);
                     injector.registerMap({
@@ -202,12 +207,23 @@ FileUploader.prototype = {
                         }
                     }
 
+                    // var jar = null;
+                    // if (cookieStr) {
+                    //     jar = Request.jar();
+                    //     var cookie = Request.cookie(cookieStr);
+                    //     jar.setCookie(cookie, uploadPage);
+                    // }
+
                     var request = Request({
                         url: uploadPage,
+                        // jar: jar,
                         method: 'POST',
                         timeout: 10000,
                         headers: {
-                            connection: 'keep-alive'
+                            'Cache-Control': 'max-age=0',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36',
+                            'Cookie': cookieStr,
+                            'Connection': 'keep-alive'
                         }
                     }, function (err, msg, response) {
                         injector.registerMap({
