@@ -1,13 +1,13 @@
 {
   "latest": {
-    "version": "1.2.2",
-    "url": "https://github.com/Moonshell/front-custos-gui/releases/tag/v1.2.2"
+    "version": "1.2.3",
+    "url": "https://github.com/Moonshell/front-custos-gui/releases/tag/v1.2.3"
   },
   "patches": [
     {
-      "from": "1.1.2",
-      "to": "1.1.5",
-      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.1.2_1.1.5.7z",
+      "from": "1.2.2",
+      "to": "1.2.3",
+      "url": "https://github.com/Moonshell/front-custos-gui/raw/master/patches/patch_1.2.2_1.2.3.7z",
       "desc": "Bugs fixed."
     }
   ]
