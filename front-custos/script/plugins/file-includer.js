@@ -21,7 +21,7 @@ var FileIncluder = function (onError) {
 
 FileIncluder.prototype = {
     // 用于匹配语法的正则表达式
-    _regExp: /(?:\/\/|\/\*)?[#_]include\(['"]?(.*?)['"]?(,[\s\b\f\n\t\r]*\{[^\u0000]+?})?\)(?:\*\/)?/gi,
+    _regExp: /(?:\/\/|\/\*|<!--)?[#_]include\(['"]?(.*?)['"]?(,[\s\b\f\n\t\r]*\{[^\u0000]+?})?\)(?:\*\/|-->)?/gi,
     // 获取初始化后的正则表达式
     _getRegExp: function () {
         var self = this,

@@ -45,12 +45,20 @@ ConstReplacer.prototype = {
             return raw;
         }
 
+        // 特殊匹配：~/ = {PROJECT}/
+        var projectPath = String(constFields['PROJECT']),
+            val, reg;
+        if (projectPath) {
+            reg = /([('"]\s*)~([/|\\])/g;
+            val = projectPath;
+            res = res.replace(reg, '$1' + val.replace(/\u0024([`&'])/g, '$$$$$1') + '$2');
+        }
         for (var key in constFields) {
             if (!constFields.hasOwnProperty(key)) {
                 continue;
             }
-            var val = String(constFields[key]),
-                reg = constRegs[key];
+            val = String(constFields[key]);
+            reg = constRegs[key];
             res = res.replace(reg, val.replace(/\u0024([`&'])/g, '$$$$$1'));
         }
         return res;
