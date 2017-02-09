@@ -77,9 +77,10 @@ VuePhpSsrTemplateCompiler.prototype = {
                     listName = forPropMatch[3];
                 $this.before('<?php foreach ($' + listName + ' as $' + keyName + ' => $' + valueName + ') { ?>')
                     .after('<?php } ?>');
-                $this.removeAttr('v-for').attr('v-if', 'keepPhpSsrDom');
+                $this.removeAttr('v-for');
                 // console.log('found v-for');
             });
+            $('[clear-before-render]').attr('v-if', 'false').removeAttr('clear-before-render');
             $('[v-cloak]').removeAttr('v-cloak');
 
             var _phpTpl = $.html(),
