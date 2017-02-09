@@ -180,11 +180,11 @@ FileIncluder.prototype = {
                                 key = key.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1');
                                 var value = String(_para[key]),
                                     valueReg = new RegExp('#' + key + '#', 'g');
-                                _content = _content.replace(valueReg, value.replace(/\u0024([`&'])/g, '$$$$$1'));
+                                _content = _content.replace(valueReg, value.replace(/\u0024([$`&'])/g, '$$$$$1'));
                             }
                         }
                     }
-                    newContent = newContent.replace(_str, _content.replace(/\u0024([`&'])/g, '$$$$$1'));
+                    newContent = newContent.replace(_str, _content.replace(/\u0024([$`&'])/g, '$$$$$1'));
                 }
 
                 cache[filePath] = newContent;

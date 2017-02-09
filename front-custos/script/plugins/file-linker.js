@@ -97,7 +97,7 @@ FileLinker.prototype = {
             // 忽略非本地文件
             /^(http|https|data|javascript|about|chrome):/.test(_rawStr) ||
             // 忽略各种模板标记
-            /((\{\{|}})|(<%|%>)|(\{.*?})|^\$)/.test(_rawStr)
+            /((\{\{|}})|(<|>)|(\{.*?})|^\$)/.test(_rawStr)
         );
     },
     // 获取单个文件的引用依赖关系表
@@ -150,10 +150,10 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                //_newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),
+                    //_newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([$`&'])/g, '$$$$$1')),
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
-                newContent = newContent.replace(_reg, _newFile.replace(/\u0024([`&'])/g, '$$$$$1'));
+                newContent = newContent.replace(_reg, _newFile.replace(/\u0024([$`&'])/g, '$$$$$1'));
             }
         }
         //if (content.substr(0, 1000) != newContent.substr(0, 1000)) {
@@ -210,11 +210,11 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),  // 注意，与上面不同
+                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([$`&'])/g, '$$$$$1')),  // 注意，与上面不同
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
                 //console.log(_rawStr, '=>', _newStr);
-                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([`&'])/g, '$$$$$1'));
+                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([$`&'])/g, '$$$$$1'));
             }
         }
         if (cb) {
@@ -263,10 +263,10 @@ FileLinker.prototype = {
             usedFiles.push(_file);
             if (cb) {
                 var _newFile = cb(_rawFile, _file),       // 调整后文件路径 = 处理（原始文件路径, 原始文件完整路径）
-                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([`&'])/g, '$$$$$1')),  // 注意，与上面不同
+                    _newStr = _rawStr.replace(_rawFile, _newFile.replace(/\u0024([$`&'])/g, '$$$$$1')),  // 注意，与上面不同
                     _pattern = _rawStr.replace(/([\^\$\(\)\*\+\.\[\]\?\\\{}\|])/g, '\\$1'),
                     _reg = new RegExp(_pattern, 'g');
-                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([`&'])/g, '$$$$$1'));
+                newContent = newContent.replace(_reg, _newStr.replace(/\u0024([$`&'])/g, '$$$$$1'));
             }
         }
         if (cb) {
@@ -285,6 +285,8 @@ FileLinker.prototype = {
 
         var content = String(file.contents),
             $ = Cheerio.load(content, {
+                recognizeSelfClosing: true,
+                normalizeWhitespace: false,
                 lowerCaseTags: false,
                 lowerCaseAttributeNames: false,
                 recognizeSelfClosing: true,
@@ -342,6 +344,7 @@ FileLinker.prototype = {
             }
         });
         if (cb) {
+                // 不推荐使用 $this.xml()，会将 <div></div> 转换成 <div/>
             file.contents = new Buffer($.html());
         }
         //console.log(' |  _getUsedFilesByDom:', usedFiles);
@@ -391,9 +394,9 @@ FileLinker.prototype = {
             //console.log('- baseName:', baseName, '\n- fileType:', fileType, '\n- flattenDir:', flattenDir, '\n===')
 
             var fileRela = (flatten ?
-                        _path.relative(src, _path.resolve(src, flattenDir, baseName)) :
-                        _path.relative(src, filePath)
-                ),
+                _path.relative(src, _path.resolve(src, flattenDir, baseName)) :
+                _path.relative(src, filePath)
+            ),
                 newFilePath = Utils.replaceBackSlash(allot ?
                     _path.resolve(src, isPage ? pageAllotDir : staticAllotDir, fileRela) :
                     _path.resolve(src, fileRela)
@@ -411,12 +414,12 @@ FileLinker.prototype = {
                     _flattenDir = flattenMap[_fileType] || '';
 
                 var _fileRela = (flatten ?
-                            _path.relative(src, _path.resolve(src, _flattenDir, _baseName)) :
-                            _path.relative(src, _filePath)
-                    ),
+                    _path.relative(src, _path.resolve(src, _flattenDir, _baseName)) :
+                    _path.relative(src, _filePath)
+                ),
                     _newFilePath = (allot ?
-                            _path.resolve(src, _isPage ? pageAllotDir : staticAllotDir, _fileRela) :
-                            _path.resolve(src, _fileRela)
+                        _path.resolve(src, _isPage ? pageAllotDir : staticAllotDir, _fileRela) :
+                        _path.resolve(src, _fileRela)
                     ),
                     _newFile;
 

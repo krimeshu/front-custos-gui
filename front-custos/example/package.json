@@ -28,6 +28,7 @@
       "run_babel",
       "prepare_build",
       "replace_const",
+      "vue_php_ssr_template",
       "prefix_crafter",
       "sprite_crafter",
       "join_include",

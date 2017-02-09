@@ -51,7 +51,7 @@ ConstReplacer.prototype = {
         if (projectPath) {
             reg = /([('"]\s*)~([/|\\])/g;
             val = projectPath;
-            res = res.replace(reg, '$1' + val.replace(/\u0024([`&'])/g, '$$$$$1') + '$2');
+            res = res.replace(reg, '$1' + val.replace(/\u0024([$`&'])/g, '$$$$$1') + '$2');
         }
         for (var key in constFields) {
             if (!constFields.hasOwnProperty(key)) {
@@ -59,7 +59,7 @@ ConstReplacer.prototype = {
             }
             val = String(constFields[key]);
             reg = constRegs[key];
-            res = res.replace(reg, val.replace(/\u0024([`&'])/g, '$$$$$1'));
+            res = res.replace(reg, val.replace(/\u0024([$`&'])/g, '$$$$$1'));
         }
         return res;
     },

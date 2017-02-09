@@ -25,6 +25,7 @@ function TaskManager() {
     this._define('run_babel', require('./tasks/run-babel'), '使用babel转换es6脚本');
     this._define('prepare_build', require('./tasks/prepare-build'), '准备项目构建', 'locked');
     this._define('replace_const', require('./tasks/replace-const'), '替换定义的常量');
+    this._define('vue_php_ssr_template', require('./tasks/vue-php-ssr-template'), '处理Vue-PHP服务端模板');
     this._define('prefix_crafter', require('./tasks/prefix-crafter'), '添加CSS3前缀');
     this._define('sprite_crafter', require('./tasks/sprite-crafter'), '自动合并雪碧图');
     this._define('run_csso', require('./tasks/run-csso'), '压缩样式');
@@ -79,6 +80,7 @@ TaskManager.prototype = {
             gulp.task(name, function (done) {
                 injector.registerMap({
                     // 每个任务中都会变化的依赖
+                    taskName: name,
                     errorHandler: errorHandler
                 });
                 var executor = injector.invoke(funcWithDep);
