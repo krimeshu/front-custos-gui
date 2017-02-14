@@ -24,7 +24,7 @@ VuePhpSsrTemplateCompiler.prototype = {
     _regForProp: /^\s*\(\s*([^\s]*?)\s*,\s*([^\s]*?)\s*\)\s*in\s*([^\s]*?)\s*$/gi,
     _regForMustache: /{{([^\u0000]*?)}}/gi,
     _regSplit: /[\s\+\-\*\/&\^\|\[\]\(\)\{\}=\!~\?:]/,
-    _regPreserve: /(undefined|null)/,
+    _regPreserve: /(true|false|null)/,
     handleFile: function () {
         var self = this;
         return Through2.obj(function (file, enc, cb) {
@@ -117,8 +117,12 @@ VuePhpSsrTemplateCompiler.prototype = {
                                     return f.replace(/^\s*/, '');
                                 }).join('');
                                 // 是否合法变量名
-                                if (/^[_\$a-z]/i.test(_varName) && !_isPreserve.test(_varName)) {
+                                let isPreserve = _isPreserve.test(_varName);
+                                if (/^[_\$a-z]/i.test(_varName) && !isPreserve) {
                                     _varName = '$' + _varName;
+                                }
+                                if (isPreserve) {
+                                    _varName = _varName.toUpperCase();
                                 }
                                 _newStr += _varName;
                             }
