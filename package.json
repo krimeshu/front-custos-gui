@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Moonshell/front-custos-gui.git"
+    "url": "git+https://github.com/krimeshu/front-custos-gui.git"
   },
   "author": "krimeshu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Moonshell/front-custos-gui/issues"
+    "url": "https://github.com/krimeshu/front-custos-gui/issues"
   },
-  "homepage": "https://github.com/Moonshell/front-custos-gui#readme",
+  "homepage": "https://github.com/krimeshu/front-custos-gui#readme",
   "dependencies": {
     "angular": "^1.5.6",
     "angular-animate": "^1.5.6",

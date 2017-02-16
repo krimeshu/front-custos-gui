@@ -4,9 +4,9 @@
 
 根据日常项目中的常见的前端开发需求，基于`gulp`任务流程、各种处理模块，提供快速创建、管理、运行前端自动任务的辅助工具。
 
-![screenshot-gui](https://github.com/Moonshell/front-custos-gui/raw/master/screenshot-gui.png)
+![screenshot-gui](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-gui.png)
 
-![screenshot-command-line](https://github.com/Moonshell/front-custos-gui/raw/master/screenshot-command-line.png)
+![screenshot-command-line](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-command-line.png)
 
 ## 一、相对旧工具
 

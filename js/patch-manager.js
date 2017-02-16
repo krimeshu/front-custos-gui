@@ -12,7 +12,7 @@ var _fs = require('fs'),
 var Utils = require('./utils.js'),
     Logger = require('./logger.js');
 
-var VERSION_LIST_URL = 'https://github.com/Moonshell/front-custos-gui/raw/master/version-list.json';
+var VERSION_LIST_URL = 'https://github.com/krimeshu/front-custos-gui/raw/master/version-list.json';
 
 module.exports = {
     // 获取本地已有的补丁包列表
