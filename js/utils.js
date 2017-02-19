@@ -2,10 +2,9 @@
  * Created by krimeshu on 2016/1/10.
  */
 
-var Utils = require('../front-custos/script/utils.js');
+var Utils = require('front-custos/script/utils.js');
 
-function UtilsGUI() {
-}
+var UtilsGUI = new Function();
 UtilsGUI.prototype = Utils;
 
 var _this = new UtilsGUI();

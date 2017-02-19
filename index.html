@@ -95,6 +95,7 @@
     <main class="window-content" ng-controller="ListBoxCtrl as ctrl">
         <!-- Project List -->
         <md-content class="list-box">
+            <!--主要是为了修改滚动条样式-->
             <perfect-scrollbar class="list-scroll"
                                wheel-propagation="true"
                                wheel-speed="2"
@@ -103,16 +104,16 @@
                 <md-list class="proj-list not-selectable"
                          data-as-sortable="dragControlListeners"
                          data-ng-model="projList">
-                    <md-list-item class="proj-item {{isCurrent(item.id)}}"
+                    <md-list-item class="_md-button-wrap proj-item {{isCurrent(item.id)}}"
                                   data-id="{{item.id}}"
                                   ng-repeat="item in projList"
                                   ng-click="setCurrent(item.id, $event)"
                                   aria-label="{{item.projName}}"
                                   data-as-sortable-item>
-                        <p class="proj-name"
+                        <span class="proj-name"
                            ng-bind="item.projName"
                            title="{{item.projName}}"
-                           data-as-sortable-item-handle></p>
+                           data-as-sortable-item-handle></span>
                     </md-list-item>
                 </md-list>
             </perfect-scrollbar>

@@ -5,7 +5,8 @@
 var Data = require('./data.js'),
     Logger = require('./logger.js'),
     Utils = require('./utils.js'),
-    FrontCustos = require('../front-custos');
+    
+    FrontCustos = require('front-custos');
 
 var _this = module.exports = {
     allTasks: FrontCustos.availableTasks,

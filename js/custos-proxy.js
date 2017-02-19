@@ -10,7 +10,7 @@ var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = require('../front-custos'),
+    FrontCustos = require('front-custos'),
 
     buildWhenFinished = null;
 
