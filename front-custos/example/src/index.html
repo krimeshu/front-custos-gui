@@ -1,66 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Example</title>
 </head>
+
 <body>
 
-<article class="main">
-    <h1>基本功能示范</h1>
+    <article class="main">
+        <h1>基本功能示范</h1>
 
-    <h2>1. 常量替换（replace_const）：</h2>
-    <p>{PROJECT_NAME} (Ver {VERSION})</p>
-    <link rel="stylesheet" href="{PROJECT}/css/style.css"/>
+        <h2>1. 常量替换（replace_const）：</h2>
+        <p>{PROJECT_NAME} (Ver {VERSION})</p>
+        <link rel="stylesheet" href="{PROJECT}/css/style.css" />
 
-    <h2>2. 雪碧图合成（sprite_crafter）：</h2>
-    <p>
-        <i class="icon-1"></i>
-        <i class="icon-2"></i>
-    </p>
+        <h2>2. 雪碧图合成（sprite_crafter）：</h2>
+        <p>
+            <i class="icon-1"></i>
+            <i class="icon-2"></i>
+        </p>
 
-    <h2>3. 文件内容并入（join_include）：</h2>
-    #include('inc/_parts.html') <!-- 注：以_开头的文件，构建完成后会被清理掉 -->
+        <h2>3. 文件内容并入（join_include）：</h2>
+        #include('inc/_parts.html')
+        <!-- 注：以_开头的文件，构建完成后会被清理掉 -->
 
-    <h2>4. SASS编译（compile_sass）：</h2>
-    <p>
-        <strong>源scss文件：</strong><br/>
-    <pre><code>
+        <h2>4. SASS编译（compile_sass）：</h2>
+        <p>
+            <strong>源scss文件：</strong><br/>
+            <pre><code>
 #include('css/style.scss')
-</code></pre>
-    </p>
-    <p>
-        <strong>生成css文件：</strong><br/>
-    <pre><code>
+            </code></pre>
+        </p>
+        <p>
+            <strong>生成css文件：</strong><br/>
+            <pre><code>
 #include('css/style.css')
-</code></pre>
-    </p>
+            </code></pre>
+        </p>
 
-    <h2>5. 用babel转换es6脚本（run_babel）：</h2>
-    <p>
-        <strong>源es6文件：</strong><br/>
-    <pre><code>
+        <h2>5. 用babel转换es6脚本（run_babel）：</h2>
+        <p>
+            <strong>源es6文件：</strong><br/>
+            <pre><code>
 #include('js/lib/es6-tests.es6')
-</code></pre>
-    </p>
-    <p>
-        <strong>生成js文件：</strong><br/>
-    <pre><code>
+            </code></pre>
+        </p>
+        <p>
+            <strong>生成js文件：</strong><br/>
+            <pre><code>
 #include('js/lib/es6-tests.js')
-</code></pre>
-    </p>
+            </code></pre>
+        </p>
 
-    <h2>6. 用browserify打包脚本（run_browserify）：</h2>
-    <p>
-        <script src="js/bundle-entry.js"></script>
-    </p>
+        <h2>6. 用browserify打包脚本（run_browserify）：</h2>
+        <p>
+            <script src="js/bundle-entry.js"></script>
+        </p>
 
-    <h2>7. 分发并替换文件链接：</h2>
-    <p>
-        <img src="images/old-street.jpg"
-             data-org-src="images/old-street.jpg"/>
-    </p>
-</article>
+        <h2>7. 用rollup打包脚本（rollup_bundle）：</h2>
+        <p>
+            <script src="js/use-small-module.js"></script>
+        </p>
+
+        <h2>8. 分发并替换文件链接：</h2>
+        <p>
+            <img src="images/old-street.jpg" data-org-src="images/old-street.jpg" />
+        </p>
+    </article>
 
 </body>
+
 </html>

@@ -65,5 +65,6 @@ _this.add({'imagemin': ()=> require('gulp-imagemin')});
 _this.add({'sass': ()=> require('gulp-sass')});
 _this.add({'babel': ()=> require('gulp-babel')});
 _this.add({'babelPresetEs2015': ()=> require('babel-preset-es2015')});
+_this.add({'babelPluginExternalHelpers': ()=> require('babel-plugin-external-helpers')});
 
 module.exports = _this;

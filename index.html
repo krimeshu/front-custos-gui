@@ -191,7 +191,7 @@
                                 <md-card-content layout="column">
                                     <div layout="row">
                                         <md-input-container class="md-block" flex="70">
-                                            <label>名称</label>
+                                            <label>显示名称</label>
                                             <input ng-model="curProj.projName" name="projName" required
                                                    ng-disabled="curProj.id === null"
                                                    placeholder="为将要处理的项目取个好记的名字"/>
@@ -282,6 +282,25 @@
                     </md-tab>
                     <md-tab label="任务配置">
                         <md-content layout-margin>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">Rollup 打包</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <md-input-container class="md-block" flex>
+                                        <label>入口脚本（一行一个）</label>
+                                        <textarea ng-model="curProj.ruOpt.entry" 
+                                               name="ruEntry" row="5"
+                                               ng-disabled="curProj.id === null"
+                                               placeholder="相对项目源目录的路径，如：js/index.js">
+                                        </textarea>
+                                    </md-input-container>
+                                </md-card-content>
+                            </md-card>
+
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
@@ -289,28 +308,30 @@
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content layout="column">
-                                    <md-input-container class="md-block" flex>
-                                        <label>像素密度</label>
-                                        <input ng-model="curProj.scOpt.useRatio" name="scRatio"
-                                               ng-disabled="curProj.id === null"
-                                               ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                               required placeholder="1=普通，大于1=Retina"/>
-                                        <div ng-messages="curProjForm.scRatio.$error">
-                                            <div ng-message="required">请输入一个普通数值</div>
-                                            <div ng-message="pattern">请输入一个有效的数值</div>
-                                        </div>
-                                    </md-input-container>
-                                    <md-input-container class="md-block" flex>
-                                        <label>Rem像素比</label>
-                                        <input ng-model="curProj.scOpt.useRem" name="scRem"
-                                               ng-disabled="curProj.id === null"
-                                               ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                               required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
-                                        <div ng-messages="curProjForm.scRem.$error">
-                                            <div ng-message="required">请输入一个普通数值</div>
-                                            <div ng-message="pattern">请输入一个有效的数值</div>
-                                        </div>
-                                    </md-input-container>
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>设备像素密度</label>
+                                            <input ng-model="curProj.scOpt.useRatio" name="scRatio"
+                                                ng-disabled="curProj.id === null"
+                                                ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                                required placeholder="1=普通，大于1=Retina"/>
+                                            <div ng-messages="curProjForm.scRatio.$error">
+                                                <div ng-message="required">请输入一个普通数值</div>
+                                                <div ng-message="pattern">请输入一个有效的数值</div>
+                                            </div>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>Rem像素比</label>
+                                            <input ng-model="curProj.scOpt.useRem" name="scRem"
+                                                ng-disabled="curProj.id === null"
+                                                ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                                required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
+                                            <div ng-messages="curProjForm.scRem.$error">
+                                                <div ng-message="required">请输入一个普通数值</div>
+                                                <div ng-message="pattern">请输入一个有效的数值</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
                                     <md-input-container class="md-block" flex>
                                         <label>输出目录</label>
                                         <input ng-model="curProj.scOpt.outputDir" name="scOutput"

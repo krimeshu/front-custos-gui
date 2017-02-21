@@ -15,7 +15,7 @@ PluginLoader.add({'FileLinker': ()=> require('../plugins/file-linker.js')});
 // 分发链接：
 // - 根据文件类型分发文件到不同的目录
 // - 根据 #link 语法、CSS中 url() 匹配和 HTML 解析，自动提取并替换静态资源的链接
-module.exports = function (console, gulp, params, config, errorHandler) {
+module.exports = function (console, gulp, params, config, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir,
             alOpt = params.alOpt,
@@ -29,7 +29,7 @@ module.exports = function (console, gulp, params, config, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
 
         var linker = new plugins.FileLinker({
             // php代码处理异常时，请关闭 cheerio 解析
@@ -66,7 +66,7 @@ module.exports = function (console, gulp, params, config, errorHandler) {
                 // 3. 清空构建目录的过期旧文件
                 var afterClean = function () {
                     logId && console.useId && console.useId(logId);
-                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'allot_link 任务结束。（' + timer.getTime() + 'ms）');
+                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
                     done();
                 };
                 var cleanFailed = function (e) {

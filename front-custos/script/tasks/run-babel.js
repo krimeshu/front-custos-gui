@@ -12,7 +12,7 @@ var _path = require('path'),
 
 // 使用 babel 处理脚本文件:
 // - 通过 gulp-babel 转换 es6 的 javscript
-module.exports = function (console, gulp, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir,
             pattern = _path.resolve(workDir, '**/*@(.es6)');
@@ -20,9 +20,9 @@ module.exports = function (console, gulp, params, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_babel 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
         gulp.src(pattern)
-            .pipe(plugins.plumber({'errorHandler': errorHandler}))
+            .pipe(plugins.plumber({ 'errorHandler': errorHandler }))
             .pipe(plugins.babel({
                 presets: [plugins.babelPresetEs2015]
             }).on('error', function () {
@@ -32,7 +32,7 @@ module.exports = function (console, gulp, params, errorHandler) {
             .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
-                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_babel 任务结束。（' + timer.getTime() + 'ms）');
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     };

@@ -14,7 +14,7 @@ PluginLoader.add({'BrowserifyProxy': ()=> require('../plugins/browserify-proxy.j
 
 // 使用Browserify打包JS:
 // - 内容中存在某行 'browserify entry'; 标记的脚本将被识别为入口进行打包
-module.exports = function (console, gulp, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir,
             pattern = _path.resolve(workDir, '**/*@(.js)');
@@ -24,7 +24,7 @@ module.exports = function (console, gulp, params, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_browserify 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
         gulp.src(pattern)
             .pipe(plugins.plumber({'errorHandler': errorHandler}))
             .pipe(browserify.findEntryFiles())
@@ -32,7 +32,7 @@ module.exports = function (console, gulp, params, errorHandler) {
             .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
-                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_browserify 任务结束。（' + timer.getTime() + 'ms）');
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     };

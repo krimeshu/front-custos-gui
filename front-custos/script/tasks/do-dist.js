@@ -11,13 +11,13 @@ var _path = require('path'),
     Timer = require('../timer.js'),
     DependencyInjector = require('../dependency-injector.js');
 
-PluginLoader.add({'FileLinker': ()=> require('../plugins/file-linker.js')});
+PluginLoader.add({ 'FileLinker': () => require('../plugins/file-linker.js') });
 
 // 发布：
 // - 清理发布目录
 // - 将构建目录中的文件输出到发布目录
 // - 工作目录转到发布目录
-module.exports = function (console, gulp, params, config, errorHandler) {
+module.exports = function (console, gulp, params, config, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir,
             distDir = params.distDir,
@@ -29,7 +29,7 @@ module.exports = function (console, gulp, params, config, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
 
         var linker = new plugins.FileLinker({
             // php代码处理异常时，请关闭 cheerio 解析
@@ -47,7 +47,7 @@ module.exports = function (console, gulp, params, config, errorHandler) {
 
         var afterClean = function () {
             gulp.src(_path.resolve(workDir, '**/*'))
-                .pipe(plugins.plumber({'errorHandler': errorHandler}))
+                .pipe(plugins.plumber({ 'errorHandler': errorHandler }))
                 .pipe(linker.excludeUnusedFiles(usedFiles))
                 .pipe(linker.excludeEmptyDir())
                 .pipe(gulp.dest(distDir))
@@ -73,7 +73,7 @@ module.exports = function (console, gulp, params, config, errorHandler) {
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的后处理将本执行异常：', e);
                     }
                     logId && console.useId && console.useId(logId);
-                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'do_dist 任务结束。（' + timer.getTime() + 'ms）');
+                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
 
                     done();
                 });
@@ -85,6 +85,6 @@ module.exports = function (console, gulp, params, config, errorHandler) {
 
             afterClean();
         };
-        plugins.del([_path.resolve(distDir, '**/*')], {force: true}).then(afterClean).catch(cleanFailed);
+        plugins.del([_path.resolve(distDir, '**/*')], { force: true }).then(afterClean).catch(cleanFailed);
     };
 };

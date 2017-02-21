@@ -48,12 +48,12 @@ var testRunner = new ES6TestRunner({
         console.log(str);
     },
     'test-destructuring': function () {
-        let dog = {type: 'animal', many: 2};
+        let dog = { type: 'animal', many: 2 };
         let {type, many} = dog;
         console.log(type, many);   //animal 2
 
-        let cat = {type: "animal", many: 1};
-        let zoo = {cat, dog};
+        let cat = { type: "animal", many: 1 };
+        let zoo = { cat, dog };
         console.log(zoo);  //Object {cat: {"type": "animal", "many": 1} dog: {"type": "animal", "many": 2}}
     },
     'test-defaultAndRest': function () {
@@ -74,7 +74,7 @@ var testRunner = new ES6TestRunner({
             name: 'async task',
             run: function () {
                 console.log(this.name + ': start...');
-                setTimeout(()=> {
+                setTimeout(() => {
                     console.log(this.name + ': complete.');
                 }, 1000);
             }
@@ -84,5 +84,8 @@ var testRunner = new ES6TestRunner({
 });
 
 export function test() {
+    document.write('test in es6-tests.es6<br/>');
     testRunner.runTests();
 }
+
+export default testRunner;

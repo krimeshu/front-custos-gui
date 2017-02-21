@@ -130,5 +130,8 @@ var testRunner = new _es6TestRunner2.default({
 });
 
 function test() {
+    document.write('test in es6-tests.es6<br/>');
     testRunner.runTests();
 }
+
+exports.default = testRunner;

@@ -15,7 +15,7 @@ var _path = require('path'),
 // - 清理构建目录
 // - 复制工作目录文件到构建目录
 // - 工作目录转移至构建目录
-module.exports = function (console, gulp, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir,
             buildDir = params.buildDir;
@@ -23,10 +23,10 @@ module.exports = function (console, gulp, params, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
         var afterClean = function () {
             gulp.src([_path.resolve(workDir, '**/*'), '!*___jb_tmp___'])
-                .pipe(plugins.plumber({'errorHandler': errorHandler}))
+                .pipe(plugins.plumber({ 'errorHandler': errorHandler }))
                 .pipe(gulp.dest(buildDir))
                 .on('end', function () {
                     // 工作目录转到构建目录
@@ -50,7 +50,7 @@ module.exports = function (console, gulp, params, errorHandler) {
                         console.error(Utils.formatTime('[HH:mm:ss.fff]'), '项目的预处理将本执行异常：', e);
                     }
                     logId && console.useId && console.useId(logId);
-                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'prepare_build 任务结束。（' + timer.getTime() + 'ms）');
+                    console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
 
                     done();
                 });
@@ -62,6 +62,6 @@ module.exports = function (console, gulp, params, errorHandler) {
 
             afterClean();
         };
-        plugins.del([_path.resolve(buildDir, '**/*')], {force: true}).then(afterClean).catch(cleanFailed);
+        plugins.del([_path.resolve(buildDir, '**/*')], { force: true }).then(afterClean).catch(cleanFailed);
     };
 };

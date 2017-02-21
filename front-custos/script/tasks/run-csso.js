@@ -12,16 +12,16 @@ var _path = require('path'),
 
 // 压缩CSS
 // - 消除 css 文件中的缩进、换行符等字符，减小文件体积
-module.exports = function (console, gulp, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir;
 
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
         gulp.src(_path.resolve(workDir, '**/*.css'))
-            .pipe(plugins.plumber({'errorHandler': errorHandler}))
+            .pipe(plugins.plumber({ 'errorHandler': errorHandler }))
             .pipe(plugins.csso({
                 restructure: false,
                 sourceMap: false,
@@ -30,7 +30,7 @@ module.exports = function (console, gulp, params, errorHandler) {
             .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
-                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'run_csso 任务结束。（' + timer.getTime() + 'ms）');
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     };

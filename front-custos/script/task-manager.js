@@ -30,6 +30,7 @@ function TaskManager() {
     this._define('sprite_crafter', require('./tasks/sprite-crafter'), '自动合并雪碧图');
     this._define('run_csso', require('./tasks/run-csso'), '压缩样式');
     this._define('join_include', require('./tasks/join-include'), '合并包含的文件');
+    this._define('rollup_bundle', require('./tasks/rollup-bundle'), '通过rollup打包脚本');
     this._define('run_browserify', require('./tasks/run-browserify'), '通过browserify打包脚本');
     this._define('allot_link', require('./tasks/allot-link'), '分发关联文件');
     this._define('optimize_image', require('./tasks/optimize-image'), '压缩图片');

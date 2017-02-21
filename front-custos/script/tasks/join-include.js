@@ -10,11 +10,11 @@ var _path = require('path'),
     Utils = require('../utils.js'),
     Timer = require('../timer.js');
 
-PluginLoader.add({'FileIncluder': ()=> require('../plugins/file-includer.js')});
+PluginLoader.add({ 'FileIncluder': () => require('../plugins/file-includer.js') });
 
 // 合并文件：
 // - 根据 #include 包含关系，合并涉及到的文件
-module.exports = function (console, gulp, params, errorHandler) {
+module.exports = function (console, gulp, params, errorHandler, taskName) {
     return function (done) {
         var workDir = params.workDir;
         var includer = new plugins.FileIncluder(errorHandler);
@@ -22,9 +22,9 @@ module.exports = function (console, gulp, params, errorHandler) {
         var timer = new Timer();
         var logId = console.genUniqueId && console.genUniqueId();
         logId && console.useId && console.useId(logId);
-        console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务开始……');
+        console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务开始……');
         var fileList = includer.analyseDepRelation(workDir);
-        gulp.src(fileList, {base: workDir})
+        gulp.src(fileList, { base: workDir })
             .pipe(plugins.plumber({
                 'errorHandler': errorHandler
             }))
@@ -32,7 +32,7 @@ module.exports = function (console, gulp, params, errorHandler) {
             .pipe(gulp.dest(workDir))
             .on('end', function () {
                 logId && console.useId && console.useId(logId);
-                console.log(Utils.formatTime('[HH:mm:ss.fff]'), 'join_include 任务结束。（' + timer.getTime() + 'ms）');
+                console.log(Utils.formatTime('[HH:mm:ss.fff]'), taskName + ' 任务结束。（' + timer.getTime() + 'ms）');
                 done();
             });
     };
