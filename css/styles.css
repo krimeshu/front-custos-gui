@@ -7,10 +7,15 @@ body {
   padding: 0;
   margin: 0; }
 
-input {
+input, textarea {
   font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, custom-font, sans-serif;
   -webkit-user-select: text;
   user-select: text; }
+
+fieldset {
+    border-width: 1px;
+    border-color: #fff;
+}
 
 .list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-save, .info-box .btn-delete, .info-box .btn-open {
   position: absolute;
