@@ -2,7 +2,8 @@
  * Created by krimeshu on 2016/4/3.
  */
 
-var _path = require('path'),
+var _fs = require('fs'),
+    _path = require('path'),
 
     _watch = require('watch');
 
@@ -10,9 +11,19 @@ var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = require('../front-custos'),
+    FrontCustos = null,
 
     buildWhenFinished = null;
+
+try {
+    if (!require('../package.json').useDevCore) {
+        throw new Error('未开启开发版本内核开关。');
+    }
+    FrontCustos = require('../../front-custos');
+} catch (e) {
+    // 未找到附近的开发版本，使用普通版本内核
+    FrontCustos = require('front-custos');
+}
 
 // 补充可能缺少的默认任务参数
 var fillTasks = function (tasks) {
@@ -96,7 +107,7 @@ var watch = function (_projWithOpt) {
         doBuild(projWithOpt, function () {
             Logger.info('监听自动处理任务执行完毕：%c%s', 'color: white;', projName);
         });
-    }, ()=> Model.config.watchDelayTime);
+    }, () => Model.config.watchDelayTime);
 
     Logger.info('开始监听项目：%c%s', 'color: white;', projName);
     _watch.watchTree(srcDir, {
@@ -156,7 +167,7 @@ var debounce = function (func, wait, immediate) {
     var later = function () {
         // 据上一次触发时间间隔
         var last = Date.now() - timestamp,
-            waitTime = typeof(wait) === 'function' ? wait() : wait;
+            waitTime = typeof (wait) === 'function' ? wait() : wait;
         // 上次被包装函数被调用时间间隔last小于设定时间间隔wait
         if (last < waitTime && last > 0) {
             timeout = setTimeout(later, waitTime - last);
@@ -175,7 +186,7 @@ var debounce = function (func, wait, immediate) {
         args = arguments;
         timestamp = Date.now();
         var callNow = immediate && !timeout,
-            waitTime = typeof(wait) === 'function' ? wait() : wait;
+            waitTime = typeof (wait) === 'function' ? wait() : wait;
         // 如果延时不存在，重新设定延时
         if (!timeout) timeout = setTimeout(later, waitTime);
         if (callNow) {

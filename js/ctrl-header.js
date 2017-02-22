@@ -9,10 +9,23 @@ var Data = require('./data.js'),
     Utils = require('./utils.js'),
     Updater = require('./updater.js'),
 
-    CustosProxy = require('./custos-proxy');
+    CustosProxy = require('./custos-proxy'),
+    
+    corePackageFile = null;
+
+try {
+    if (!require('../package.json').useDevCore) {
+        throw new Error('未开启开发版本内核开关。');
+    }
+    corePackageFile = require('../../front-custos/package.json');
+} catch (e) {
+    // 未找到附近的开发版本，使用普通版本内核
+    corePackageFile = require('front-custos/package.json');
+}
 
 module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDialog) {
     $scope.version = appPackageFile.version;
+    $scope.coreVersion = corePackageFile.version;
 
     var originatorEv;
 

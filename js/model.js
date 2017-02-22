@@ -2,19 +2,32 @@
  * Created by krimeshu on 2016/3/12.
  */
 
+var _fs = require('fs');
+
 var Data = require('./data.js'),
     Logger = require('./logger.js'),
     Utils = require('./utils.js'),
-    FrontCustos = require('../front-custos');
+
+    FrontCustos = null;
+
+try {
+    if (!require('../package.json').useDevCore) {
+        throw new Error('未开启开发版本内核开关。');
+    }
+    FrontCustos = require('../../front-custos');
+} catch (e) {
+    // 未找到附近的开发版本，使用普通版本内核
+    FrontCustos = require('front-custos');
+}
 
 var _this = module.exports = {
     allTasks: FrontCustos.availableTasks,
     allThemes: {
-        'default': {primary: 'blue-grey', accent: 'red'},
-        'pink': {primary: 'pink', accent: 'red'},
-        'indigo': {primary: 'indigo', accent: 'pink'},
-        'orange': {primary: 'deep-orange', accent: 'blue'},
-        'grey': {primary: 'grey', accent: 'grey'}
+        'default': { primary: 'blue-grey', accent: 'red' },
+        'pink': { primary: 'pink', accent: 'red' },
+        'indigo': { primary: 'indigo', accent: 'pink' },
+        'orange': { primary: 'deep-orange', accent: 'blue' },
+        'grey': { primary: 'grey', accent: 'grey' }
     },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
@@ -22,9 +35,9 @@ var _this = module.exports = {
     curProj: Data.getNewOpt(),
     watchingProjIds: [],
     watchTaskRanges: {
-        '': {name: '无限制'},
-        'prepare_build': {name: '跳转构建之前'},
-        'do_upload': {name: '开始上传之前'}
+        '': { name: '无限制' },
+        'prepare_build': { name: '跳转构建之前' },
+        'do_upload': { name: '开始上传之前' }
     },
     getTasksInRange: function (tasks, limit) {
         var pos = tasks.indexOf(limit);
@@ -71,11 +84,11 @@ var _this = module.exports = {
     getProjById: function (id) {
         var proj = null;
         this.projList && this.projList.forEach &&
-        this.projList.forEach(function (_proj) {
-            if (_proj.id === id) {
-                proj = _proj;
-            }
-        });
+            this.projList.forEach(function (_proj) {
+                if (_proj.id === id) {
+                    proj = _proj;
+                }
+            });
         return proj;
     },
     removeProjById: function (id) {

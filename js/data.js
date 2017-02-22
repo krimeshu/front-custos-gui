@@ -53,7 +53,7 @@ module.exports = {
     exampleProj: {
         "id": "default_example_project_" + Date.now(),
         "projName": "example",
-        "projDir": _path.resolve(__dirname, "../front-custos/example")
+        "projDir": _path.resolve(__dirname, "../node_modules/front-custos/example")
     },
     // 加载全局配置
     loadConfig: function () {

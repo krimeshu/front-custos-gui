@@ -40,6 +40,11 @@ input, textarea {
   user-select: text;
 }
 
+fieldset {
+    border-width: 1px;
+    border-color: #fff;
+}
+
 %float-btn {
   position: absolute;
   z-index: 5;

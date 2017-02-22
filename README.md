@@ -6,8 +6,6 @@
 
 ![screenshot-gui](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-gui.png)
 
-![screenshot-command-line](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-command-line.png)
-
 ## 一、相对旧工具
 
 * 基于`gulp`任务流，分离出不同的处理任务，便于随时加入其它的插件任务
