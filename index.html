@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="font/material-icons.css"/>
 
     <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css"/>
+    <link rel="stylesheet" href="node_modules/ng-sortable/dist/ng-sortable.min.css"/>
     <link rel="stylesheet" href="angular-perfect-scrollbar/perfect-scrollbar.min.css"/>
-    <link rel="stylesheet" href="ng-sortable/ng-sortable.min.css"/>
 
     <link rel="stylesheet" href="css/json-viewer.css"/>
     <link rel="stylesheet" href="css/styles.css"/>
@@ -30,8 +30,8 @@
         <div class="header-row">
             <!-- Title -->
             <span class="title">
-                Front Custos GUI - 
-                <small>(GUI ver <span ng-bind="version">...</span>, Core ver <span ng-bind="coreVersion">...</span>)</small>
+                Front Custos - 
+                <small>(GUI v<span ng-bind="version">...</span>, Core v<span ng-bind="coreVersion">...</span>)</small>
             </span>
             <div class="spacer"></div>
             <!-- Top Bar Buttons -->
@@ -102,7 +102,7 @@
                                min-scrollbar-length="20">
                 <!--<md-subheader class="list-title">项目列表</md-subheader>-->
                 <md-list class="proj-list not-selectable"
-                         data-as-sortable="dragControlListeners"
+                         data-as-sortable="board.dragControlListeners"
                          data-ng-model="projList">
                     <md-list-item class="_md-button-wrap proj-item {{isCurrent(item.id)}}"
                                   data-id="{{item.id}}"
@@ -501,10 +501,10 @@
 <script src="node_modules/angular-aria/angular-aria.min.js"></script>
 <script src="node_modules/angular-messages/angular-messages.min.js"></script>
 <script src="node_modules/angular-material/angular-material.min.js"></script>
+<script src="node_modules/ng-sortable/dist/ng-sortable.min.js"></script>
 
 <script src="angular-perfect-scrollbar/perfect-scrollbar.with-mousewheel.min.js"></script>
 <script src="angular-perfect-scrollbar/angular-perfect-scrollbar.js"></script>
-<script src="ng-sortable/ng-sortable.min.js"></script>
 
 <script src="js/ace/ace.js"></script>
 <script src="js/ace/theme-monokai.js"></script>
