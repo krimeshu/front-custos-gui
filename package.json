@@ -8,6 +8,7 @@
     "start": "electron main.js",
     "rebuild": "gulp rebuild",
     "dist-win64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
+    "dist-win32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
     "dist": "npm run-script dist-win64"
   },
   "repository": {
