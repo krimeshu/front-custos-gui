@@ -34,7 +34,7 @@
     "electron": "^1.4.15",
     "electron-rebuild": "^1.5.7",
     "electron-packager": "^7.0.3",
-    "front-custos": "^1.4.2",
+    "front-custos": "^1.4.4",
     "ng-sortable": "^1.3.7",
     "request-progress": "^2.0.1",
     "watch": "^0.18.0"
