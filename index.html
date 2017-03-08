@@ -334,7 +334,7 @@
                                             <input ng-model="curProj.scOpt.useRatio" name="scRatio"
                                                 ng-disabled="curProj.id === null"
                                                 ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                                required placeholder="1=普通，大于1=Retina"/>
+                                                required placeholder="1=普通 大于1=Retina"/>
                                             <div ng-messages="curProjForm.scRatio.$error">
                                                 <div ng-message="required">请输入一个普通数值</div>
                                                 <div ng-message="pattern">请输入一个有效的数值</div>
@@ -345,7 +345,7 @@
                                             <input ng-model="curProj.scOpt.useRem" name="scRem"
                                                 ng-disabled="curProj.id === null"
                                                 ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                                required placeholder="1=不转为Rem，其它=1rem与px的换算值"/>
+                                                required placeholder="1=不转为Rem 其它=1rem/1px"/>
                                             <div ng-messages="curProjForm.scRem.$error">
                                                 <div ng-message="required">请输入一个普通数值</div>
                                                 <div ng-message="pattern">请输入一个有效的数值</div>
@@ -388,25 +388,33 @@
                                 </md-card-title>
                                 <md-card-content layout="column">
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.alOpt.flatten" flex="50"
-                                                   ng-disabled="curProj.id === null">简化目录结构
-                                        </md-switch>
-                                        <md-switch ng-model="curProj.alOpt.hashLink" flex="50"
-                                                   ng-disabled="curProj.id === null">链接指纹参数
+                                        <md-switch ng-model="curProj.alOpt.flatten" flex="100"
+                                                   ng-disabled="curProj.id === null">简化目录结构（分发时，根据文件类型放入对应目录）
                                         </md-switch>
                                     </div>
-                                    <md-input-container class="md-block" flex>
+                                    <md-radio-group ng-model="curProj.alOpt.hashLink"
+                                                    ng-disabled="curProj.id === null">
+                                        <md-radio-button value="NO_HASH">
+                                                         不处理文件指纹</md-radio-button>
+                                        <md-radio-button value="AS_QUERY_STRING">
+                                                         文件指纹作为链接参数</md-radio-button>
+                                        <md-radio-button value="IN_FILE_NAME">
+                                                         文件指纹加入文件名内</md-radio-button>
+                                    </md-radio-group>
+                                    <div layout="row">
+                                    <md-input-container class="md-block" flex="50">
                                         <label>页面文件分发目录</label>
                                         <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
                                                ng-disabled="curProj.id === null"
-                                               placeholder="html, php 等页面文件分发到此目录下"/>
+                                               placeholder="页面文件将放到此目录中"/>
                                     </md-input-container>
-                                    <md-input-container class="md-block" flex>
+                                    <md-input-container class="md-block" flex="50">
                                         <label>静态文件分发目录</label>
                                         <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
                                                ng-disabled="curProj.id === null"
-                                               placeholder="非页面的静态文件分发到此目录下"/>
+                                               placeholder="静态资源文件将放到此目录中"/>
                                     </md-input-container>
+                                    </div>
                                     <div layout="row">
                                         <md-input-container class="md-block" flex="80">
                                             <label>静态文件链接前缀</label>

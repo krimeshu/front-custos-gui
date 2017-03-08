@@ -1,19 +1,36 @@
 # front-custos-gui
 
-`Front Custos` *(`Front Custom Tasks Custos`)* —— “前端定制任务看门人”。
+`Front Custos` *(`Front Custom Tasks Custos`)* —— “前端定制任务管家”。
 
 根据日常项目中的常见的前端开发需求，基于`gulp`任务流程、各种处理模块，提供快速创建、管理、运行前端自动任务的辅助工具。
 
 ![screenshot-gui](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-gui.png)
 
-## 一、相对旧工具
+## 一、使用方法
 
-* 基于`gulp`任务流，分离出不同的处理任务，便于随时加入其它的插件任务
-* 改进文件缓存的情况，修复一些旧工具的问题
-* 由`nw.js`改为采用`electron`实现，提高性能和稳定性
-* `UI`部分改为`Angular Material`，表现与数据分离，UI和数据的增减更加灵活
-* 对于活动、主站、组件的开发，可以通过上传、预处理、后处理脚本，进行不同的定制
-* 增加任务监听模块，检查到文件修改后，自动执行构建任务
+### 1. 直接下载 release 中最新打包好的发布版本，解压后使用。
+
+> 暂时只提供 win32-x64 版本。
+
+### 2. 手动构建编译。
+
+```bash
+git clone https://github.com/krimeshu/front-custos-gui.git
+cd front-custos-gui
+npm install
+npm run rebuild
+```
+
+完成后，需要打开工具时，执行 ```npm start``` 即可。
+
+打包发布版本：
+
+```base
+npm run dist-win64
+npm run dist-win32
+```
+
+其它平台可以自己编写 ```electron-packager``` 命令进行打包。
 
 ## 二、主要任务说明
 
@@ -48,6 +65,10 @@
 * **join_include**
 
 处理构建目录中，使用`#include(...)`标记的文件文件合并语句，常用于文件内容并入、图片转`base64`字符串。
+
+* **rollup_bundle**
+
+根据工具中的配置，使用`rollup`对各个入口脚本进行打包处理.
 
 * **run_browserify**
 

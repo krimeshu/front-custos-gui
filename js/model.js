@@ -47,11 +47,22 @@ var _this = module.exports = {
             return tasks.slice(0, pos);
         }
     },
+    // 更新过期的配置
+    _updateOpts: function (opts) {
+        // 更新 alOpt
+        var alOpt = opts.alOpt;
+        if (alOpt.hashLink == true) {
+            alOpt.hashLink = 'AS_QUERY_STRING';
+        } else if (alOpt.hashLink == false) {
+            alOpt.hashLink = 'NO_HASH';
+        }
+    },
     selectCurProj: function (proj) {
         var opts = this.loadProjOptions(proj),
             id = proj.id,
             projName = proj.projName,
             projDir = proj.projDir;
+        this._updateOpts(opts);
         Utils.clearObj(this.curProj);
         Utils.deepCopy(opts, this.curProj);
         Utils.deepCopy(proj, this.curProj);
