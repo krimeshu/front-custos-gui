@@ -17,8 +17,7 @@
 ```bash
 git clone https://github.com/krimeshu/front-custos-gui.git
 cd front-custos-gui
-npm install
-npm run rebuild
+npm run install-dev
 ```
 
 完成后，需要打开工具时，执行 ```npm start``` 即可。
