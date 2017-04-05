@@ -1,6 +1,6 @@
 # front-custos-gui
 
-`Front Custos` *(`Front Custom Tasks Custos`)* —— “前端定制任务管家”。
+`Front Custos` *(`Front Custom Tasks Custos`)* ———— “前端定制任务管家”。
 
 根据日常项目中的常见的前端开发需求，基于`gulp`任务流程、各种处理模块，提供快速创建、管理、运行前端自动任务的辅助工具。
 
@@ -23,7 +23,7 @@ npm run rebuild
 
 完成后，需要打开工具时，执行 ```npm start``` 即可。
 
-打包发布版本：
+### 3. 打包发布版本。
 
 ```base
 npm run dist-win64
