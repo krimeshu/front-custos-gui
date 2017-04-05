@@ -1,0 +1,3 @@
+[submodule "front-custos"]
+	path = front-custos
+	url = https://github.com/krimeshu/front-custos
