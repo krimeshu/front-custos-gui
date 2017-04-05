@@ -11,19 +11,9 @@ var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = null,
+    FrontCustos = require('../front-custos'),
 
     buildWhenFinished = null;
-
-try {
-    if (!require('../package.json').useDevCore) {
-        throw new Error('未开启开发版本内核开关。');
-    }
-    FrontCustos = require('../../front-custos');
-} catch (e) {
-    // 未找到附近的开发版本，使用普通版本内核
-    FrontCustos = require('front-custos');
-}
 
 // 补充可能缺少的默认任务参数
 var fillTasks = function (tasks) {

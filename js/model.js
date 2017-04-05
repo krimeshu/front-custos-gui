@@ -8,17 +8,7 @@ var Data = require('./data.js'),
     Logger = require('./logger.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = null;
-
-try {
-    if (!require('../package.json').useDevCore) {
-        throw new Error('未开启开发版本内核开关。');
-    }
-    FrontCustos = require('../../front-custos');
-} catch (e) {
-    // 未找到附近的开发版本，使用普通版本内核
-    FrontCustos = require('front-custos');
-}
+    FrontCustos = require('../front-custos');
 
 var _this = module.exports = {
     allTasks: FrontCustos.availableTasks,

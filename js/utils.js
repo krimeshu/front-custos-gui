@@ -4,18 +4,7 @@
 
 var _fs = require('fs');
 
-var Utils = null;
-
-
-try {
-    if (!require('../package.json').useDevCore) {
-        throw new Error('未开启开发版本内核开关。');
-    }
-    Utils = require('../../front-custos/script/utils.js');
-} catch (e) {
-    // 未找到附近的开发版本，使用普通版本内核
-    Utils = require('front-custos/script/utils.js');
-}
+var Utils = require('../front-custos/script/utils.js');
 
 
 var UtilsGUI = new Function();
