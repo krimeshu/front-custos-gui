@@ -8,10 +8,22 @@ var Data = require('./data.js'),
     Logger = require('./logger.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = require('../front-custos');
+    TaskList = require('../front-custos/script/task-list.js');
+
+var lockedTasks = ['prepare_build', 'do_dist'],
+    disabledTasks = ['do_upload'];
+
+TaskList.forEach((task) => {
+    if (lockedTasks.indexOf(task.name) >= 0) {
+        task.locked = true;
+    }
+    if (disabledTasks.indexOf(task.name) >= 0) {
+        task.disabled = true;
+    }
+});
 
 var _this = module.exports = {
-    allTasks: FrontCustos.availableTasks,
+    allTasks: TaskList,
     allThemes: {
         'default': { primary: 'blue-grey', accent: 'red' },
         'pink': { primary: 'pink', accent: 'red' },

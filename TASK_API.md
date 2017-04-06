@@ -2,7 +2,7 @@
 
 ## 在 task-manager 中添加任务信息和任务入口
 
-打开 `front-custos/script/task-manager.js`，在 TaskManager 函数内，按照已有格式和顺序，加入任务名、入口和简介信息。
+打开 `front-custos/script/task-list.js`，按照已有格式和顺序，加入任务名、入口和简介信息。
 
 ## 编写任务入口和任务插件代码
 

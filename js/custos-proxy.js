@@ -11,21 +11,38 @@ var Logger = require('./logger.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
 
-    FrontCustos = require('../front-custos'),
+    FrontCustos = null,
 
     buildWhenFinished = null;
 
+var self = {
+    get FrontCustos() {
+        return FrontCustos || loadFrontCustos();
+    },
+    fillTasks: fillTasks,
+    doBuild: doBuild,
+    doUpload: doUpload,
+    runTasks: runTasks,
+    watch: watch,
+    unwatch: unwatch
+};
+
+// 加载内核
+function loadFrontCustos() {
+    return FrontCustos = require('../front-custos');
+}
+
 // 补充可能缺少的默认任务参数
-var fillTasks = function (tasks) {
+function fillTasks(tasks) {
     var uploadPos = tasks.indexOf('do_upload');
     if (uploadPos >= 0) {
         tasks.splice(uploadPos, 1);
     }
-    FrontCustos.fillAndOrderTasks(tasks);
+    self.FrontCustos.fillAndOrderTasks(tasks);
 };
 
-var doBuild = function (fcOpt, cb) {
-    if (FrontCustos.isRunning()) {
+function doBuild(fcOpt, cb) {
+    if (self.FrontCustos.isRunning()) {
         console.info('有任务尚未结束，将推迟到任务结束后再处理。');
         buildWhenFinished = {
             fcOpt: fcOpt,
@@ -33,11 +50,11 @@ var doBuild = function (fcOpt, cb) {
         };
         return;
     }
-    FrontCustos.takeOverConsole(Logger);
-    FrontCustos.setConfig(Model.config);
+    self.FrontCustos.takeOverConsole(Logger);
+    self.FrontCustos.setConfig(Model.config);
     var params = Utils.deepCopy(fcOpt);
     Logger.log('<hr/>');
-    FrontCustos.process(params, function () {
+    self.FrontCustos.process(params, function () {
         cb && cb(params);
         if (buildWhenFinished) {
             console.info('有待处理任务，将自动开始。');
@@ -52,34 +69,34 @@ var doBuild = function (fcOpt, cb) {
     });
 };
 
-var doUpload = function (params, cb) {
-    if (FrontCustos.isRunning()) {
+function doUpload(params, cb) {
+    if (self.FrontCustos.isRunning()) {
         return;
     }
-    FrontCustos.takeOverConsole(Logger);
+    self.FrontCustos.takeOverConsole(Logger);
     params.workDir = params.distDir;
     params.tasks = ['do_upload'];
-    FrontCustos.runTasks(params, function () {
+    self.FrontCustos.runTasks(params, function () {
         Model.config.noticeWhenUploadFinished && Utils.playSE('upload-finished');
         cb && cb(params);
     });
 };
 
-var runTasks = function (params, cb) {
-    if (FrontCustos.isRunning()) {
+function runTasks(params, cb) {
+    if (self.FrontCustos.isRunning()) {
         return;
     }
-    FrontCustos.takeOverConsole(Logger);
-    FrontCustos.runTasks(params, cb);
+    self.FrontCustos.takeOverConsole(Logger);
+    self.FrontCustos.runTasks(params, cb);
 };
 
-var watch = function (_projWithOpt) {
+function watch(_projWithOpt) {
     _projWithOpt.watchToRebuilding = true;
 
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        srcDir = FrontCustos.getSrcDir(projWithOpt),
+        srcDir = self.FrontCustos.getSrcDir(projWithOpt),
         tasks = projWithOpt.tasks;
 
     var pos = Model.watchingProjIds.indexOf(id);
@@ -111,7 +128,7 @@ var watch = function (_projWithOpt) {
                 return false;
             }
             // 排除生成文件的情况
-            return !FrontCustos.FilenameHelper.getOriginalPathFromCompiled(f);
+            return !self.FrontCustos.FilenameHelper.getOriginalPathFromCompiled(f);
         }
     }, function (f, curr, prev) {
         if (typeof f == "object" && prev === null && curr === null) {
@@ -132,13 +149,13 @@ var watch = function (_projWithOpt) {
     });
 };
 
-var unwatch = function (_projWithOpt) {
+function unwatch(_projWithOpt) {
     _projWithOpt.watchToRebuilding = false;
 
     var projWithOpt = Utils.deepCopy(_projWithOpt),
         id = projWithOpt.id,
         projName = projWithOpt.projName,
-        srcDir = FrontCustos.getSrcDir(projWithOpt);
+        srcDir = self.FrontCustos.getSrcDir(projWithOpt);
 
     var pos = Model.watchingProjIds.indexOf(id);
     if (pos < 0) {
@@ -151,7 +168,7 @@ var unwatch = function (_projWithOpt) {
     _watch.unwatchTree(srcDir);
 };
 
-var debounce = function (func, wait, immediate) {
+function debounce(func, wait, immediate) {
     var timeout, args, context, timestamp, result;
 
     var later = function () {
@@ -194,14 +211,4 @@ Model.onCurrentChanged(function () {
     }
 });
 
-module.exports = {
-    get FrontCustos() {
-        return FrontCustos;
-    },
-    fillTasks: fillTasks,
-    doBuild: doBuild,
-    doUpload: doUpload,
-    runTasks: runTasks,
-    watch: watch,
-    unwatch: unwatch
-};
+module.exports = self;

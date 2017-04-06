@@ -13,10 +13,6 @@ var Logger = require('./logger.js'),
     Utils = require('./utils.js'),
     CustosProxy = require('./custos-proxy.js');
 
-Model.onCurrentChanged(function () {
-    CustosProxy.fillTasks(Model.curProj.tasks);
-});
-
 module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope, $mdDialog, $mdToast) {
     var self = this;
     self.isOpenExpanded = false;
@@ -87,20 +83,23 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             CustosProxy.unwatch(proj);
             var res = Model.removeProjById(id),
                 msg = res ?
-                '项目 ' + projName + ' 已被移除' :
-                '项目 ' + projName + ' 移除失败，请稍后重试';
+                    '项目 ' + projName + ' 已被移除' :
+                    '项目 ' + projName + ' 移除失败，请稍后重试';
             $scope.toastMsg(msg);
         });
     };
 
     // 保存项目配置
     $scope.saveProj = function () {
+        // 补充任务
+        CustosProxy.fillTasks(Model.curProj.tasks);
+
         var proj = $scope.curProj,
             res = Model.updateProj(proj),
             projName = proj.projName,
             msg = res ?
-            '项目 ' + projName + ' 配置保存完毕' :
-            '项目 ' + projName + ' 配置保存失败，请稍后重试';
+                '项目 ' + projName + ' 配置保存完毕' :
+                '项目 ' + projName + ' 配置保存失败，请稍后重试';
         if (res && proj.watchToRebuilding) {
             Logger.log('<hr/>');
             Logger.info('项目配置发生变化，重新启动监听……');

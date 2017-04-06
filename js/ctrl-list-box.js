@@ -171,6 +171,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         allowDuplicates: false //optional param allows duplicates to be dropped.
     };
 
+    // 上次关闭时的工作项目ID
     var lastWorkingId = Model.config.lastWorkingId;
     lastWorkingId && $scope.setCurrent(lastWorkingId);
 }];
