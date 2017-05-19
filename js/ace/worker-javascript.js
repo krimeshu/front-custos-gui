@@ -1,148 +1,8 @@
 "no use strict";
-
-(function() {
-
-    var ACE_NAMESPACE = "";
-
-    var global = (function() { return this; })();
-    if (!global && typeof window != "undefined") global = window; // strict mode
-
-
-    if (!ACE_NAMESPACE && typeof requirejs !== "undefined")
-        return;
-
-
-    var defineInAce = function(module, deps, payload) {
-        if (typeof module !== "string") {
-            if (defineInAce.original)
-                defineInAce.original.apply(this, arguments);
-            else {
-                console.error("dropping module because define wasn\'t a string.");
-                console.trace();
-            }
-            return;
-        }
-        if (arguments.length == 2)
-            payload = deps;
-        if (!defineInAce.modules[module]) {
-            defineInAce.payloads[module] = payload;
-            defineInAce.modules[module] = null;
-        }
-    };
-
-    defineInAce.modules = {};
-    defineInAce.payloads = {};
-
-    /**
-     * Get at functionality define()ed using the function above
-     */
-    var _require = function(parentId, module, callback) {
-        if (typeof module === "string") {
-            var payload = lookup(parentId, module);
-            if (payload != undefined) {
-                callback && callback();
-                return payload;
-            }
-        } else if (Object.prototype.toString.call(module) === "[object Array]") {
-            var params = [];
-            for (var i = 0, l = module.length; i < l; ++i) {
-                var dep = lookup(parentId, module[i]);
-                if (dep == undefined && require.original)
-                    return;
-                params.push(dep);
-            }
-            return callback && callback.apply(null, params) || true;
-        }
-    };
-
-    var require = function(module, callback) {
-        var packagedModule = _require("", module, callback);
-        if (packagedModule == undefined && require.original)
-            return require.original.apply(this, arguments);
-        return packagedModule;
-    };
-
-    var normalizeModule = function(parentId, moduleName) {
-        // normalize plugin requires
-        if (moduleName.indexOf("!") !== -1) {
-            var chunks = moduleName.split("!");
-            return normalizeModule(parentId, chunks[0]) + "!" + normalizeModule(parentId, chunks[1]);
-        }
-        // normalize relative requires
-        if (moduleName.charAt(0) == ".") {
-            var base = parentId.split("/").slice(0, -1).join("/");
-            moduleName = base + "/" + moduleName;
-
-            while(moduleName.indexOf(".") !== -1 && previous != moduleName) {
-                var previous = moduleName;
-                moduleName = moduleName.replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
-            }
-        }
-        return moduleName;
-    };
-
-    /**
-     * Internal function to lookup moduleNames and resolve them by calling the
-     * definition function if needed.
-     */
-    var lookup = function(parentId, moduleName) {
-        moduleName = normalizeModule(parentId, moduleName);
-
-        var module = defineInAce.modules[moduleName];
-        if (!module) {
-            module = defineInAce.payloads[moduleName];
-            if (typeof module === 'function') {
-                var exports = {};
-                var mod = {
-                    id: moduleName,
-                    uri: '',
-                    exports: exports,
-                    packaged: true
-                };
-
-                var req = function(module, callback) {
-                    return _require(moduleName, module, callback);
-                };
-
-                var returnValue = module(req, exports, mod);
-                exports = returnValue || mod.exports;
-                defineInAce.modules[moduleName] = exports;
-                delete defineInAce.payloads[moduleName];
-            }
-            module = defineInAce.modules[moduleName] = exports || module;
-        }
-        return module;
-    };
-
-    function exportAce(ns) {
-        var root = global;
-        if (ns) {
-            if (!global[ns])
-                global[ns] = {};
-            root = global[ns];
-        }
-
-        if (!root.defineInAce || !root.defineInAce.packaged) {
-            defineInAce.original = root.defineInAce;
-            root.defineInAce = defineInAce;
-            root.defineInAce.packaged = true;
-        }
-
-        if (!root.require || !root.require.packaged) {
-            require.original = root.require;
-            root.require = require;
-            root.require.packaged = true;
-        }
-    }
-
-    exportAce(ACE_NAMESPACE);
-
-})();
-
 ;(function(window) {
 if (typeof window.window != "undefined" && window.document)
     return;
-if (window.require && (window.define || window.defineInAce))
+if (window.require && window.define)
     return;
 
 if (!window.console) {
@@ -357,9 +217,7 @@ window.onmessage = function(e) {
 };
 })(this);
 
-(function () {
-    var define = defineInAce;
-define("ace/lib/oop",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/lib/oop",["require","exports","module"], function(require, exports, module) {
 "use strict";
 
 exports.inherits = function(ctor, superCtor) {
@@ -387,7 +245,7 @@ exports.implement = function(proto, mixin) {
 
 });
 
-define("ace/range",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/range",["require","exports","module"], function(require, exports, module) {
 "use strict";
 var comparePoints = function(p1, p2) {
     return p1.row - p2.row || p1.column - p2.column;
@@ -626,7 +484,7 @@ Range.comparePoints = function(p1, p2) {
 exports.Range = Range;
 });
 
-define("ace/apply_delta",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/apply_delta",["require","exports","module"], function(require, exports, module) {
 "use strict";
 
 function throwDeltaError(delta, errorText){
@@ -691,7 +549,7 @@ exports.applyDelta = function(docLines, delta, doNotValidate) {
 }
 });
 
-define("ace/lib/event_emitter",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/lib/event_emitter",["require","exports","module"], function(require, exports, module) {
 "use strict";
 
 var EventEmitter = {};
@@ -817,7 +675,7 @@ exports.EventEmitter = EventEmitter;
 
 });
 
-define("ace/anchor",["require","exports","module","ace/lib/oop","ace/lib/event_emitter"], function(require, exports, module) {
+ace.define("ace/anchor",["require","exports","module","ace/lib/oop","ace/lib/event_emitter"], function(require, exports, module) {
 "use strict";
 
 var oop = require("./lib/oop");
@@ -942,7 +800,7 @@ var Anchor = exports.Anchor = function(doc, row, column) {
 
 });
 
-define("ace/document",["require","exports","module","ace/lib/oop","ace/apply_delta","ace/lib/event_emitter","ace/range","ace/anchor"], function(require, exports, module) {
+ace.define("ace/document",["require","exports","module","ace/lib/oop","ace/apply_delta","ace/lib/event_emitter","ace/range","ace/anchor"], function(require, exports, module) {
 "use strict";
 
 var oop = require("./lib/oop");
@@ -1055,7 +913,7 @@ var Document = function(textOrLines) {
         return this.removeFullLines(firstRow, lastRow);
     };
     this.insertNewLine = function(position) {
-        console.warn("Use of document.insertNewLine is deprecated. Use insertMergedLines(position, [\'\', \'\']) instead.");
+        console.warn("Use of document.insertNewLine is deprecated. Use insertMergedLines(position, ['', '']) instead.");
         return this.insertMergedLines(position, ["", ""]);
     };
     this.insert = function(position, text) {
@@ -1298,7 +1156,7 @@ var Document = function(textOrLines) {
 exports.Document = Document;
 });
 
-define("ace/lib/lang",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/lib/lang",["require","exports","module"], function(require, exports, module) {
 "use strict";
 
 exports.last = function(a) {
@@ -1344,7 +1202,7 @@ exports.copyArray = function(array){
     var copy = [];
     for (var i=0, l=array.length; i<l; i++) {
         if (array[i] && typeof array[i] == "object")
-            copy[i] = this.copyObject( array[i] );
+            copy[i] = this.copyObject(array[i]);
         else 
             copy[i] = array[i];
     }
@@ -1362,14 +1220,12 @@ exports.deepCopy = function deepCopy(obj) {
         }
         return copy;
     }
-    var cons = obj.constructor;
-    if (cons === RegExp)
+    if (Object.prototype.toString.call(obj) !== "[object Object]")
         return obj;
     
-    copy = cons();
-    for (var key in obj) {
+    copy = {};
+    for (var key in obj)
         copy[key] = deepCopy(obj[key]);
-    }
     return copy;
 };
 
@@ -1488,7 +1344,7 @@ exports.delayedCall = function(fcn, defaultTimeout) {
 };
 });
 
-define("ace/worker/mirror",["require","exports","module","ace/range","ace/document","ace/lib/lang"], function(require, exports, module) {
+ace.define("ace/worker/mirror",["require","exports","module","ace/range","ace/document","ace/lib/lang"], function(require, exports, module) {
 "use strict";
 
 var Range = require("../range").Range;
@@ -1550,7 +1406,7 @@ var Mirror = exports.Mirror = function(sender) {
 
 });
 
-define("ace/mode/javascript/jshint",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/mode/javascript/jshint",["require","exports","module"], function(require, exports, module) {
 module.exports = (function outer (modules, cache, entry) {
     var previousRequire = typeof require == "function" && require;
     function newRequire(name, jumped){
@@ -11827,7 +11683,7 @@ exports.jasmine = {
 
 });
 
-define("ace/mode/javascript_worker",["require","exports","module","ace/lib/oop","ace/worker/mirror","ace/mode/javascript/jshint"], function(require, exports, module) {
+ace.define("ace/mode/javascript_worker",["require","exports","module","ace/lib/oop","ace/worker/mirror","ace/mode/javascript/jshint"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -11917,7 +11773,7 @@ oop.inherits(JavaScriptWorker, Mirror);
 
         var errors = [];
         var maxErrorLevel = this.isValidJS(value) ? "warning" : "error";
-        lint(value, this.options);
+        lint(value, this.options, this.options.globals);
         var results = lint.errors;
 
         var errorAdded = false
@@ -11974,7 +11830,7 @@ oop.inherits(JavaScriptWorker, Mirror);
 
 });
 
-define("ace/lib/es5-shim",["require","exports","module"], function(require, exports, module) {
+ace.define("ace/lib/es5-shim",["require","exports","module"], function(require, exports, module) {
 
 function Empty() {}
 
@@ -12670,5 +12526,3 @@ var toObject = function (o) {
 };
 
 });
-
-})();
