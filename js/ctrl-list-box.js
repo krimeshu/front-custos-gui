@@ -72,6 +72,17 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         });
     };
 
+    // 拖入项目目录
+    $('.list-box')[0].ondrop = function (ev) {
+        var file = ev.dataTransfer.files[0],
+            filePath = file.path,
+            state = _fs.statSync(filePath);
+        console.log('Drop file:', filePath);
+        if (state.isDirectory()) {
+            $scope.importProj(filePath, ev);
+        }
+    };
+
     // 导入项目
     $scope.importProj = function (projDir, ev) {
         var projName = _path.basename(projDir),
