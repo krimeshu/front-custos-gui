@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "3.0.3",
+  "version": "3.1.2",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
@@ -39,5 +39,6 @@
     "request-progress": "^2.0.1",
     "watch": "^0.18.0"
   },
-  "useDevCore": false
+  "useDevCore": false,
+  "dependencies": {}
 }

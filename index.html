@@ -291,33 +291,56 @@
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content layout="column">
-                                    <md-input-container class="md-block" flex>
-                                        <label>入口脚本（一行一个）</label>
-                                        <textarea ng-model="curProj.ruOpt.entry" 
-                                               name="ruEntry" row="5"
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="相对项目源目录的路径，如：js/index.js">
-                                        </textarea>
-                                    </md-input-container>
                                     <fieldset>
                                         <legend>启用插件</legend>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.nodeResolve" flex="50"
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.nodeResolve" flex="33"
                                                     ng-disabled="curProj.id === null">
                                                     node-resolve
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.commonJS" flex="50"
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.commonJS" flex="33"
                                                     ng-disabled="curProj.id === null">
                                                     common-js
                                             </md-checkbox>
-                                        </div>
-                                        <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="50"
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="33"
                                                     ng-disabled="curProj.id === null">
                                                     babel
                                             </md-checkbox>
                                         </div>
                                     </fieldset>
+                                    <div layout="row" style="padding-top: 10px;">
+                                        <md-input-container class="md-block" flex>
+                                            <label>打包格式</label>
+                                            <md-select ng-model="curProj.ruOpt.format">
+                                                <md-option value="es6"
+                                                        ng-selected="curProj.ruOpt.format == 'es6'  || !curProj.ruOpt.format">
+                                                    ES6
+                                                </md-option>
+                                                <md-option value="cjs"
+                                                        ng-selected="curProj.ruOpt.format == 'cjs'">
+                                                    CJS
+                                                </md-option>
+                                                <md-option value="iife"
+                                                        ng-selected="curProj.ruOpt.format == 'iife'">
+                                                    IIFE
+                                                </md-option>
+                                                <md-option value="umd"
+                                                        ng-selected="curProj.ruOpt.format == 'umd'">
+                                                    UMD
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex>
+                                            <label>入口脚本（一行一个）</label>
+                                            <textarea ng-model="curProj.ruOpt.entry" 
+                                                name="ruEntry" row="5"
+                                                ng-disabled="curProj.id === null"
+                                                placeholder="相对项目源目录的路径，如：js/index.js">
+                                            </textarea>
+                                        </md-input-container>
+                                    </div>
                                 </md-card-content>
                             </md-card>
 
@@ -392,15 +415,23 @@
                                                    ng-disabled="curProj.id === null">简化目录结构（分发时，根据文件类型放入对应目录）
                                         </md-switch>
                                     </div>
-                                    <md-radio-group ng-model="curProj.alOpt.hashLink"
-                                                    ng-disabled="curProj.id === null">
-                                        <md-radio-button value="NO_HASH">
-                                                         不处理文件指纹</md-radio-button>
-                                        <md-radio-button value="AS_QUERY_STRING">
-                                                         文件指纹作为链接参数</md-radio-button>
-                                        <md-radio-button value="IN_FILE_NAME">
-                                                         文件指纹加入文件名内</md-radio-button>
-                                    </md-radio-group>
+                                    <md-input-container>
+                                        <label>文件指纹处理</label>
+                                        <md-select ng-model="curProj.alOpt.hashLink">
+                                            <md-option value="NO_HASH"
+                                                    ng-selected="curProj.alOpt.hashLink == 'NO_HASH'  || !curProj.alOpt.hashLink">
+                                                不处理文件指纹
+                                            </md-option>
+                                            <md-option value="AS_QUERY_STRING"
+                                                    ng-selected="curProj.alOpt.hashLink == 'AS_QUERY_STRING'">
+                                                文件指纹作为链接参数
+                                            </md-option>
+                                            <md-option value="IN_FILE_NAME"
+                                                    ng-selected="curProj.alOpt.hashLink == 'IN_FILE_NAME'">
+                                                文件指纹加入文件名内
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
                                     <div layout="row">
                                     <md-input-container class="md-block" flex="50">
                                         <label>页面文件分发目录</label>
@@ -526,15 +557,21 @@
 
     window.windowCtrl = {
         open: function () {
+            // 修复 Tab 坐标问题
             var fixTabPosition = function () {
                 $('md-tabs-content-wrapper')
                         .css({'position': 'relative'})
                         .each(new Function('this.clientWidth'))
                         .css({'position': 'absolute'});
             };
+            // 修复 ACE 编辑器点击乱跳问题（减缓症状）
+            var fixAceScroll = function () {
+                $('.ace_editor').on('mousedown', function () { this.scrollIntoView(); });
+            };
             window.setTimeout(function () {
                 document.querySelector('.shadow-box').classList.add('in');
                 window.setTimeout(fixTabPosition, 300);
+                fixAceScroll();
             }, 100);
         },
         close: function () {
