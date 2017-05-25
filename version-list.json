@@ -1,7 +1,20 @@
 {
   "latest": {
-    "version": "3.0.2",
-    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.0.2"
+    "version": "3.1.2",
+    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.1.2"
   },
-  "patches": []
+  "patches": [
+    {
+      "from": "3.0.2",
+      "to": "3.1.2",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.2_3.1.2.7z",
+      "desc": "New features."
+    },
+    {
+      "from": "3.0.3",
+      "to": "3.1.2",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.3_3.1.2.7z",
+      "desc": "New features."
+    }
+  ]
 }
