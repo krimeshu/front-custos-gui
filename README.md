@@ -27,6 +27,8 @@ npm run build
 ```base
 npm run dist-win64
 npm run dist-win32
+npm run dist-mac64
+npm run dist-mac32
 ```
 
 其它平台可以自己编写 ```electron-packager``` 命令进行打包。
