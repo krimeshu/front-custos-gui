@@ -142,7 +142,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         var srcDir = CustosProxy.FrontCustos.getSrcDir(proj);
         Utils.makeSureDir(srcDir);
-        shell.openExternal(srcDir);
+        shell.openItem(srcDir);
     };
 
     // 打开项目生成目录
@@ -156,7 +156,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         var distDir = CustosProxy.FrontCustos.getDistDir(proj, Model.config.outputDir);
         Utils.makeSureDir(distDir);
-        shell.openExternal(distDir);
+        shell.openItem(distDir);
     };
 
     // 删除项目配置

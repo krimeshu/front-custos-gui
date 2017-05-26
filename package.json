@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "3.1.5",
+  "version": "3.1.7",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
@@ -10,7 +10,9 @@
     "electron-rebuild": "cd front-custos && npm run electron-rebuild && cd ..",
     "dist": "npm run-script dist-win64",
     "dist-win64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
-    "dist-win32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\""
+    "dist-win32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
+    "dist-mac64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=darwin --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
+    "dist-mac32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=darwin --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\""
   },
   "repository": {
     "type": "git",

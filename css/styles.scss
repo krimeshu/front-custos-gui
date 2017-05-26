@@ -184,6 +184,7 @@ fieldset {
     .title {
       line-height: 80px;
       font-size: 20px;
+      text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
     }
 
     .spacer {
@@ -237,6 +238,10 @@ fieldset {
 
       &.current {
         color: #fff;
+
+        .proj-name {
+          text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
+        }
       }
 
       .proj-delete {
@@ -264,6 +269,7 @@ fieldset {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
       
       cursor: initial;
     }

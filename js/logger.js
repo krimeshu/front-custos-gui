@@ -161,10 +161,10 @@ var console = module.exports,
 console.info('[程序员老黄历]');
 console.log(FooCalendar.date);
 FooCalendar.good.forEach(function (event, index) {
-    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '宜' : '&nbsp;&nbsp;', 'color: white;', event.name, 'color: gray;', event.good);
+    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '宜' : '　', 'color: white;', event.name, 'color: gray;', event.good);
 });
 FooCalendar.bad.forEach(function (event, index) {
-    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '忌' : '&nbsp;&nbsp;', 'color: white;', event.name, 'color: gray;', event.bad);
+    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '忌' : '　', 'color: white;', event.name, 'color: gray;', event.bad);
 });
 console.warn('座位朝向：%c面向<ins>%s</ins>写代码，BUG最少', 'color: white;', FooCalendar.direction);
 console.warn('今日宜饮：%c%s', 'color: white;', FooCalendar.drink.join('，'));
