@@ -1,6 +1,6 @@
 {
   "name": "front-custos-gui",
-  "version": "3.1.3",
+  "version": "3.1.5",
   "description": "A graphic user interface of Front Custos.",
   "productName": "Front Custos GUI",
   "main": "main.js",
@@ -40,5 +40,8 @@
     "watch": "^0.18.0"
   },
   "useDevCore": false,
-  "dependencies": {}
+  "dependencies": {
+    "angular-right-click": "^0.1.1",
+    "tinycolor2": "^1.4.1"
+  }
 }

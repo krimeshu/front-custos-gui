@@ -7,9 +7,18 @@ var HeaderCtrl = require('./ctrl-header.js'),
     InfoBoxCtrl = require('./ctrl-info-box.js'),
     Model = require('./model.js');
 
-angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace', 'perfect_scrollbar', 'as.sortable'])
+var tinycolor = require('tinycolor2');
+
+angular.module('FrontCustosGUI', [
+    'ngMaterial',
+    'ngMessages',
+    'ngRightClick',
+    'ui.ace',
+    'perfect_scrollbar',
+    'as.sortable'])
     .config(['$mdThemingProvider', function ($mdThemingProvider) {
-        var allThemes = Model.allThemes;
+        var allThemes = Model.allThemes,
+            extraThemeStyle = [];
         for (var name in allThemes) {
             if (!allThemes.hasOwnProperty(name)) {
                 continue;
@@ -17,11 +26,31 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace', 'perfect
             var props = allThemes[name];
             $mdThemingProvider.theme(name)
                 .primaryPalette(props.primary)
-                .accentPalette(props.accent)
+                .accentPalette(props.accent, {
+                    'default': '500'
+                })
                 .backgroundPalette('grey', {
                     'default': '50'
                 });
+
+            // 顶栏与项目列表配色
+            var primaryColor = $mdThemingProvider._PALETTES[props.primary]['500'];
+            extraThemeStyle.push('.window-box[md-theme="' + name + '"] .window-header {');
+            extraThemeStyle.push('  background-color: ' + tinycolor(primaryColor) + ';');
+            extraThemeStyle.push('}');
+            extraThemeStyle.push('.window-box[md-theme="' + name + '"] .list-box {');
+            extraThemeStyle.push('  background-color: ' + tinycolor(primaryColor).lighten(45) + ';');
+            extraThemeStyle.push('  color: ' + tinycolor(primaryColor).darken(25) + ';');
+            extraThemeStyle.push('}');
+            extraThemeStyle.push('.window-box[md-theme="' + name + '"] .proj-item.current {');
+            extraThemeStyle.push('  background-color: ' + tinycolor(primaryColor).lighten(25) + ';');
+            extraThemeStyle.push('}');
         }
+
+        var styleText = extraThemeStyle.join('\n');
+        // console.log('styleText:', styleText);
+        $('body').append($('<style title="extra-theme-style"></style>').html(styleText));
+
         $mdThemingProvider.alwaysWatchTheme(true);
     }])
     .filter('to_trusted', ['$sce', function ($sce) {
@@ -32,19 +61,20 @@ angular.module('FrontCustosGUI', ['ngMaterial', 'ngMessages', 'ui.ace', 'perfect
     .controller('MainCtrl', ['$scope', function ($scope) {
         var theme = Model.config.theme,
             allThemes = Model.allThemes,
-            correct = false;
+            isThemeConfigAvailable = false;
         for (var name in allThemes) {
             if (!allThemes.hasOwnProperty(name)) {
                 continue;
             }
             if (name === theme) {
-                correct = true;
+                isThemeConfigAvailable = true;
                 break;
             }
         }
-        if (!correct) {
-            Model.config.theme = 'default';
+        if (!isThemeConfigAvailable) {
+            Model.config.theme = Model._DEFAULT_THEME;
         }
+
         $scope.config = Model.config;
     }])
     .controller('HeaderCtrl', HeaderCtrl)

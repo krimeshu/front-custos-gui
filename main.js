@@ -45,7 +45,7 @@ function createWindow() {
     var bounds = mainWindow.getBounds(),
         width = initWindowSize.width,
         height = initWindowSize.height;
-    
+
     mainWindow.setBounds({
         x: bounds.x - width / 2,
         y: bounds.y - height / 2,
@@ -54,16 +54,17 @@ function createWindow() {
     });
 
     // 注册快捷键
-    globalShortcut.register('ctrl+alt+b', function () {
-        mainWindow.webContents.send('global-shortcut', 'ctrl+alt+b');
+    [
+        'CmdOrCtrl+Alt+b',
+        'CmdOrCtrl+Alt+u',
+        'CmdOrCtrl+Alt+r'
+    ].forEach((key) => {
+        globalShortcut.register(key, function () {
+            var pageKey = key.toLowerCase().replace(/CmdOrCtrl/gi, 'ctrl');
+            mainWindow.webContents.send('global-shortcut', pageKey);
+        });
     });
-    globalShortcut.register('ctrl+alt+u', function () {
-        mainWindow.webContents.send('global-shortcut', 'ctrl+alt+u');
-    });
-    globalShortcut.register('ctrl+alt+r', function () {
-        mainWindow.webContents.send('global-shortcut', 'ctrl+alt+r');
-    });
-    globalShortcut.register('ctrl+alt+d', function () {
+    globalShortcut.register('CmdOrCtrl+Alt+d', function () {
         mainWindow.webContents.openDevTools();
     });
 }

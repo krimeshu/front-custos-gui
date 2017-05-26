@@ -2,8 +2,7 @@
  * Created by krimeshu on 2016/3/12.
  */
 
-var shell = require('electron').remote.shell,
-    ipcRenderer = require('electron').ipcRenderer;
+var ipcRenderer = require('electron').ipcRenderer;
 
 var _path = require('path'),
     _fs = require('fs');
@@ -50,43 +49,6 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         // Options
         _editor.$blockScrolling = Infinity;
         _editor.focus();
-    };
-
-    // 打开项目源目录
-    $scope.openSrcDir = function () {
-        var srcDir = CustosProxy.FrontCustos.getSrcDir(Model.curProj);
-        Utils.makeSureDir(srcDir);
-        shell.openExternal(srcDir);
-    };
-
-    // 打开项目生成目录
-    $scope.openDistDir = function () {
-        var distDir = CustosProxy.FrontCustos.getDistDir(Model.curProj, Model.config.outputDir);
-        Utils.makeSureDir(distDir);
-        shell.openExternal(distDir);
-    };
-
-    // 删除项目配置
-    $scope.removeProj = function (ev) {
-        var confirm = $mdDialog.confirm()
-            .parent(angular.element(document.querySelector('.window-box')))
-            .title('确定要从项目列表中移除此项目的配置吗？')
-            .textContent('项目源文件不会受任何影响。')
-            .ariaLabel('删除项目')
-            .targetEvent(ev)
-            .ok('确定')
-            .cancel('取消');
-        $mdDialog.show(confirm).then(function () {
-            var proj = $scope.curProj,
-                id = proj.id,
-                projName = proj.projName;
-            CustosProxy.unwatch(proj);
-            var res = Model.removeProjById(id),
-                msg = res ?
-                    '项目 ' + projName + ' 已被移除' :
-                    '项目 ' + projName + ' 移除失败，请稍后重试';
-            $scope.toastMsg(msg);
-        });
     };
 
     // 保存项目配置

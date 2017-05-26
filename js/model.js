@@ -24,12 +24,15 @@ TaskList.forEach((task) => {
 
 var _this = module.exports = {
     allTasks: TaskList,
+    _DEFAULT_THEME: 'Modern',
     allThemes: {
-        'default': { primary: 'blue-grey', accent: 'red' },
-        'pink': { primary: 'pink', accent: 'red' },
-        'indigo': { primary: 'indigo', accent: 'pink' },
-        'orange': { primary: 'deep-orange', accent: 'blue' },
-        'grey': { primary: 'grey', accent: 'grey' }
+        'Modern': { primary: 'blue-grey', accent: 'red' },
+        'Girl': { primary: 'pink', accent: 'red' },
+        // 'Spring': { primary: 'teal', accent: 'green' },
+        'Industry': { primary: 'indigo', accent: 'red' },
+        'Orange': { primary: 'deep-orange', accent: 'blue' },
+        'Coffee': { primary: 'brown', accent: 'deep-orange' },
+        'Deep': { primary: 'deep-purple', accent: 'purple' }
     },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
@@ -104,7 +107,7 @@ var _this = module.exports = {
             });
         return proj;
     },
-    removeProjById: function (id) {
+    removeProjById: function (id, selectNext) {
         try {
             var projList = this.projList,
                 proj = this.getProjById(id),
@@ -118,13 +121,15 @@ var _this = module.exports = {
             Data.saveProjList(projList);
             Utils.deepCopy(Data.getNewOpt(), this.curProj);
 
-            if (pos >= projList.length - 1) {
-                pos = projList.length - 1;
-            }
-            if (pos >= 0) {
-                // 同一位置还有项目时，切换到该项目
-                proj = this.projList[pos];
-                this.selectCurProj(proj);
+            if (selectNext) {
+                if (pos >= projList.length - 1) {
+                    pos = projList.length - 1;
+                }
+                if (pos >= 0) {
+                    // 同一位置还有项目时，切换到该项目
+                    proj = this.projList[pos];
+                    this.selectCurProj(proj);
+                }
             }
             return true;
         } catch (e) {

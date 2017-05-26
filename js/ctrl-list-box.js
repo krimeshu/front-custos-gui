@@ -1,13 +1,19 @@
 /**
  * Created by krimeshu on 2016/3/12.
  */
-var mainWindow = require('electron').remote.getCurrentWindow(),
-    dialog = require('electron').remote.dialog;
+var remote = require('electron').remote,
+    mainWindow = remote.getCurrentWindow(),
+    dialog = remote.dialog,
+    shell = remote.shell,
+
+    Menu = remote.Menu,
+    MenuItem = remote.MenuItem;
 
 var Logger = require('./logger.js'),
     Data = require('./data.js'),
     Model = require('./model.js'),
-    Utils = require('./utils.js');
+    Utils = require('./utils.js'),
+    CustosProxy = require('./custos-proxy.js');
 
 var _fs = require('fs'),
     _path = require('path');
@@ -26,6 +32,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         if (Model.curProj.id === id) {
             return;
         }
+
         //console.log('projName:', projName);
         var proj = Model.getProjById(id);
 
@@ -56,6 +63,136 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         Model.selectCurProj(proj);
     };
 
+    // 显示右键菜单
+    $scope.showContext = function (id, ev) {
+        //console.log('projName:', projName);
+        var proj = Model.getProjById(id);
+
+        if (!proj) {
+            console.log('ListBoxCtrl.showContext 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        var template = [
+            { label: '移到顶部', click: () => { $scope.orderProj(id, ev, 'top'); } },
+            { label: '移到底部', click: () => { $scope.orderProj(id, ev, 'bottom'); } },
+            { label: '上移一项', click: () => { $scope.orderProj(id, ev, -1); } },
+            { label: '下移一项', click: () => { $scope.orderProj(id, ev, 1); } },
+            { type: 'separator' },
+            { label: '打开源目录', click: () => { $scope.openSrcDir(id, ev); } },
+            { label: '打开生成目录', click: () => { $scope.openDistDir(id, ev); } },
+            { type: 'separator' },
+            { label: '从列表中移除', click: () => { $scope.removeProj(id, ev); } }
+        ];
+
+        setTimeout(function () {
+            var menu = Menu.buildFromTemplate(template);
+            menu.popup(remote.getCurrentWindow);
+        }, 100);
+    };
+
+    // 项目排序调整
+    $scope.orderProj = function (id, ev, delta) {
+        //console.log('projName:', projName);
+        var proj = Model.getProjById(id);
+
+        if (!proj) {
+            console.log('ListBoxCtrl.orderProj 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        var idx = Model.projList.indexOf(proj);
+        Model.projList.splice(idx, 1);
+        if (typeof delta == 'number') {
+            Model.projList.splice(idx + delta, 0, proj);
+        } else if (delta == 'top') {
+            Model.projList.splice(0, 0, proj);
+        } else if (delta == 'bottom') {
+            Model.projList.push(proj);
+        }
+        $scope.$apply(function () {
+            $scope.projList = Model.projList;
+        });
+    };
+
+    windowCtrl.bindPageShortCut('ctrl+up', function () {
+        if (!Model.curProj || !Model.curProj.id) {
+            return;
+        }
+        // $scope.$apply(function () {
+        $scope.orderProj(Model.curProj.id, {}, -1);
+        // });
+    });
+    windowCtrl.bindPageShortCut('ctrl+down', function () {
+        if (!Model.curProj || !Model.curProj.id) {
+            return;
+        }
+        // $scope.$apply(function () {
+        $scope.orderProj(Model.curProj.id, {}, 1);
+        // });
+    });
+    // 打开项目源目录
+    $scope.openSrcDir = function (id) {
+        var proj = Model.getProjById(id);
+
+        if (!proj) {
+            console.log('ListBoxCtrl.openSrcDir 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        var srcDir = CustosProxy.FrontCustos.getSrcDir(proj);
+        Utils.makeSureDir(srcDir);
+        shell.openExternal(srcDir);
+    };
+
+    // 打开项目生成目录
+    $scope.openDistDir = function (id) {
+        var proj = Model.getProjById(id);
+
+        if (!proj) {
+            console.log('ListBoxCtrl.openDistDir 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        var distDir = CustosProxy.FrontCustos.getDistDir(proj, Model.config.outputDir);
+        Utils.makeSureDir(distDir);
+        shell.openExternal(distDir);
+    };
+
+    // 删除项目配置
+    $scope.removeProj = function (id, ev) {
+        //console.log('projName:', projName);
+        var proj = Model.getProjById(id);
+
+        ev && ev.stopPropagation && ev.stopPropagation();
+
+        if (!proj) {
+            console.log('ListBoxCtrl.removeProj 选择的项目异常，找不到对应数据！');
+            return;
+        }
+
+        var confirm = $mdDialog.confirm()
+            .parent(angular.element(document.querySelector('.window-box')))
+            .title('确定要从项目列表中移除此项目的配置吗？')
+            .textContent('项目源文件不会受任何影响。')
+            .ariaLabel('删除项目')
+            .targetEvent(ev)
+            .ok('确定')
+            .cancel('取消');
+
+        $mdDialog.show(confirm).then(function () {
+            var id = proj.id,
+                projName = proj.projName,
+                selectNext = id == ($scope.curProj.id);
+            CustosProxy.unwatch(proj);
+            var res = Model.removeProjById(id, selectNext),
+                msg = res ?
+                    '项目 ' + projName + ' 已被移除' :
+                    '项目 ' + projName + ' 移除失败，请稍后重试';
+            $scope.toastMsg(msg);
+        });
+    };
+
     // 显示打开项目路径对话框
     $scope.showOpenDialog = function (ev) {
         dialog.showOpenDialog(mainWindow, {
@@ -82,6 +219,11 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             $scope.importProj(filePath, ev);
         }
     };
+
+    // 右键菜单
+    $('.list-item').on('contextmenu', function (ev) {
+        console.log('Show context menu:', ev);
+    });
 
     // 导入项目
     $scope.importProj = function (projDir, ev) {

@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body class="shadow-wrap"
-      md-theme="{{ config.theme }}"
       style="background: transparent;">
 <script>
     document.ondragover = document.ondrop = function (e) {
@@ -25,7 +24,8 @@
     };
 </script>
 
-<div class="window-box shadow-box theme-default">
+<div class="window-box shadow-box theme-default"
+     md-theme="{{ config.theme }}">
     <header class="window-header" ng-controller="HeaderCtrl as ctrl">
         <div class="header-row">
             <!-- Title -->
@@ -68,7 +68,7 @@
                         </md-menu-item>
                         <md-menu-item>
                             <md-button ng-click="checkUpdate($event)">
-                                检查更新
+                                检查更新 (Only Win64)
                                 <span md-menu-align-target style="float: right;"></span>
                             </md-button>
                         </md-menu-item>
@@ -108,12 +108,20 @@
                                   data-id="{{item.id}}"
                                   ng-repeat="item in projList"
                                   ng-click="setCurrent(item.id, $event)"
+                                  ng-right-click="showContext(item.id, $event)"
                                   aria-label="{{item.projName}}"
                                   data-as-sortable-item>
                         <p class="proj-name"
                            ng-bind="item.projName"
                            title="{{item.projName}}"
                            data-as-sortable-item-handle></p>
+                        <!--<md-icon class="proj-delete material-icons"
+                            ng-click="removeProj(item.id, $event)">
+                            <md-tooltip md-direction="right">
+                                移除项目
+                            </md-tooltip>
+                            delete
+                        </md-icon>-->
                     </md-list-item>
                 </md-list>
             </perfect-scrollbar>
@@ -135,10 +143,26 @@
         </md-content>
 
         <!-- Current Project Info -->
-        <md-content class="info-box md-default-theme" ng-controller="InfoBoxCtrl as ctrl">
+        <md-content class="info-box" ng-controller="InfoBoxCtrl as ctrl">
             <form class="info-form"
                   name="curProjForm">
-                <md-fab-speed-dial class="btn-open" ng-cloak
+                <md-button class="md-fab btn-build md-raised"
+                           ng-disabled="curProj.id === null"
+                           ng-click="buildLocally()">
+                    <md-tooltip md-direction="bottom">
+                        本地构建
+                    </md-tooltip>
+                    <md-icon class="material-icons">build</md-icon>
+                </md-button>
+                <md-button class="md-fab btn-build-upload md-primary"
+                           ng-disabled="curProj.id === null"
+                           ng-click="buildUpload()">
+                    <md-tooltip md-direction="bottom">
+                        构建并上传
+                    </md-tooltip>
+                    <md-icon class="material-icons">backup</md-icon>
+                </md-button>
+                <!--<md-fab-speed-dial class="btn-open" ng-cloak
                                    md-open="ctrl.isOpenExpanded"
                                    md-direction="up"
                                    ng-class="ctrl.openDialMode">
@@ -154,7 +178,7 @@
                         <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini"
                                    ng-disabled="curProj.id === null"
                                    ng-click="openDistDir()">
-                            <md-tooltip md-direction="right">
+                            <md-tooltip md-direction="left">
                                 打开项目生成目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_returned</md-icon>
@@ -162,22 +186,14 @@
                         <md-button aria-label="打开源目录" class="md-fab md-raised md-mini"
                                    ng-disabled="curProj.id === null"
                                    ng-click="openSrcDir()">
-                            <md-tooltip md-direction="right">
+                            <md-tooltip md-direction="left">
                                 打开项目源目录
                             </md-tooltip>
                             <md-icon class="material-icons">assignment_return</md-icon>
                         </md-button>
                     </md-fab-actions>
-                </md-fab-speed-dial>
-                <md-button class="md-fab btn-delete"
-                           ng-disabled="curProj.id === null"
-                           ng-click="removeProj($event)">
-                    <md-tooltip md-direction="bottom">
-                        删除项目配置
-                    </md-tooltip>
-                    <md-icon class="material-icons">delete</md-icon>
-                </md-button>
-                <md-button class="md-fab md-primary btn-save"
+                </md-fab-speed-dial>-->
+                <md-button class="md-fab md-raised btn-save"
                            ng-disabled="curProj.id === null"
                            ng-click="saveProj($event)">
                     <md-tooltip md-direction="bottom">
@@ -239,7 +255,7 @@
 
                             <!--<h4>开始操作</h4>-->
 
-                            <div layout="row">
+                            <!--<div layout="row">
                                 <md-button class="md-raised middle-width"
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildLocally()">本地构建
@@ -248,7 +264,7 @@
                                            ng-disabled="curProj.id === null"
                                            ng-click="buildUpload()">构建上传
                                 </md-button>
-                            </div>
+                            </div>-->
                             <div layout="row">
                                 <md-switch class="middle-width"
                                            ng-checked="curProj.watchToRebuilding"
@@ -540,6 +556,7 @@
 <script src="node_modules/angular-aria/angular-aria.min.js"></script>
 <script src="node_modules/angular-messages/angular-messages.min.js"></script>
 <script src="node_modules/angular-material/angular-material.min.js"></script>
+<script src="node_modules/angular-right-click/src/ng-right-click.js"></script>
 <script src="node_modules/ng-sortable/dist/ng-sortable.min.js"></script>
 
 <script src="angular-perfect-scrollbar/perfect-scrollbar.with-mousewheel.min.js"></script>
@@ -600,7 +617,8 @@
             });
         },
         bindPageShortCut: function (key, func) {
-            var listeners = this.pageShortCutListeners;
+            var listeners = this.pageShortCutListeners,
+                specKeys = { '38': 'up', '40': 'down' };
             if (!listeners) {
                 listeners = this.pageShortCutListeners = [];
                 window.addEventListener('keydown', function (e) {
@@ -608,7 +626,7 @@
                     e.ctrlKey && keys.push('ctrl');
                     e.shiftKey && keys.push('shift');
                     e.altKey && keys.push('alt');
-                    keys.push(String.fromCharCode(e.keyCode).toLowerCase());
+                    keys.push(specKeys[e.keyCode] || String.fromCharCode(e.keyCode).toLowerCase());
                     key = keys.join('+');
                     listeners.forEach(function (listener) {
                         var _key = listener.key, _func = listener.func;
