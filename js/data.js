@@ -10,7 +10,7 @@ var _fs = require('fs'),
 
 module.exports = {
     initConfig: {
-        "outputDir": "D:\\FC_Output",
+        "outputDir": _path.resolve(process.env.HOME || process.env.USERPROFILE, "FC_Output"),
         "htmlEnhanced": false,
         "delUnusedFiles": true,
         "flattenMap": {
@@ -162,7 +162,7 @@ module.exports = {
     },
     // 读取模板列表
     getTemplates: function () {
-        var templates = [{name: '空白模板', path: null}],
+        var templates = [{ name: '空白模板', path: null }],
             templateDir = Utils.configDir('./fc-template');
         if (!_fs.existsSync(templateDir)) {
             _fs.mkdirSync(templateDir, 511); // 511:dec = 0777:hex
@@ -171,7 +171,7 @@ module.exports = {
             var filePath = _path.resolve(templateDir, file),
                 extName = _path.extname(file),
                 baseName = _path.basename(filePath, extName);
-            templates.push({name: baseName, path: filePath});
+            templates.push({ name: baseName, path: filePath });
         });
         return templates;
     }
