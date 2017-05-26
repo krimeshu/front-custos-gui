@@ -32,7 +32,7 @@ var _this = module.exports = {
         'Industry': { primary: 'indigo', accent: 'red' },
         'Orange': { primary: 'deep-orange', accent: 'blue' },
         'Coffee': { primary: 'brown', accent: 'deep-orange' },
-        'Deep': { primary: 'deep-purple', accent: 'purple' }
+        'Evil': { primary: 'deep-purple', accent: 'purple' }
     },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
