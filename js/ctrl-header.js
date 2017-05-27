@@ -10,7 +10,7 @@ var Data = require('./data.js'),
     Updater = require('./updater.js'),
 
     CustosProxy = require('./custos-proxy'),
-    
+
     corePackageFile = require('../front-custos/package.json');
 
 module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDialog) {
@@ -45,7 +45,7 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
     // 显示配置对话框
     $scope.showConfig = function (ev) {
         $mdDialog.show({
-            lacals: {parent: $scope},
+            lacals: { parent: $scope },
             controller: function configDialogController($scope, $mdDialog) {
                 $scope.config = Utils.deepCopy(Model.config);
                 $scope.allThemes = Model.allThemes;
@@ -92,16 +92,16 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
         // Appending dialog to document.body to cover sidenav in docs app
         // Modal dialogs should fully cover application
         // to prevent interaction outside of dialog
-        $mdDialog.show(
-            $mdDialog.alert()
-                .parent(angular.element(document.querySelector('.window-box')))
-                .title('关于')
-                .textContent('本工具基于 electron 和 angular material 提供 front-custos 的图形界面，' +
-                    '如不需要 GUI，也可以尝试直接基于 front-custos 编写脚本。使用过程中发现任何问题，欢迎联系 krimeshu。(^o^)/')
-                .ariaLabel('About Dialog')
-                .ok('好的')
-                .clickOutsideToClose(true)
-                .targetEvent(ev)
-        );
+        var alert = $mdDialog.alert()
+            .parent(angular.element(document.querySelector('.window-box')))
+            .theme(Model.config.theme)
+            .title('关于')
+            .textContent('本工具基于 electron 和 angular material 提供 front-custos 的图形界面，' +
+            '如不需要 GUI，也可以尝试直接基于 front-custos 编写脚本。使用过程中发现任何问题，欢迎联系 krimeshu。(^o^)/')
+            .ariaLabel('About Dialog')
+            .ok('好的')
+            .clickOutsideToClose(true)
+            .targetEvent(ev);
+        $mdDialog.show(alert);
     };
 }];

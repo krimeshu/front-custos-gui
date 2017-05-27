@@ -46,16 +46,16 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         if (!_fs.existsSync(projDir)) {
             Model.removeProjById(id);
-            $mdDialog.show(
-                $mdDialog.alert()
-                    .parent(angular.element(document.querySelector('.window-box')))
-                    .title('项目“' + projName + '”配置失效，项目目录不存在，已从列表中移除')
-                    .textContent('如项目被移动到其他位置，需要继续处理，请重新导入到工具内后继续操作。')
-                    .ariaLabel('项目不存在')
-                    .ok('好的')
-                    .clickOutsideToClose(true)
-                    .targetEvent(ev)
-            );
+            var alert = $mdDialog.alert()
+                .parent(angular.element(document.querySelector('.window-box')))
+                .theme(Model.config.theme)
+                .title('项目“' + projName + '”配置失效，项目目录不存在，已从列表中移除')
+                .textContent('如项目被移动到其他位置，需要继续处理，请重新导入到工具内后继续操作。')
+                .ariaLabel('项目不存在')
+                .ok('好的')
+                .clickOutsideToClose(true)
+                .targetEvent(ev);
+            $mdDialog.show(alert);
             return;
         }
 
@@ -173,6 +173,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.querySelector('.window-box')))
+            .theme(Model.config.theme)
             .title('确定要从项目列表中移除此项目的配置吗？')
             .textContent('项目源文件不会受任何影响。')
             .ariaLabel('删除项目')
