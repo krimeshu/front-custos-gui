@@ -2,6 +2,9 @@
  * Created by krimeshu on 2016/3/8.
  */
 
+var remote = require('electron').remote,
+    Menu = remote.Menu;
+
 var HeaderCtrl = require('./ctrl-header.js'),
     ListBoxCtrl = require('./ctrl-list-box.js'),
     InfoBoxCtrl = require('./ctrl-info-box.js'),
@@ -81,3 +84,29 @@ angular.module('FrontCustosGUI', [
     .controller('ListBoxCtrl', ListBoxCtrl)
     .controller('InfoBoxCtrl', InfoBoxCtrl);
 
+(function setApplicationMenu() {
+    // 设置应用菜单（修复 Mac OS 内常用编辑快捷键）
+
+    var template = [{
+        label: "Application",
+        submenu: [
+            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+            { type: "separator" },
+            { label: "Quit", accelerator: "CmdOrCtrl+Q", click: ()=> app.quit() }
+        ]
+    }, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+        ]
+    }
+    ];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+})();
