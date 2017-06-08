@@ -6,33 +6,39 @@
   "patches": [
     {
       "from": "3.0.2",
-      "to": "3.1.10",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.2_3.1.10.7z",
+      "to": "3.1.12",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.2_3.1.12.7z",
       "desc": "New features."
     },
     {
       "from": "3.0.3",
-      "to": "3.1.10",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.3_3.1.10.7z",
+      "to": "3.1.12",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.3_3.1.12.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.2",
-      "to": "3.1.10",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.2_3.1.10.7z",
+      "to": "3.1.12",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.2_3.1.12.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.5",
       "to": "3.1.9",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.5_3.1.10.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.5_3.1.12.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.9",
-      "to": "3.1.10",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.1.10.7z",
+      "to": "3.1.12",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.1.12.7z",
       "desc": "New features."
+    },
+    {
+      "from": "3.1.10",
+      "to": "3.1.12",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.10_3.1.12.7z",
+      "desc": "Bugs fixed."
     }
   ]
 }
