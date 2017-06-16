@@ -1,31 +1,31 @@
 {
   "latest": {
-    "version": "3.1.9",
-    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.1.9"
+    "version": "3.2.1",
+    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.2.1"
   },
   "patches": [
     {
       "from": "3.0.2",
-      "to": "3.1.12",
+      "to": "3.2.1",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.2_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.2_3.2.1.7z",
       "desc": "New features."
     },
     {
       "from": "3.0.3",
-      "to": "3.1.12",
+      "to": "3.2.1",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.3_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.0.3_3.2.1.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.2",
-      "to": "3.1.12",
+      "to": "3.2.1",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.2_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.2_3.2.1.7z",
       "desc": "New features."
     },
     {
@@ -33,23 +33,31 @@
       "to": "3.1.9",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.5_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.5_3.2.1.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.9",
-      "to": "3.1.12",
+      "to": "3.2.1",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.2.1.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.10",
-      "to": "3.1.12",
+      "to": "3.2.1",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.10_3.1.12.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.10_3.2.1.7z",
+      "desc": "Bugs fixed."
+    },
+    {
+      "from": "3.1.12",
+      "to": "3.2.1",
+      "platform": "win32",
+      "arch": "x64",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.12_3.2.1.7z",
       "desc": "Bugs fixed."
     }
   ]
