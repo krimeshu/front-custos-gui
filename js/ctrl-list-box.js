@@ -79,8 +79,8 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             { label: '上移一项', accelerator: "CmdOrCtrl+Up", click: () => { $scope.orderProj(id, ev, -1); } },
             { label: '下移一项', accelerator: "CmdOrCtrl+Down", click: () => { $scope.orderProj(id, ev, 1); } },
             { type: 'separator' },
-            { label: '打开源目录', click: () => { $scope.openSrcDir(id, ev); } },
-            { label: '打开生成目录', click: () => { $scope.openDistDir(id, ev); } },
+            { label: '打开源目录', accelerator: "CmdOrCtrl+R", click: () => { $scope.openSrcDir(id, ev); } },
+            { label: '打开生成目录', accelerator: "CmdOrCtrl+D", click: () => { $scope.openDistDir(id, ev); } },
             { type: 'separator' },
             { label: '从列表中移除', click: () => { $scope.removeProj(id, ev); } }
         ];
@@ -162,6 +162,24 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         Utils.makeSureDir(distDir);
         shell.openItem(distDir);
     };
+
+    windowCtrl.bindPageShortCut('ctrl+r', function () {
+        if (!Model.curProj || !Model.curProj.id) {
+            return;
+        }
+        // $scope.$apply(function () {
+        $scope.openSrcDir(Model.curProj.id);
+        // });
+    });
+
+    windowCtrl.bindPageShortCut('ctrl+d', function () {
+        if (!Model.curProj || !Model.curProj.id) {
+            return;
+        }
+        // $scope.$apply(function () {
+        $scope.openDistDir(Model.curProj.id);
+        // });
+    });
 
     // 删除项目配置
     $scope.removeProj = function (id, ev) {
