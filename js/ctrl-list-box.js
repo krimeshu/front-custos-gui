@@ -76,8 +76,8 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         var template = [
             { label: '移到顶部', click: () => { $scope.orderProj(id, ev, 'top'); } },
             { label: '移到底部', click: () => { $scope.orderProj(id, ev, 'bottom'); } },
-            { label: '上移一项', click: () => { $scope.orderProj(id, ev, -1); } },
-            { label: '下移一项', click: () => { $scope.orderProj(id, ev, 1); } },
+            { label: '上移一项', accelerator: "CmdOrCtrl+Up", click: () => { $scope.orderProj(id, ev, -1); } },
+            { label: '下移一项', accelerator: "CmdOrCtrl+Down", click: () => { $scope.orderProj(id, ev, 1); } },
             { type: 'separator' },
             { label: '打开源目录', click: () => { $scope.openSrcDir(id, ev); } },
             { label: '打开生成目录', click: () => { $scope.openDistDir(id, ev); } },
@@ -101,14 +101,18 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             return;
         }
 
-        var idx = Model.projList.indexOf(proj);
+        var idx = Model.projList.indexOf(proj),
+            targetPos = typeof delta == 'number' ? idx + delta : delta;
+        if (targetPos < 0 || targetPos >= Model.projList.length) {
+            return;
+        }
         Model.projList.splice(idx, 1);
-        if (typeof delta == 'number') {
-            Model.projList.splice(idx + delta, 0, proj);
-        } else if (delta == 'top') {
+        if (targetPos == 'top') {
             Model.projList.splice(0, 0, proj);
-        } else if (delta == 'bottom') {
+        } else if (targetPos == 'bottom') {
             Model.projList.push(proj);
+        } else if (typeof targetPos == 'number') {
+            Model.projList.splice(targetPos, 0, proj);
         }
         $scope.$apply(function () {
             $scope.projList = Model.projList;

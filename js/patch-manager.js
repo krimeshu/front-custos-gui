@@ -42,7 +42,7 @@ module.exports = {
     },
     // 检查是否有可用的本地补丁包
     checkLocalPatch: function () {
-        return new Promise((resolve, reject)=> {
+        return new Promise((resolve, reject) => {
             var patches = this.getLocalPatches(),
                 currentVersion = appPackageFile.version,
                 currentPatch = null;
@@ -60,7 +60,7 @@ module.exports = {
     },
     // 解压补丁包
     extractPatch: function (patch) {
-        return new Promise((resolve, reject)=> {
+        return new Promise((resolve, reject) => {
             var appRootPath = _path.resolve('./'),
                 dirPath = _path.resolve(__dirname, '../'),
                 _7zPath = _path.relative(appRootPath, _path.resolve(dirPath, '7z')),
@@ -91,19 +91,21 @@ module.exports = {
     },
     // 下载在线版本列表
     downVerList: function () {
-        return new Promise((resolve)=> {
+        return new Promise((resolve) => {
             var updaterDir = Utils.configDir('./fc-update');
-            this._download('版本列表', VERSION_LIST_URL, updaterDir, ()=> {
+            this._download('版本列表', VERSION_LIST_URL, updaterDir, () => {
                 resolve();
             });
         });
     },
     // 检查在线版本列表中是否有可用补丁
     checkVerPatch: function () {
-        return new Promise((resolve, reject)=> {
+        return new Promise((resolve, reject) => {
             var updaterDir = Utils.configDir('./fc-update'),
                 versionListPath = _path.resolve(updaterDir, 'version-list.json'),
-                currentVersion = appPackageFile.version;
+                currentVersion = appPackageFile.version,
+                platform = process.platform,
+                arch = process.arch;
             try {
                 var str = _fs.readFileSync(versionListPath, 'utf-8'),
                     verList = JSON.parse(str),
@@ -111,7 +113,9 @@ module.exports = {
                     patches = verList['patches'],
                     curPatch = null;
                 patches.forEach(function (patch) {
-                    if (patch.from === currentVersion) {
+                    if (patch.platform === platform &&
+                        patch.arch === arch &&
+                        patch.from === currentVersion) {
                         curPatch = patch;
                     }
                 });
@@ -134,9 +138,9 @@ module.exports = {
     },
     // 下载补丁
     downPatch: function (patch) {
-        return new Promise((resolve)=> {
+        return new Promise((resolve) => {
             var patchDir = _path.resolve(__dirname, '..');
-            this._download('补丁文件', patch.url, patchDir, ()=> {
+            this._download('补丁文件', patch.url, patchDir, () => {
                 resolve();
             });
         });

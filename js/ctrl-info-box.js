@@ -16,6 +16,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     var self = this;
     self.isOpenExpanded = false;
     self.openDialMode = 'md-fling';
+    $scope.cmdOrCtrl = process.platform === 'darwin' ? 'Cmd' : 'Ctrl';
 
     $scope.curProj = Model.curProj;
     $scope.toggleCurWatching = function () {

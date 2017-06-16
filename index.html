@@ -68,7 +68,7 @@
                         </md-menu-item>
                         <md-menu-item>
                             <md-button ng-click="checkUpdate($event)">
-                                检查更新 (Only Win64)
+                                检查更新
                                 <span md-menu-align-target style="float: right;"></span>
                             </md-button>
                         </md-menu-item>
@@ -128,7 +128,7 @@
             <md-button class="md-fab float-btn btn-add-proj"
                        ng-click="showOpenDialog($event)">
                 <md-tooltip md-direction="bottom">
-                    导入项目
+                    导入项目 (也可直接拖拽入列表内)
                 </md-tooltip>
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
@@ -150,7 +150,7 @@
                            ng-disabled="curProj.id === null"
                            ng-click="buildLocally()">
                     <md-tooltip md-direction="bottom">
-                        本地构建
+                        本地构建 ({{cmdOrCtrl}}+Alt+B)
                     </md-tooltip>
                     <md-icon class="material-icons">build</md-icon>
                 </md-button>
@@ -158,7 +158,7 @@
                            ng-disabled="curProj.id === null"
                            ng-click="buildUpload()">
                     <md-tooltip md-direction="bottom">
-                        构建并上传
+                        构建并上传 ({{cmdOrCtrl}}+Alt+U)
                     </md-tooltip>
                     <md-icon class="material-icons">backup</md-icon>
                 </md-button>
@@ -197,7 +197,7 @@
                            ng-disabled="curProj.id === null"
                            ng-click="saveProj($event)">
                     <md-tooltip md-direction="bottom">
-                        保存项目配置
+                        保存项目配置 ({{cmdOrCtrl}}+S)
                     </md-tooltip>
                     <md-icon class="material-icons">save</md-icon>
                 </md-button>
@@ -310,15 +310,21 @@
                                     <fieldset>
                                         <legend>启用插件</legend>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.nodeResolve" flex="33"
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.nodeResolve" flex="50"
                                                     ng-disabled="curProj.id === null">
                                                     node-resolve
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.commonJS" flex="33"
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.commonJS" flex="50"
                                                     ng-disabled="curProj.id === null">
                                                     common-js
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="33"
+                                        </div>                                            
+                                        <div layout="row">
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.vue" flex="50"
+                                                    ng-disabled="curProj.id === null">
+                                                    vue
+                                            </md-checkbox>
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="50"
                                                     ng-disabled="curProj.id === null">
                                                     babel
                                             </md-checkbox>
