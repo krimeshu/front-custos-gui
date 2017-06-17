@@ -38,7 +38,7 @@ var Updater = {
             .then(PatchManager.checkLocalPatch.bind(PatchManager))
             .then(PatchManager.extractPatch.bind(PatchManager))
             .then(function () {
-                Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。');
+                Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新完毕，更新功能将在重启后生效。<a href="javascript:window.location.reload();">立即重启</a>');
             })
             .catch(function (errOrMsg) {
                 var isError = errOrMsg instanceof Error;
