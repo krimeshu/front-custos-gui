@@ -353,6 +353,11 @@ fieldset {
 }
 
 .editor {
-  position: relative;
+  width: 100%;
   height: 400px;
 }
+
+.padding-tab-bottom {
+  padding-bottom: 80px;
+}
+

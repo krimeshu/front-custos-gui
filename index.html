@@ -115,13 +115,6 @@
                            ng-bind="item.projName"
                            title="{{item.projName}}"
                            data-as-sortable-item-handle></p>
-                        <!--<md-icon class="proj-delete material-icons"
-                            ng-click="removeProj(item.id, $event)">
-                            <md-tooltip md-direction="right">
-                                移除项目
-                            </md-tooltip>
-                            delete
-                        </md-icon>-->
                     </md-list-item>
                 </md-list>
             </perfect-scrollbar>
@@ -132,14 +125,6 @@
                 </md-tooltip>
                 <md-icon class="material-icons">add</md-icon>
             </md-button>
-            <!--<md-button class="md-fab md-primary float-btn btn-reload"-->
-            <!--ng-show="isDebug"-->
-            <!--onclick="window.location.reload();">-->
-            <!--<md-tooltip md-direction="bottom">-->
-            <!--刷新窗口-->
-            <!--</md-tooltip>-->
-            <!--<md-icon class="material-icons">refresh</md-icon>-->
-            <!--</md-button>-->
         </md-content>
 
         <!-- Current Project Info -->
@@ -162,37 +147,6 @@
                     </md-tooltip>
                     <md-icon class="material-icons">backup</md-icon>
                 </md-button>
-                <!--<md-fab-speed-dial class="btn-open" ng-cloak
-                                   md-open="ctrl.isOpenExpanded"
-                                   md-direction="up"
-                                   ng-class="ctrl.openDialMode">
-                    <md-fab-trigger>
-                        <md-button aria-label="打开…" class="md-fab md-primary">
-                            <md-tooltip md-direction="bottom">
-                                打开…
-                            </md-tooltip>
-                            <md-icon class="material-icons">folder</md-icon>
-                        </md-button>
-                    </md-fab-trigger>
-                    <md-fab-actions>
-                        <md-button aria-label="打开输出目录" class="md-fab md-raised md-mini"
-                                   ng-disabled="curProj.id === null"
-                                   ng-click="openDistDir()">
-                            <md-tooltip md-direction="left">
-                                打开项目生成目录
-                            </md-tooltip>
-                            <md-icon class="material-icons">assignment_returned</md-icon>
-                        </md-button>
-                        <md-button aria-label="打开源目录" class="md-fab md-raised md-mini"
-                                   ng-disabled="curProj.id === null"
-                                   ng-click="openSrcDir()">
-                            <md-tooltip md-direction="left">
-                                打开项目源目录
-                            </md-tooltip>
-                            <md-icon class="material-icons">assignment_return</md-icon>
-                        </md-button>
-                    </md-fab-actions>
-                </md-fab-speed-dial>-->
                 <md-button class="md-fab md-raised btn-save"
                            ng-disabled="curProj.id === null"
                            ng-click="saveProj($event)">
@@ -203,7 +157,7 @@
                 </md-button>
                 <md-tabs md-border-bottom>
                     <md-tab label="基本信息">
-                        <md-content layout-margin>
+                        <md-content layout-margin class="padding-tab-bottom">
                             <md-card>
                                 <md-card-content layout="column">
                                     <div layout="row">
@@ -246,25 +200,9 @@
                                                    placeholder="输出到子目录时填写，如：“./dist”"/>
                                         </md-input-container>
                                     </div>
-
-                                    <!--<md-button class="md-raised" flex="15"-->
-                                    <!--ng-disabled="curProj.id === null">选择-->
-                                    <!--</md-button>-->
                                 </md-card-content>
                             </md-card>
 
-                            <!--<h4>开始操作</h4>-->
-
-                            <!--<div layout="row">
-                                <md-button class="md-raised middle-width"
-                                           ng-disabled="curProj.id === null"
-                                           ng-click="buildLocally()">本地构建
-                                </md-button>
-                                <md-button class="md-raised md-primary middle-width"
-                                           ng-disabled="curProj.id === null"
-                                           ng-click="buildUpload()">构建上传
-                                </md-button>
-                            </div>-->
                             <div layout="row">
                                 <md-switch class="middle-width"
                                            ng-checked="curProj.watchToRebuilding"
@@ -279,7 +217,7 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="任务列表">
-                        <md-content layout-margin>
+                        <md-content layout-margin class="padding-tab-bottom">
                             <md-card>
                                 <md-list>
                                     <md-list-item ng-repeat="item in allTasks"
@@ -298,7 +236,7 @@
                         </md-content>
                     </md-tab>
                     <md-tab label="任务配置">
-                        <md-content layout-margin>
+                        <md-content layout-margin class="padding-tab-bottom">
 
                             <md-card>
                                 <md-card-title>
@@ -485,47 +423,17 @@
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
-                                        <span class="md-headline">预处理脚本</span>
+                                        <span class="md-headline">附加处理脚本</span>
                                     </md-card-title-text>
                                 </md-card-title>
-                                <div class="editor" ng-model="curProj.preprocessing" flex-grow
-                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
+                                <div layout="row">
+                                    <md-button ng-click="editPreprocessing($event)">预处理</md-button>
+                                    <md-button ng-click="editPostprocessing($event)">后处理</md-button>
+                                    <md-button ng-click="editUploadForm($event)">上传表单</md-button>
+                                    <md-button ng-click="editUploadResult($event)">上传结果判断</md-button>
+                                </div>
                             </md-card>
 
-                            <md-card>
-                                <md-card-title>
-                                    <md-card-title-text>
-                                        <span class="md-headline">后处理脚本</span>
-                                    </md-card-title-text>
-                                </md-card-title>
-                                <div class="editor" ng-model="curProj.postprocessing" flex-grow
-                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
-                            </md-card>
-
-                            <md-card>
-                                <md-card-title>
-                                    <md-card-title-text>
-                                        <span class="md-headline">上传表单</span>
-                                    </md-card-title-text>
-                                </md-card-title>
-                                <div class="editor" ng-model="curProj.upOpt.form" flex-grow
-                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
-                                <md-card-title>
-                                    <md-card-title-text>
-                                        <span class="md-headline">上传结果判断</span>
-                                    </md-card-title-text>
-                                </md-card-title>
-                                <div class="editor" ng-model="curProj.upOpt.judge" flex-grow
-                                     ui-ace="{ theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
-                                <md-card-content layout="column">
-                                    <md-input-container class="md-block">
-                                        <label>上传页面</label>
-                                        <input ng-model="curProj.upOpt.page" name="uploadPage"
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="处理项目文件上传的页面地址"/>
-                                    </md-input-container>
-                                </md-card-content>
-                            </md-card>
                         </md-content>
                     </md-tab>
                 </md-tabs>
@@ -569,8 +477,8 @@
 <script src="angular-perfect-scrollbar/angular-perfect-scrollbar.js"></script>
 
 <script src="js/ace/ace.js"></script>
-<script src="js/ace/theme-monokai.js"></script>
-<script src="js/ace/mode-javascript.js"></script>
+<!--<script src="js/ace/theme-monokai.js"></script>-->
+<!--<script src="js/ace/mode-javascript.js"></script>-->
 <script src="js/ace/ui-ace.js"></script>
 <script src="js/json-viewer.js"></script>
 
