@@ -352,12 +352,20 @@ fieldset {
   font-style: normal;
 }
 
-.editor {
-  width: 100%;
-  height: 400px;
-}
-
 .padding-tab-bottom {
   padding-bottom: 80px;
 }
 
+.editor-dialog-box {
+  transition: opacity 300ms ease;
+  opacity: 0;
+}
+
+.editor-dialog-box, .editor-dialog-box .editor-in-dialog {
+  width: 480px;
+  height: 400px;
+}
+
+.editor-dialog-box.show {
+  opacity: 1;
+}

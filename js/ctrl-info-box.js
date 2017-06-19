@@ -58,6 +58,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                     $scope.title = title;
                     $scope.text = orgText;
                     $scope.theme = Model.config.theme;
+                    $scope.isShowEditor = false;
+                    setTimeout(function () {
+                        $scope.isShowEditor = true;
+                    }, 50);
 
                     $scope.aceLoaded = function (_editor) {
                         // Options
@@ -90,22 +94,22 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.editPreprocessing = function (ev) {
         $scope.showAceDialog('预处理脚本', Model.curProj.preprocessing, ev).then(function (text) {
             Model.curProj.preprocessing = text;
-        }, function () {});
+        }, function () { });
     };
     $scope.editPostprocessing = function (ev) {
         $scope.showAceDialog('后处理脚本', Model.curProj.postprocessing, ev).then(function (text) {
             Model.curProj.postprocessing = text;
-        }, function () {});
+        }, function () { });
     };
     $scope.editUploadForm = function (ev) {
         $scope.showAceDialog('上传表单字段', Model.curProj.upOpt.form, ev).then(function (text) {
             Model.curProj.upOpt.form = text;
-        }, function () {});
+        }, function () { });
     };
     $scope.editUploadResult = function (ev) {
         $scope.showAceDialog('上传结果判断', Model.curProj.upOpt.judge, ev).then(function (text) {
             Model.curProj.upOpt.judge = text;
-        }, function () {});
+        }, function () { });
     };
 
     // 保存项目配置
@@ -121,8 +125,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             res = Model.updateProj(proj),
             projName = proj.projName,
             msg = res ?
-            '项目 ' + projName + ' 配置保存完毕' :
-            '项目 ' + projName + ' 配置保存失败，请稍后重试';
+                '项目 ' + projName + ' 配置保存完毕' :
+                '项目 ' + projName + ' 配置保存失败，请稍后重试';
         if (res && proj.watchToRebuilding) {
             Logger.log('<hr/>');
             Logger.info('项目配置发生变化，重新启动监听……');
@@ -136,10 +140,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.toastMsg = function (msg) {
         $mdToast.show(
             $mdToast.simple()
-            .parent(angular.element(document.querySelector('.window-box .info-box')))
-            .textContent(msg)
-            .position('top right')
-            .hideDelay(2000)
+                .parent(angular.element(document.querySelector('.window-box .info-box')))
+                .textContent(msg)
+                .position('top right')
+                .hideDelay(2000)
         );
     };
 

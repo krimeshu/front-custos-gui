@@ -9,8 +9,8 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-dialog-content style="width: 480px;">
-            <div class="editor" ng-model="text" flex-grow ui-ace="{ useWrapMode: true, theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
+        <md-dialog-content class="editor-dialog-box {{isShowEditor ? 'show' : ''}}">
+            <div class="editor-in-dialog" ng-model="text" ui-ace="{ useWrapMode: true, theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <span flex></span>
