@@ -38,27 +38,35 @@
     },
     {
       "from": "3.1.9",
-      "to": "3.2.1",
+      "to": "3.3.3",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.2.1.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.9_3.3.3.7z",
       "desc": "New features."
     },
     {
       "from": "3.1.10",
-      "to": "3.2.1",
+      "to": "3.3.3",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.10_3.2.1.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.10_3.3.3.7z",
       "desc": "Bugs fixed."
     },
     {
       "from": "3.1.12",
-      "to": "3.2.1",
+      "to": "3.3.3",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.12_3.2.1.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.1.12_3.3.3.7z",
       "desc": "Bugs fixed."
+    },
+    {
+      "from": "3.2.1",
+      "to": "3.3.3",
+      "platform": "win32",
+      "arch": "x64",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.2.1_3.3.3.7z",
+      "desc": "Support for jsx."
     }
   ]
 }

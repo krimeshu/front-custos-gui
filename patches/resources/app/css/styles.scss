@@ -1,0 +1,410 @@
+@charset "utf-8";
+
+html, body {
+  background: transparent;
+}
+
+body {
+  font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, custom-font, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+input, textarea {
+  font-family: 'Helvetica Neue', 'Open Sans', Helvetica, Arial, custom-font, sans-serif;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+fieldset {
+    border-width: 1px;
+    border-color: #fff;
+}
+
+%float-btn {
+  position: absolute;
+  z-index: 5;
+
+  transition: opacity 400ms ease;
+  opacity: .8;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.ps-container .ps-scrollbar-y-rail {
+  &, &:hover, &.hover, &:active, &.active, &.in-scrolling {
+    background: transparent;
+  }
+  .ps-scrollbar-y {
+    width: 6px;
+  }
+}
+
+/*---滚动条大小--*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/*---滚动条默认显示样式--*/
+::-webkit-scrollbar-thumb, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y {
+  background-color: rgba(120, 120, 120, .6);
+  height: auto;
+  outline: 0 none;
+  -webkit-border-radius: 6px;
+}
+
+/*---鼠标点击滚动条显示样式--*/
+::-webkit-scrollbar-thumb:hover, .ps-container .ps-scrollbar-y-rail .ps-scrollbar-y:hover {
+  background-color: rgba(120, 120, 120, .8);
+  height: auto;
+  -webkit-border-radius: 6px;
+}
+
+/*---滚动条背景、空闲背景样式--*/
+::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece {
+  background: transparent;
+  padding: 2px;
+}
+
+.shadow-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background: transparent;
+
+  perspective: 800px;
+}
+
+.shadow-box {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+
+  box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+
+  transition: transform 500ms ease, opacity 500ms ease;
+  transform: translateZ(0) rotateX(180deg) scale(0.1);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  opacity: 0;
+  &.in {
+    transform: translateZ(0) rotateX(0deg) scale(1);
+    opacity: 1;
+  }
+  &.out {
+    transform: translateZ(0) rotateX(180deg) scale(0.1);
+    opacity: 0;
+  }
+}
+
+.window-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  //position: relative;
+  //z-index: 2;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .5);
+
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+
+  @at-root {
+    & .clickable, .md-clickable {
+      -webkit-app-region: no-drag;
+      cursor: pointer;
+    }
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 0 40px;
+
+    height: 80px;
+
+    color: white;
+
+    .material-icons {
+      color: white;
+    }
+
+    .title {
+      line-height: 80px;
+      font-size: 20px;
+      text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
+    }
+
+    .spacer {
+      flex: 1;
+    }
+  }
+}
+
+.window-content {
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  //position: relative;
+  //z-index: 1;
+  //flex: 1;
+
+  .not-selectable, .md-tab {
+    -webkit-user-select: none;
+  }
+}
+
+.list-box {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+
+  width: 220px;
+  height: 100%;
+
+  .list-scroll {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .proj-list {
+    width: 100%;
+    margin: 0;
+    padding: 5px 0;
+
+    font-size: 14px;
+
+    .proj-item {
+      width: 100%;
+      transition: background 400ms ease;
+
+      &.current {
+        color: #fff;
+
+        .proj-name {
+          text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
+        }
+      }
+
+      .proj-delete {
+        display: none;
+        margin-right: -10px;
+        padding: 9px 10px 5px 10px;
+        text-align: center;
+        font-size: 20px;
+      }
+
+      &:hover {
+        .proj-delete {
+          display: block;
+        }
+      }
+    }
+
+    .proj-name {
+      flex: 1;
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+      
+      cursor: initial;
+    }
+  }
+
+  .btn-add-proj {
+    @extend %float-btn;
+    bottom: 20px;
+    right: 10px;
+  }
+
+  .btn-reload {
+    @extend %float-btn;
+    bottom: 20px;
+    right: 80px;
+  }
+}
+
+.info-box {
+  //flex: 1;
+
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 220px;
+  right: 480px;
+
+  width: auto;
+  height: 100%;
+  overflow: auto;
+
+  box-sizing: border-box;
+  //padding: 10px 20px;
+  color: #272822;
+  background: #FFF;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+
+  md-card {
+    background-color: #FFF;
+  }
+
+  md-button, button {
+    height: 48px;
+  }
+
+  form.info-form, md-tabs {
+    height: 100%;
+  }
+
+  .middle-width {
+    width: 150px;
+  }
+
+  .indent {
+    padding-left: 24px;
+  }
+
+  .btn-build {
+    @extend %float-btn;
+    bottom: 20px;
+    left: 10px;
+  }
+
+  .btn-build-upload {
+    @extend %float-btn;
+    bottom: 20px;
+    left: 80px;
+  }
+
+  .btn-open {
+    @extend %float-btn;
+    bottom: 20px;
+    // left: 10px;
+    right: 80px;
+  }
+
+  .btn-save {
+    @extend %float-btn;
+    bottom: 20px;
+    // right: 10px;
+    right: 10px;
+  }
+
+  .btn-delete {
+    @extend %float-btn;
+    bottom: 20px;
+    // right: 80px;
+    right: 150px;
+  }
+}
+
+.log-box {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  width: 480px;
+  height: 100%;
+  overflow: auto;
+
+  background-color: rgba(39, 40, 34, .9);
+  color: #cacaca;
+
+  a {
+    color: #ffffff;
+  }
+
+  hr {
+    border-color: #cacaca;
+  }
+
+  .literal {
+    color: #cacaca;
+  }
+
+  .info {
+    color: #74aa04;
+  }
+
+  .warn {
+    color: #cccc81;
+  }
+
+  .error {
+    color: #a70334;
+  }
+
+  word-break: break-all;
+  font-size: 13px;
+  font-family: Consolas, custom-font, sans-serif;
+
+  .log-list {
+    list-style: none;
+    padding: 8px 10px;
+    margin: 0;
+
+    li {
+      margin: 4px 0;
+    }
+  }
+
+  .options-confirm {
+    font-style: normal;
+    color: #cacaca;
+
+    .options-link {
+      &.ok, &.cancel {
+        color: white;
+      }
+    }
+  }
+
+  .json-holder {
+    font-style: normal;
+  }
+}
+
+.padding-tab-bottom {
+  padding-bottom: 80px;
+}
+
+.editor-dialog-box {
+  &, .editor-in-dialog {
+    width: 480px; 
+    height: 400px;
+  }
+
+  transition: opacity 300ms ease;
+  opacity: 0;
+  &.show {
+    opacity: 1;
+  }
+}

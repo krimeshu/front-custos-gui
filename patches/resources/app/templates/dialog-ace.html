@@ -1,0 +1,25 @@
+<md-dialog aria-label="{{title}}" md-theme="{{theme}}">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>{{title}}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons">&#xE14C;</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="editor-dialog-box {{isShowEditor ? 'show' : ''}}">
+            <div class="editor-in-dialog" ng-model="text" ui-ace="{ useWrapMode: true, theme: 'monokai', mode: 'javascript', onLoad: aceLoaded }"></div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                取消
+            </md-button>
+            <md-button class="md-primary" ng-click="save()" style="margin-right:10px;">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
