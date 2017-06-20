@@ -15,6 +15,15 @@ var Utils = require('./utils.js'),
 var VERSION_LIST_URL = 'https://github.com/krimeshu/front-custos-gui/raw/master/version-list.json';
 
 module.exports = {
+    // require('./js/patch-manager')._test()
+    _test: function () {
+        var updaterDir = Utils.configDir('./fc-update');
+        this._download('测试文件',
+            'https://raw.githubusercontent.com/krimeshu/front-custos-gui/76bcdbef0b53817da7d641f534bdfeff5896aa67/version-list.json',
+            updaterDir, function () {
+                Logger.log('测试文件下载完毕。');
+            });
+    },
     // 获取本地已有的补丁包列表
     getLocalPatches: function () {
         var dirPath = _path.resolve(__dirname, '../'),
