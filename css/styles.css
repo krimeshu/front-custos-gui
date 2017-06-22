@@ -20,6 +20,10 @@ fieldset {
   border-color: #fff;
 }
 
+.weak-text {
+  color: rgba(0, 0, 0, .54);
+}
+
 .list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-build, .info-box .btn-build-upload, .info-box .btn-open, .info-box .btn-save, .info-box .btn-delete {
   position: absolute;
   z-index: 5;

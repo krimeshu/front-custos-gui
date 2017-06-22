@@ -21,6 +21,10 @@ fieldset {
     border-color: #fff;
 }
 
+.weak-text {
+  color: rgba(0, 0, 0, .54);
+}
+
 %float-btn {
   position: absolute;
   z-index: 5;

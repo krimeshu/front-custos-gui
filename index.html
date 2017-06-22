@@ -227,8 +227,8 @@
                                                      ng-checked="item.locked || exists(item.name, curProj.tasks)"
                                                      ng-disabled="item.disabled || item.locked || curProj.id === null"></md-checkbox>
                                         <p flex>
-                                            <span ng-bind="item.desc"></span>
-                                            <em ng-bind="item.name"></em>
+                                            <strong ng-bind="item.name">..</strong>
+                                            <small class="weak-text" ng-bind="item.desc">..</small>
                                         </p>
                                     </md-list-item>
                                 </md-list>
