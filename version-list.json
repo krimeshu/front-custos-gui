@@ -22,18 +22,26 @@
     },
     {
       "from": "3.2.1",
-      "to": "3.4.1",
+      "to": "3.4.4",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.2.1_3.4.1.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.2.1_3.4.4.7z",
       "desc": "New features."
     },
     {
       "from": "3.3.3",
-      "to": "3.4.1",
+      "to": "3.4.4",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.3.3_3.4.1.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.3.3_3.4.4.7z",
+      "desc": "New features."
+    },
+    {
+      "from": "3.4.1",
+      "to": "3.4.4",
+      "platform": "win32",
+      "arch": "x64",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.4.1_3.4.4.7z",
       "desc": "New features."
     }
   ]
