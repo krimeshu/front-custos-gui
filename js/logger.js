@@ -2,12 +2,13 @@
  * Created by krimeshu on 2016/3/13.
  */
 
-module.exports = {
-    logList: document.querySelector('.log-box .log-list'),
+var console = {
+    _logList: null,
+    _jsonViewer: null,
     nextId: null,
     clear: function () {
-        var logList = this.logList;
-        logList.html();
+        var logList = this._logList;
+        logList.innerHTML = '';
     },
     useId: function (id) {
         this.nextId = id;
@@ -52,7 +53,7 @@ module.exports = {
         return '_log_text_' + new Date().getTime() + Math.random();
     },
     _append: function (item) {
-        var logList = this.logList,
+        var logList = this._logList,
             nextId = this.nextId || '',
             existed = nextId && document.getElementById(nextId);
         this.nextId = null;
@@ -70,7 +71,7 @@ module.exports = {
     },
     _format: function (args) {
         var formatStr = args[0];
-        if (typeof(formatStr) !== 'string') {
+        if (typeof (formatStr) !== 'string') {
             formatStr = this._stringify(formatStr);
         }
         var res = [];
@@ -80,7 +81,7 @@ module.exports = {
             type,
             arg;
         if (formats.length > 1) {
-            for (var i = offset, f; f = formats[i]; i++, offset++) {
+            for (var i = offset, f; f = formats[i]; i++ , offset++) {
                 type = f[0];
                 arg = args[offset];
                 switch (type) {
@@ -134,7 +135,8 @@ module.exports = {
         return res;
     },
     _stringify: function (arg) {
-        var type = typeof(arg);
+        var type = typeof (arg),
+            jsonViewer = this._jsonViewer;
         switch (type) {
             case 'string':
                 return arg;
@@ -143,30 +145,54 @@ module.exports = {
             default:
                 return String(arg);
         }
+    },
+    _showCalendar: function () {
+        var FooCalendar = require('./foo-calendar.js'),
+            res = FooCalendar.runIt();
+
+        console.info('[程序员老黄历]');
+        console.log(res.date);
+        res.good.forEach(function (event, index) {
+            console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '宜' : '　', 'color: white;', event.name, 'color: gray;', event.good);
+        });
+        res.bad.forEach(function (event, index) {
+            console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '忌' : '　', 'color: white;', event.name, 'color: gray;', event.bad);
+        });
+        console.warn('座位朝向：%c面向<ins>%s</ins>写代码，BUG最少', 'color: white;', res.direction);
+        console.warn('今日宜饮：%c%s', 'color: white;', res.drink.join('，'));
+        console.warn('女神亲近指数：%c%s', 'color: white;', res.goddes);
+    },
+    _init: function () {
+        let $box = $('.log-box'),
+            $list = $box.find('.log-list');
+
+        this._logList = $list[0];
+        // JSON 展示
+        this._jsonViewer = new JSONViewer({
+            eventHandler: $list[0],
+            indentSize: 16,
+            expand: 1,
+            theme: 'dark'
+        });
+
+        const remote = require('electron').remote;
+        const Menu = remote.Menu;
+
+        // 右键菜单
+        const menu = Menu.buildFromTemplate([
+            { label: '查看日历', click: () => { this.log('<hr/>'); this._showCalendar(); } },
+            { type: 'separator' },
+            { label: '清空', click: () => { this.clear(); } }
+        ]);
+        $box.on('contextmenu', function (ev) {
+            menu.popup(remote.getCurrentWindow())
+        });
+        this._showCalendar();
     }
 };
 
-var jsonViewer = new JSONViewer({
-    eventHandler: document.querySelector('.log-box .log-list'),
-    indentSize: 16,
-    expand: 1,
-    theme: 'dark'
-});
+console._init();
 
-// ----------------------------------------
+module.exports = console;
 
-var console = module.exports,
-    FooCalendar = require('./foo-calendar.js');
-
-console.info('[程序员老黄历]');
-console.log(FooCalendar.date);
-FooCalendar.good.forEach(function (event, index) {
-    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '宜' : '　', 'color: white;', event.name, 'color: gray;', event.good);
-});
-FooCalendar.bad.forEach(function (event, index) {
-    console.warn('%s%c | %s %c<small>%s</small>', index === 0 ? '忌' : '　', 'color: white;', event.name, 'color: gray;', event.bad);
-});
-console.warn('座位朝向：%c面向<ins>%s</ins>写代码，BUG最少', 'color: white;', FooCalendar.direction);
-console.warn('今日宜饮：%c%s', 'color: white;', FooCalendar.drink.join('，'));
-console.warn('女神亲近指数：%c%s', 'color: white;', FooCalendar.goddes);
 

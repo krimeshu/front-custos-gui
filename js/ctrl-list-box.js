@@ -6,8 +6,7 @@ var remote = require('electron').remote,
     dialog = remote.dialog,
     shell = remote.shell,
 
-    Menu = remote.Menu,
-    MenuItem = remote.MenuItem;
+    Menu = remote.Menu;
 
 var Logger = require('./logger.js'),
     Data = require('./data.js'),
@@ -242,11 +241,6 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             $scope.importProj(filePath, ev);
         }
     };
-
-    // 右键菜单
-    $('.list-item').on('contextmenu', function (ev) {
-        console.log('Show context menu:', ev);
-    });
 
     // 导入项目
     $scope.importProj = function (projDir, ev) {
