@@ -38,7 +38,7 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
     // 清空缓存
     $scope.clearCache = function () {
         CustosProxy.runTasks({
-            tasks: ['optimize_image:clear_cache']
+            tasks: ['clear_tmp_dir', 'optimize_image:clear_cache']
         });
     };
 
