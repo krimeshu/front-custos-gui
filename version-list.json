@@ -50,7 +50,7 @@
       "platform": "win32",
       "arch": "x64",
       "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.4.4_3.4.6.7z",
-      "desc": "New features."
+      "desc": "Bug fixed."
     }
   ]
 }
