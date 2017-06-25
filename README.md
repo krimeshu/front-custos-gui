@@ -1,7 +1,7 @@
-<div style="text-align: center;">
-	<img src="https://github.com/krimeshu/front-custos-gui/raw/master/tea-time.png" style="width: 80px;"/>
-	<p style="font-size: 26px; margin-top: 0;">Front Custos GUI</p>
-</div>
+<p align="center">
+	<img src="https://github.com/krimeshu/front-custos-gui/raw/master/tea-time.png" width="80"/>
+	<strong>Front Custos GUI</strong>
+</p>
 
 基于 electron + gulp 的 Web 前端开发常用任务流的可视化配置工具，无需安装其他环境即可直接使用。
 
