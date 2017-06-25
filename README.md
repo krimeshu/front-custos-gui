@@ -8,7 +8,7 @@
 
 > `Front Custos` (= *FRONT-end CUStomize Tasks Orgnizing Scheduler*, lol)。
 
-## 使用方法
+## 安装方法
 
 ### 1. 下载 release 版本
 
