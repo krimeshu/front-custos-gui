@@ -6,7 +6,7 @@
 
 基于 electron + gulp 的 Web 前端开发常用任务流的可视化配置工具，无需安装其他环境即可直接使用。
 
-> `Front Custos` (= *Front-end CUStomize Tasks Orgnizing Scheduler*, lol)。
+> `Front Custos` (= *FRONT-end CUStomize Tasks Orgnizing Scheduler*, lol)。
 
 ## 使用方法
 
