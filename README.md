@@ -1,5 +1,6 @@
 <p align="center">
 	<img src="https://github.com/krimeshu/front-custos-gui/raw/master/tea-time.png" width="80"/>
+	<br/>
 	<strong>Front Custos GUI</strong>
 </p>
 
