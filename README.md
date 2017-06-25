@@ -1,18 +1,23 @@
-# front-custos-gui
+<div style="text-align: center;">
+	<img src="https://github.com/krimeshu/front-custos-gui/raw/master/tea-time.png" style="width: 80px;"/>
+	<p style="font-size: 26px; margin-top: 0;">Front Custos GUI</p>
+</div>
 
-`Front Custos` *(`Front Custom Tasks Custos`)* ———— “前端定制任务管家”。
+基于 electron + gulp 的 Web 前端开发常用任务流的可视化配置工具，无需安装其他环境即可直接使用。
 
-根据日常项目中的常见的前端开发需求，基于`gulp`任务流程、各种处理模块，提供快速创建、管理、运行前端自动任务的辅助工具。
+> `Front Custos` (= *Front-end CUStomize Tasks Orgnizing Scheduler*, lol)。
 
-![screenshot-gui](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-gui.png)
+## 使用方法
 
-## 一、使用方法
+### 1. 下载 release 版本
 
-### 1. 直接下载 release 中最新打包好的发布版本，解压后使用。
+下载完成后，解压即可直接打开运行。
 
-> 暂时只提供 win32-x64 版本。
+[https://github.com/krimeshu/front-custos-gui/releases](https://github.com/krimeshu/front-custos-gui/releases)
 
-### 2. 手动构建编译。
+> 暂时只提供 **Win32-x64** 版本，其他平台架构参考下面步骤手动构建打包。
+
+### 2. 手动构建编译
 
 ```bash
 git clone https://github.com/krimeshu/front-custos-gui.git
@@ -20,9 +25,13 @@ cd front-custos-gui
 npm run build
 ```
 
-完成后，需要打开工具时，执行 ```npm start``` 即可。
+完成后，执行 ```npm start``` 即可启动开发调试版。
 
-### 3. 打包发布版本。
+> 已测试支持 **Win32 (x86&x64)**, **OS X (x64)**，其他情况需要自行验证，如遇到问题欢迎联系或留言。
+
+### 3. 打包发布版
+
+根据自己的操作系统平台与架构，执行对应的打包命令。打包完成的发布版会保存在 `front-custos-gui` 相邻的 `front-custos-gui-dist` 目录内。
 
 ```base
 npm run dist-win64
@@ -31,87 +40,141 @@ npm run dist-mac64
 npm run dist-mac32
 ```
 
-其它平台可以自己编写 ```electron-packager``` 命令进行打包。
+> 其它平台打包命令可参考 `electron-packager` 文档，自行配置。
 
-## 二、主要任务说明
+## 使用方法
 
-* **compile_sass**
+![screenshot-gui](https://github.com/krimeshu/front-custos-gui/raw/master/screenshot-gui.png)
 
-将目录中的`.sass`和`.scss`编译成浏览器支持的`.css`样式文件。
+将需要处理的项目目录加入到左侧列表，在 **任务列表** 内勾选需要执行的任务，根据项目情况微调 **任务配置** 内的相关参数后，点击执行构建 (或全局快捷键 **CmdOrCtrl+Alt+B**) 即可。
 
-* **run_babel**
+## 主要功能
 
-将项目中的`.es6`编译成`.js`的`es5`代码。
+### SASS 编译
 
-* **prepare_build**
+启用 **compile_sass** 任务后，项目目录内的 "*.scss" 文件就会被编译成 "*.css" 文件，保存在同一目录下（注意，若之前有同名 css 文件将会被覆盖）。
 
-将源目录中的文件转到构建目录，开始后续需要避免对源文件影响的任务。
+```css
+article {
+  width: 800px;
+  background: darken(#FFF, 20%);	/* 调用了 SASS 的 darken 函数 */
+}
+```
 
-* **replace_const**
+编译后生成的样式代码：
 
-其它任务开始之前，将各类文件中的`{PROJECT}`、`{PROJECT_NAME}`、`{VERSION}`等常量替换成相应的值。
+```css
+article {
+  width: 800px;
+  background: #cccccc; 
+}
+```
 
-* **prefix_crafter**
+### CSS 样式前缀处理
 
-根据设定的浏览器范围，处理构建目录中的`.css`文件，自动添加各类浏览器的样式前缀。
+启用 **prefix_crafter** 任务后，生成的 "*.css" 文件内需要添加浏览器前缀的样式将会被自动处理，无需再手动添加不同浏览器前缀了。对应浏览器范围可在 **任务配置** 页卡内进行配置。
 
-* **sprite_crafter**
+```css
+.example {
+  display: flex;
+  animation: zoomIn 100ms ease;
+}
 
-检测构建目录中的`.css`文件，根据背景图片地址的标记，自动合成输出雪碧图，并替换覆盖`.css`文件内的相关样式。
+@keyframes zoomIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+```
 
-* **run_csso**
+以目标浏览器 `Android > 2.3, iOS > 6.0` 的配置处理后 (其他配置可参考 [browserlist](https://github.com/ai/browserslist)):
 
-优化构建目录中的`.css`文件，删除空白、换行符等字符，缩减`.css`文件内容。
+```css
+.example {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-animation: zoomIn 100ms ease;
+  animation: zoomIn 100ms ease
+}
 
-* **join_include**
+@-webkit-keyframes zoomIn {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0)
+  }
+  to {
+    -webkit-transform: scale(1);
+    transform: scale(1)
+  }
+}
 
-处理构建目录中，使用`#include(...)`标记的文件文件合并语句，常用于文件内容并入、图片转`base64`字符串。
+@keyframes zoomIn {
+  0% {
+    -webkit-transform: scale(0);
+    transform: scale(0)
+  }
+  to {
+    -webkit-transform: scale(1);
+    transform: scale(1)
+  }
+}
+```
 
-* **rollup_bundle**
+### ES6 代码转换与打包
 
-根据工具中的配置，使用`rollup`对各个入口脚本进行打包处理.
+有两个任务可供选择，**run_babel** 任务只会处理 "*.es6" 文件，将其中的 ES6 语法部分转换成多数浏览器支持的等效代码，供浅度尝试 ES6 语法的项目使用。
 
-* **run_browserify**
+使用 **rollup_bundle** 任务的话，配合其中的 `babel`、`common-js`、`vue` 等插件，能实现 ES6 语法转换和脚本打包的完整流程。
 
-寻找构建目录中标记为入口模块的`.js`脚本文件，使用`browserify`进行打包处理。
+相关插件和打包的入口脚本可以在 **任务配置** 页卡内设置， 如果不想手动配置，也可启用 **find\_bundle\_entry** 任务。该任务将检测页面内引用的脚本，自动标记为打包任务的入口脚本。
 
-* **allot_link**
+此外，**babel** 相关任务默认加入了 `react` 插件，支持将 jsx 语法的 DOM 代码转换为浏览器能识别的代码。
 
-分发构建目录中的文件，可根据配置将页面文件和静态资源文件分发到不同的目录下，并简化较深的目录层级，将文件内容中旧地址替换为处理后的新地址。
+### 雪碧图合成
 
-过程中，还可将相对资源文件路径，自动补全为带域名的完整链接。
+要使用此功能，在项目任务列表中，勾选 **sprite_crafter** 任务。
 
-再根据各页面使用到的文件链接关系，删减没有使用到的资源文件。
+然后修改项目的样式代码，在需要合成雪碧图的图片地址后面，加上`#sc`或`#sc=组名`的标记即可。
 
-## 三、使用方法
+```css
+body { 
+  background: url('../images/main-bg.png#sc'); 
+}
+```
 
-### 1. 雪碧图合成
+被标记的图片将自动合并在同组雪碧图内（`#sc`等效于`#sc=default`）。
 
-要使用此功能，在项目任务列表中，勾选`sprite_crafter`。
+若背景图素材为高清图片，可配置相应的像素密度参数，如：
 
-然后打开项目的`.css`文件，在需要合成雪碧图的图片地址后面，加上`#sc`或`#sc=组名`的标记即可。如：`body { background: url('../images/main-bg.png#sc'); }`
+> 为 **375px** 虚拟视口宽度（iPhone6尺寸）制作的 **750px** 设计稿，像素密度即为 **750px / 375px = 2**。
 
-若背景图素材为高清图片，可配置相应的像素密度参数，如：为 **375px** 虚拟视口宽度（iPhone6尺寸）制作的 **750px** 设计稿，像素密度为 **750px / 375px = 2**。非高清素材，像素密度填写 **1** 即可。
+非高清素材，像素密度直接填写 **1** 即可。
 
-若页面使用了`rem`适配设备尺寸，雪碧图宽高也需要转换成`rem`单位时，可再配置`rem`像素比参数。如：默认`html`的`font-size: 20px;`，`rem`像素比即为 **20**。
+若页面使用了`rem`适配设备尺寸，雪碧图宽高也需要转换成`rem`单位时，可配置`rem`像素比参数。如：
 
-### 2. 文件内容并入
+> 默认`html`的`font-size: 20px;`，`rem`像素比即为 **20**。
 
-要使用此功能，在项目任务列表中，勾选`join_include`。
+## 其他功能
+
+### 文件内容并入
+
+要使用此功能，在项目任务列表中，勾选 **join_include** 任务。
 
 #### **I. 文本文件处理**
 
 在相应位置输入`#include('被并入文件相对路径')`的语句，即可将被并入文件的内容插入到所在位置。
 
-也可以在注释中使用此语句：`//#include('b.js');`或`/*#include('b.js')*/`，避免`.js`或`.css`文件的语法校验错误。
+> 可注释此语句，避免`.js`或`.css`文件的语法校验错误 (不影响文件并入效果)：
 
-```html
-<body>
-<script>
-	// 一些预处理，直接从JS文件中提出，并入页面内
-	//#include('js/_init.js');
-</script>
-</body>
+```javascript
+//#include('b.js')
+/*#include('b.js')*/
+```
+
+等价于：
+
+```
+#include('b.js')
 ```
 
 #### **II. 图片文件处理**
@@ -175,31 +238,11 @@ document.body.appendChild(styleDOM);
 #include("_top.html", {"pageName": "登录页"})
 ```
 
-### 3. 打包脚本
-
-对于页面逻辑达到一定规模的页面，会开始有编写模块化脚本的需要，以便于日后进行迭代维护。
-
-由于暂时还没能踏入HTTP2的时代，模块化的脚本在上线前还需要进行打包合并的工作，处理成最终文件再进行上线。
-
-为了合并这些模块脚本，除了通过传统方式的`window`命名空间，配合`#include()`语句实现之外，我们还可以使用`CommonJS`标准编写脚本模块，然后通过`browserify`来对脚本进行打包。
-
-具体只需要在任务列表中勾选`run_browserify`，再在打包脚本的入口文件内加入标记：`Browserify Entry` 即可。如：
-
-```javascript
-/* a.js 文件内容 */
-
-'browserify entry';
-
-var b = require('./b.js');
-```
-
-**注：** 也可使用注释的形式进行标记，如：`// Browserify entry`或`/* Browserify Entry */`。
-
-### 4. 链接文件地址
+### 链接文件
 
 有时候，我们还需要将本地重构完毕的页面，针对不同的资源服务器域名，进行引用链接的替换、并加入文件版本相关的指纹参数等操作。
 
-为了避免这类重复且容易疏漏的问题，可以勾选工具中的`allot_link`任务，让工具自动进行处理。
+为了避免这类重复且容易疏漏的问题，可以勾选工具中的 **allot_link** 任务，让工具自动进行处理。
 
 工具在任务中会自动匹配识别`html`页面标签的相关资源属性，和`css`样式文件内`url()`中的资源属性，将它们替换成最终链接。
 
@@ -212,4 +255,4 @@ var appLogoSrc = '#link("../images/app-logo.png")',
 appLogoDOM.src = appLogoSrc;
 ```
 
-**注：** 所有链接文件路径都请使用相对于当前标记文件的路径，`js`脚本中也是（而非相对被引用页面的路径）
+没有被直接或间接引用到的文件，将被自动忽略，不放入生成目录内。
