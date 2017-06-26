@@ -262,9 +262,15 @@
                                                     ng-disabled="curProj.id === null">
                                                     vue
                                             </md-checkbox>
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.postcssModules" flex="50"
+                                                    ng-disabled="curProj.id === null">
+                                                    postcss + modules
+                                            </md-checkbox>
+                                        </div>                                            
+                                        <div layout="row">
                                             <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="50"
                                                     ng-disabled="curProj.id === null">
-                                                    babel
+                                                    babel + react
                                             </md-checkbox>
                                         </div>
                                     </fieldset>
@@ -272,9 +278,9 @@
                                         <md-input-container class="md-block" flex>
                                             <label>打包格式</label>
                                             <md-select ng-model="curProj.ruOpt.format">
-                                                <md-option value="es6"
-                                                        ng-selected="curProj.ruOpt.format == 'es6'  || !curProj.ruOpt.format">
-                                                    ES6
+                                                <md-option value="es"
+                                                        ng-selected="curProj.ruOpt.format == 'es'  || !curProj.ruOpt.format">
+                                                    ES
                                                 </md-option>
                                                 <md-option value="cjs"
                                                         ng-selected="curProj.ruOpt.format == 'cjs'">
