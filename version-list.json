@@ -59,6 +59,14 @@
       "arch": "x64",
       "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.4.6_3.5.1.7z",
       "desc": "New features."
+    },
+    {
+      "from": "3.5.1",
+      "to": "3.5.2",
+      "platform": "win32",
+      "arch": "x64",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.5.1_3.5.2.7z",
+      "desc": "Bug fixed."
     }
   ]
 }
