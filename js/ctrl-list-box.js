@@ -143,7 +143,8 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             return;
         }
 
-        var srcDir = CustosProxy.FrontCustos.getSrcDir(proj);
+        var projWithOptions = Model.loadProj(proj),
+            srcDir = CustosProxy.FrontCustos.getSrcDir(projWithOptions);
         Utils.makeSureDir(srcDir);
         shell.openItem(srcDir);
     };
@@ -157,7 +158,8 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
             return;
         }
 
-        var distDir = CustosProxy.FrontCustos.getDistDir(proj, Model.config.outputDir);
+        var projWithOptions = Model.loadProj(proj),
+            distDir = CustosProxy.FrontCustos.getDistDir(projWithOptions, Model.config.outputDir);
         Utils.makeSureDir(distDir);
         shell.openItem(distDir);
     };

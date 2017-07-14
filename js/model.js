@@ -63,14 +63,10 @@ var _this = module.exports = {
         }
     },
     selectCurProj: function (proj) {
-        var opts = this.loadProjOptions(proj),
-            id = proj.id,
+        var id = proj.id,
             projName = proj.projName,
             projDir = proj.projDir;
-        this._updateOpts(opts);
-        Utils.clearObj(this.curProj);
-        Utils.deepCopy(opts, this.curProj);
-        Utils.deepCopy(proj, this.curProj);
+        this.loadProj(proj, this.curProj);
 
         Logger.log('<hr/>');
         Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
@@ -85,6 +81,15 @@ var _this = module.exports = {
         window.setTimeout(function () {
             scrollToItem(id);
         }, 100);
+    },
+    loadProj: function (proj, target) {
+        target = target || {};
+        var opts = this.loadProjOptions(proj);
+        this._updateOpts(opts);
+        Utils.clearObj(target);
+        Utils.deepCopy(opts, target);
+        Utils.deepCopy(proj, target);
+        return target;
     },
     loadProjOptions: function (proj) {
         var projName = proj.projName,

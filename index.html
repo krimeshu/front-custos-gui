@@ -272,6 +272,10 @@
                                                     ng-disabled="curProj.id === null">
                                                     babel + react
                                             </md-checkbox>
+                                            <md-checkbox ng-model="curProj.ruOpt.plugins.uglify" flex="50"
+                                                    ng-disabled="curProj.id === null">
+                                                    uglify
+                                            </md-checkbox>
                                         </div>
                                     </fieldset>
                                     <div layout="row" style="padding-top: 10px;">
@@ -357,6 +361,15 @@
                                     </md-card-title-text>
                                 </md-card-title>
                                 <md-card-content layout="column">
+                                    <fieldset>
+                                        <legend>启用插件</legend>
+                                        <div layout="row">
+                                            <md-checkbox ng-model="curProj.pcOpt.cssnano" flex="50"
+                                                    ng-disabled="curProj.id === null">
+                                                    cssnano
+                                            </md-checkbox>
+                                        </div>
+                                    </fieldset>
                                     <md-input-container class="md-block" flex>
                                         <label>目标浏览器范围</label>
                                         <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
