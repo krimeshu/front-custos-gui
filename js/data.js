@@ -32,11 +32,30 @@ module.exports = {
     initOpt: {
         "scOpt": {},
         "pcOpt": {},
+        "ruOpt": {
+            "entry": "",
+            "plugins": {
+                "nodeResolve": false,
+                "commonJS": false,
+                "babel": true,
+                "vue": false,
+                "postcssModules": false,
+                "uglify": false
+            },
+            "format": "es"
+        },
         "alOpt": {
-            "allot": false
+            "allot": false,
+            "pageDir": "",
+            "staticDir": "",
+            "staticUrlHead": "http://asset-host.example.com/{PROJECT_NAME}",
+            "flatten": false,
+            "hashLink": "IN_FILE_NAME",
+            "useStaticUrlHead": false
         },
         "upOpt": {
             "delta": true,
+            "page": "",
             "form": "function uploadForm(fileStream, filePath) {\r\n    var fileDir = filePath.split('/'),\r\n        fileName = fileDir.pop().split('.'),\r\n        fileType = fileName.length > 1 ? fileName.pop() : '';\r\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\r\n    return {\r\n        'fileDir': fileDir.join('/'),\r\n        'fileName': fileName.join('.'),\r\n        'fileType': fileType,\r\n        'fileContents': fileStream\r\n    };\r\n}",
             "judge": "function uploadJudge(response) {\n    return /^上传成功/.test(response);\n}"
         },
@@ -48,12 +67,16 @@ module.exports = {
         "innerDistDir": "",
         "preprocessing": "function preprocessing(console, workDir) {\n    console.log('当前工作目录：', workDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something before build.\n}",
         "postprocessing": "function postprocessing(console, workDir) {\n    console.log('当前工作目录：', workDir);\n    // console.log('其它可用参数：', this.queryAvailableArguments().join(', '));\n    // Todo: do something after build.\n}",
-        "keepOldCopy": false
+        "keepOldCopy": false,
+        "smOpt": {
+            "enable": false,
+            "mappingUrl": "// function mappingUrl(file) {\n//     return 'http://asset-host.example.com/' + file.relative + '.map';\n// }"
+        }
     },
     exampleProj: {
         "id": "default_example_project_" + Date.now(),
         "projName": "example",
-        "projDir": _path.resolve(__dirname, "../node_modules/front-custos/example")
+        "projDir": _path.resolve(__dirname, "../front-custos/example")
     },
     // 加载全局配置
     loadConfig: function () {

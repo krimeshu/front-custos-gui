@@ -91,6 +91,12 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             });
         });
     };
+    $scope.editMappingUrl = function (ev) {
+        var smOpt = Model.curProj.smOpt || (Model.curProj.smOpt = {});
+        $scope.showAceDialog('sourceMappingUrl 函数', smOpt.mappingUrl, ev).then(function (text) {
+            Model.curProj.smOpt.mappingUrl = text;
+        }, function () { });
+    };
     $scope.editPreprocessing = function (ev) {
         $scope.showAceDialog('预处理脚本', Model.curProj.preprocessing, ev).then(function (text) {
             Model.curProj.preprocessing = text;

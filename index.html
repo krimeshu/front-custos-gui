@@ -385,6 +385,23 @@
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
+                                        <span class="md-headline">Sourcemaps 配置</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <div layout="row">
+                                        <md-switch ng-model="curProj.smOpt.enable" flex="50"
+                                                   ng-disabled="curProj.id === null">
+                                                   生成 sourcemap 文件
+                                        </md-switch>
+                                        <md-button ng-click="editMappingUrl($event)">MAP URL 处理函数</md-button>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
                                         <span class="md-headline">文件分发</span>
                                     </md-card-title-text>
                                 </md-card-title>
@@ -461,12 +478,12 @@
                                         <span class="md-headline">附加处理脚本</span>
                                     </md-card-title-text>
                                 </md-card-title>
-                                <div layout="row">
+                                <md-card-content layout="row">
                                     <md-button ng-click="editPreprocessing($event)">预处理</md-button>
                                     <md-button ng-click="editPostprocessing($event)">后处理</md-button>
                                     <md-button ng-click="editUploadForm($event)">上传表单</md-button>
                                     <md-button ng-click="editUploadResult($event)">上传结果判断</md-button>
-                                </div>
+                                </md-card-content>
                             </md-card>
 
                         </md-content>
