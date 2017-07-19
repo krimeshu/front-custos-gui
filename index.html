@@ -469,6 +469,11 @@
                                                ng-disabled="curProj.id === null"		
                                                placeholder="处理项目文件上传的页面地址"/>
                                     </md-input-container>
+                                    <div layout="row">
+                                        <md-button ng-click="editUploadFilter($event)">上传过滤</md-button>
+                                        <md-button ng-click="editUploadForm($event)">上传表单</md-button>
+                                        <md-button ng-click="editUploadResult($event)">上传结果判断</md-button>
+                                    </div>
                                 </md-card-content>
                             </md-card>
 
@@ -481,8 +486,6 @@
                                 <md-card-content layout="row">
                                     <md-button ng-click="editPreprocessing($event)">预处理</md-button>
                                     <md-button ng-click="editPostprocessing($event)">后处理</md-button>
-                                    <md-button ng-click="editUploadForm($event)">上传表单</md-button>
-                                    <md-button ng-click="editUploadResult($event)">上传结果判断</md-button>
                                 </md-card-content>
                             </md-card>
 

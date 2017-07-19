@@ -107,6 +107,11 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             Model.curProj.postprocessing = text;
         }, function () { });
     };
+    $scope.editUploadFilter = function (ev) {
+        $scope.showAceDialog('上传过滤', Model.curProj.upOpt.filter, ev).then(function (text) {
+            Model.curProj.upOpt.filter = text;
+        }, function () { });
+    };
     $scope.editUploadForm = function (ev) {
         $scope.showAceDialog('上传表单字段', Model.curProj.upOpt.form, ev).then(function (text) {
             Model.curProj.upOpt.form = text;
