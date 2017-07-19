@@ -70,8 +70,8 @@ module.exports = {
         "postprocessing": "/* \n    任务结束前的处理逻辑\n      可用的注入参数:\n        - console, params, config, projName, projDir, srcDir, distDir, workDir...\n        - filePath: Path of the uploading file\n        - fileStreem: Stream of the uploading file\n      查看所有可用参数:\n        - console.log(this.queryAvailableArguments();\n */\nfunction postprocessing(console, workDir) {\n    console.log('当前工作目录：', workDir);\n}",
         "keepOldCopy": false,
         "smOpt": {
-            "enable": false,
-            "mappingUrl": "// function mappingUrl(file) {\n//     return 'http://asset-host.example.com/' + file.relative + '.map';\n// }"
+            "mappingUrl": "/*\n    传给 gulp-sourcemaps 插件 write 参数中的 \n        sourceMappingURL 字段\n */\nfunction mappingUrl(file) {\n    // return 'http://asset-host.example.com/' + file.relative + '.map';\n    return require('path').basename(file.path) + '.map';\n}",
+            "enable": false
         }
     },
     exampleProj: {
