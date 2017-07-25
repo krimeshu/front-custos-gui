@@ -241,6 +241,64 @@
                             <md-card>
                                 <md-card-title>
                                     <md-card-title-text>
+                                        <span class="md-headline">Sourcemaps 配置</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <div layout="row">
+                                        <md-switch ng-model="curProj.smOpt.enable" flex="50"
+                                                   ng-disabled="curProj.id === null">
+                                                   生成 sourcemap 文件
+                                        </md-switch>
+                                        <md-button ng-click="editMappingUrl($event)">MAP URL 处理函数</md-button>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">脚本打包</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <div layout="row">
+                                        <md-input-container class="md-block" flex>
+                                            <label>入口脚本（一行一个）</label>
+                                            <textarea ng-model="curProj.jsOpt.bundleEntry" 
+                                                name="jsBundleEntry" row="5"
+                                                ng-disabled="curProj.id === null"
+                                                placeholder="相对项目源目录的路径，如：js/index.js">
+                                            </textarea>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
+                                        <p style="margin-top: -20px;">
+                                            <small>* 若不想手动配置，可尝试使用 find_bundle_entry 任务，html 页面直接引用的 js 文件将被自动识别为脚本入口。</small>
+                                        </p>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
+                                        <span class="md-headline">Browserify 打包</span>
+                                    </md-card-title-text>
+                                </md-card-title>
+                                <md-card-content layout="column">
+                                    <div layout="row">
+                                        <md-switch ng-model="curProj.brOpt.babelify"
+                                                   ng-disabled="curProj.id === null">
+                                                   启用 babelify transform (babel + react)
+                                        </md-switch>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+
+                            <md-card>
+                                <md-card-title>
+                                    <md-card-title-text>
                                         <span class="md-headline">Rollup 打包</span>
                                     </md-card-title-text>
                                 </md-card-title>
@@ -299,16 +357,6 @@
                                                     UMD
                                                 </md-option>
                                             </md-select>
-                                        </md-input-container>
-                                    </div>
-                                    <div layout="row">
-                                        <md-input-container class="md-block" flex>
-                                            <label>入口脚本（一行一个）</label>
-                                            <textarea ng-model="curProj.ruOpt.entry" 
-                                                name="ruEntry" row="5"
-                                                ng-disabled="curProj.id === null"
-                                                placeholder="相对项目源目录的路径，如：js/index.js">
-                                            </textarea>
                                         </md-input-container>
                                     </div>
                                 </md-card-content>
@@ -379,23 +427,6 @@
                                             <div ng-message="required">请输入目标浏览器范围</div>
                                         </div>
                                     </md-input-container>
-                                </md-card-content>
-                            </md-card>
-
-                            <md-card>
-                                <md-card-title>
-                                    <md-card-title-text>
-                                        <span class="md-headline">Sourcemaps 配置</span>
-                                    </md-card-title-text>
-                                </md-card-title>
-                                <md-card-content layout="column">
-                                    <div layout="row">
-                                        <md-switch ng-model="curProj.smOpt.enable" flex="50"
-                                                   ng-disabled="curProj.id === null">
-                                                   生成 sourcemap 文件
-                                        </md-switch>
-                                        <md-button ng-click="editMappingUrl($event)">MAP URL 处理函数</md-button>
-                                    </div>
                                 </md-card-content>
                             </md-card>
 

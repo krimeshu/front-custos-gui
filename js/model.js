@@ -52,16 +52,6 @@ var _this = module.exports = {
             return tasks.slice(0, pos);
         }
     },
-    // 更新过期的配置
-    _updateOpts: function (opts) {
-        // 更新 alOpt
-        var alOpt = opts.alOpt;
-        if (alOpt.hashLink == true) {
-            alOpt.hashLink = 'AS_QUERY_STRING';
-        } else if (alOpt.hashLink == false) {
-            alOpt.hashLink = 'NO_HASH';
-        }
-    },
     selectCurProj: function (proj) {
         var id = proj.id,
             projName = proj.projName,
@@ -85,7 +75,7 @@ var _this = module.exports = {
     loadProj: function (proj, target) {
         target = target || {};
         var opts = this.loadProjOptions(proj);
-        this._updateOpts(opts);
+        Utils.upgradeOpts(opts);
         Utils.clearObj(target);
         Utils.deepCopy(opts, target);
         Utils.deepCopy(proj, target);
