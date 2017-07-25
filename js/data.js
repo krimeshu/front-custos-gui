@@ -32,8 +32,10 @@ module.exports = {
     initOpt: {
         "scOpt": {},
         "pcOpt": {},
+        "jsOpt": {
+            "bundleEntry": "",
+        },
         "ruOpt": {
-            "entry": "",
             "plugins": {
                 "nodeResolve": false,
                 "commonJS": false,
