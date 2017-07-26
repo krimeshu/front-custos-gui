@@ -299,6 +299,12 @@
                                                    启用 vueify transform (babel + vue)
                                         </md-switch>
                                     </div>
+                                    <div layout="row">
+                                        <md-switch ng-model="curProj.brOpt.cssModules"
+                                                   ng-disabled="curProj.id === null">
+                                                   启用 less-modulesify bundle (less + css modules)
+                                        </md-switch>
+                                    </div>
                                 </md-card-content>
                             </md-card>
 
