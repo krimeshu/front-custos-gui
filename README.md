@@ -273,3 +273,9 @@ appLogoDOM.src = appLogoSrc;
 ```
 
 没有被直接或间接引用到的文件，将被自动忽略，不放入生成目录内。
+
+### 配置模板
+
+将已有项目配置从 **package.json** 的 `fcOpt` 字段中提出，保存到 **~/FrontCustos/fc-template** 下即可作为任务模板使用。
+
+之后添加的项目不存在 `fcOpt` 字段时，可选择此目录下的模板，自动套用到新项目之上。
