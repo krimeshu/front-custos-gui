@@ -6,8 +6,8 @@
 
 var stream = typeof require !== 'undefined' ? require('stream') : null,
     isStream = stream && function (o) {
-            return o instanceof stream;
-        };
+        return o instanceof stream;
+    };
 
 var JSONViewer = function (opts) {
     var eventHandler = this._getUsefulDOM(opts.eventHandler),
@@ -27,23 +27,23 @@ var JSONViewer = function (opts) {
 JSONViewer.prototype = {
     _getUsefulDOM: function (unknown) {
         if (this._isDOM(unknown) ||
-            (unknown.length && typeof(unknown.append) === 'function')) {
+            (unknown.length && typeof (unknown.append) === 'function')) {
             return unknown;
         }
         return (document.querySelector && document.querySelector(unknown)) ||
             document.getElementById(unknown);
     },
-    _isDOM: ( typeof HTMLElement === 'object' ) ?
+    _isDOM: (typeof HTMLElement === 'object') ?
         function (unknown) {
             return unknown instanceof HTMLElement;
         } :
         function (unknown) {
             return (unknown && typeof unknown === 'object'
-            && unknown.nodeType === 1 && typeof unknown.nodeName === 'string');
+                && unknown.nodeType === 1 && typeof unknown.nodeName === 'string');
         },
     _isThis: function (el, selector) {
         var _matches = (el.matches || el.matchesSelector
-        || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
+            || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
         if (_matches) {
             return _matches.call(el, selector);
         } else if (el.parentNode) {
@@ -179,7 +179,7 @@ JSONViewer.prototype = {
                 objectType = true;
                 break;
             default:
-                if (typeof(target) === 'object') {
+                if (typeof (target) === 'object') {
                     objectType = true;
                 } else {
                     baseType = 'value';
@@ -225,13 +225,14 @@ JSONViewer.prototype = {
             _keyName && this._tryPrependKey(buffer, _keyName);
             buffer.push('<div class="json-viewer-' + baseType + '">');
             if (baseType === 'string') {
-                buffer.push('"');
-                buffer.push(target.replace(/"/g, '\\"'));
-                buffer.push('"');
+                buffer.push(JSON.stringify(target.replace(/</g, '&lt;')));
+                // buffer.push('"');
+                // buffer.push(target.replace(/"/g, '\\"'));
+                // buffer.push('"');
             } else if (baseType === 'stream') {
                 buffer.push('Stream');
             } else {
-                buffer.push(String(target));
+                buffer.push(JSON.stringify(target));
             }
             buffer.push('</div>');
             if (_isLast) {
