@@ -1,39 +1,15 @@
 {
   "latest": {
-    "version": "3.5.2",
-    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.5.2"
+    "version": "3.7.3",
+    "url": "https://github.com/krimeshu/front-custos-gui/releases/tag/v3.7.3"
   },
   "patches": [
     {
-      "from": "3.5.2",
-      "to": "3.6.7",
+      "from": "3.7.1",
+      "to": "3.7.3",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.5.2_3.6.7.7z",
-      "desc": "New features & Bug fixed."
-    },
-    {
-      "from": "3.6.3",
-      "to": "3.6.7",
-      "platform": "win32",
-      "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.6.3_3.6.7.7z",
-      "desc": "New features & Bug fixed."
-    },
-    {
-      "from": "3.6.5",
-      "to": "3.6.10",
-      "platform": "win32",
-      "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.6.5_3.6.10.7z",
-      "desc": "New features & Bug fixed."
-    },
-    {
-      "from": "3.6.7",
-      "to": "3.6.10",
-      "platform": "win32",
-      "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.6.7_3.6.10.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.7.1_3.7.3.7z",
       "desc": "New features & Bug fixed."
     }
   ]

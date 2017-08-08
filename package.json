@@ -9,7 +9,7 @@
     "build": "git submodule update --init --recursive && cd front-custos && git checkout master && npm install && cd .. && npm install && npm run electron-rebuild",
     "electron-rebuild": "cd front-custos && npm run electron-rebuild && cd ..",
     "dist": "npm run-script dist-win64",
-    "dist-win64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
+    "dist-win64": "electron-packager . FrontCustos --asar=true --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
     "dist-win32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=win32 --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
     "dist-mac64": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=darwin --arch=x64 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\"",
     "dist-mac32": "electron-packager . FrontCustos --out=../front-custos-gui-dist --icon=./tea-time --platform=darwin --arch=ia32 --overwrite=true --ignore=\"(.idea|patches|front-custos/example/dist)\""
