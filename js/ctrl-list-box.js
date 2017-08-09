@@ -12,6 +12,7 @@ var Logger = require('./logger.js'),
     Data = require('./data.js'),
     Model = require('./model.js'),
     Utils = require('./utils.js'),
+    Updater = require('./updater.js'),
     CustosProxy = require('./custos-proxy.js');
 
 var _fs = require('fs'),
@@ -346,6 +347,14 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
     // 上次关闭时的工作项目ID
     var lastWorkingId = Model.config.lastWorkingId;
     lastWorkingId && $scope.setCurrent(lastWorkingId);
+    
+    // 自动检查更新
+    if (Model.config.autoCheckUpdate) {
+        Updater.checkForUpdate({
+            quiet: true,
+            autoUpdate: false
+        });
+    }
 }];
 
 

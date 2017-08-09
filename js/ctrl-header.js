@@ -84,7 +84,10 @@ module.exports = ['$scope', '$mdDialog', function HeaderMenuCtrl($scope, $mdDial
 
     // 检查更新
     $scope.checkUpdate = function () {
-        Updater.checkForUpdate();
+        Updater.checkForUpdate({
+            quite: false,
+            autoUpdate: true
+        });
     };
 
     // 显示关于对话框

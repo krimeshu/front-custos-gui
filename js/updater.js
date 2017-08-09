@@ -8,33 +8,35 @@ var Utils = require('./utils.js'),
     PatchManager = require('./patch-manager.js');
 
 var Updater = {
-    checkForUpdate: function () {
-        // PatchManager.downVerList(function () {
-        //     PatchManager.checkVerPatch(function (patch) {
-        //         if (patch) {
-        //             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '发现可用更新补丁：', patch);
-        //             PatchManager.downPatch(patch, function (err) {
-        //                 if (err) {
-        //                     return;
-        //                 }
-        //                 PatchManager.checkLocalPatch(function (patch) {
-        //                     if (!patch) {
-        //                         return;
-        //                     }
-        //                     PatchManager.extractPatch(patch.path, function () {
-        //
-        //                     });
-        //                 });
-        //             });
-        //         } else {
-        //             Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '恭喜，您的版本暂时不需要更新~');
-        //         }
-        //     });
-        // });
-        Logger.log('<hr/>');
-        PatchManager.downVerList()
+    checkForUpdate: function (opts) {
+        var quiet = opts.quiet,
+            autoUpdate = opts.autoUpdate;
+        !quiet && Logger.log('<hr/>');
+        return PatchManager.downVerList(quiet)
             .then(PatchManager.checkVerPatch.bind(PatchManager))
-            .then(PatchManager.downPatch.bind(PatchManager))
+            .then(function (availPatch) {
+                if (!availPatch) return;
+                if (autoUpdate) {
+                    return Updater.doUpdate(availPatch);
+                } else {
+                    Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '检测到可更新版本，<a id="btn_uploadNow">立即更新</a>。');
+                    document.addEventListener('click', function (e) {
+                        if (e.target.id != 'btn_uploadNow') return;
+                        Updater.doUpdate(availPatch);
+                    });
+                }
+            })
+            .catch(function (errOrMsg) {
+                var isError = errOrMsg instanceof Error;
+                if (isError) {
+                    Logger.info(Utils.formatTime('[HH:mm:ss.fff]'), '更新检测失败：', errOrMsg);
+                } else {
+                    !quiet && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), errOrMsg);
+                }
+            });
+    },
+    doUpdate: function (availPatch) {
+        return PatchManager.downPatch(availPatch)
             .then(PatchManager.checkLocalPatch.bind(PatchManager))
             .then(PatchManager.extractPatch.bind(PatchManager))
             .then(function () {

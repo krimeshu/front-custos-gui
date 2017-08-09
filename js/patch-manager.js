@@ -99,12 +99,12 @@ module.exports = {
         });
     },
     // 下载在线版本列表
-    downVerList: function () {
+    downVerList: function (quiet) {
         return new Promise((resolve) => {
             var updaterDir = Utils.configDir('./fc-update');
             this._download('版本列表', VERSION_LIST_URL, updaterDir, () => {
                 resolve();
-            });
+            }, quiet);
         });
     },
     // 检查在线版本列表中是否有可用补丁
@@ -155,13 +155,13 @@ module.exports = {
         });
     },
     // 下载文件并进度提示
-    _download: function (name, url, saveDirPath, callback) {
+    _download: function (name, url, saveDirPath, callback, quiet) {
         var baseName = String(url.split('/').pop()).split(/\?#/g)[0],
             savePath = _path.resolve(saveDirPath, baseName);
         Utils.makeSureDir(saveDirPath);
 
         var logId = Logger.genUniqueId();
-        Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '开始下载' + name + '……');
+        !quiet && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), '开始下载' + name + '……');
         _progress(_request(url), {
             throttle: 100,
             delay: 0
@@ -181,14 +181,14 @@ module.exports = {
                 's。'
             ];
             Logger.useId(logId);
-            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
+            !quiet && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), progressText.join(''));
         }).on('error', function (e) {
             var err = new Error(name + '下载异常：');
             err.detail = e;
             Logger.error(err);
         }).on('end', function () {
             Logger.useId(logId);
-            Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '下载完毕。');
+            !quiet && Logger.log(Utils.formatTime('[HH:mm:ss.fff]'), name + '下载完毕。');
             callback && callback();
         }).pipe(_fs.createWriteStream(savePath));
     },
