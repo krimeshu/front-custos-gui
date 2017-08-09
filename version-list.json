@@ -6,10 +6,18 @@
   "patches": [
     {
       "from": "3.7.1",
-      "to": "3.7.3",
+      "to": "3.7.5",
       "platform": "win32",
       "arch": "x64",
-      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.7.1_3.7.3.7z",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.7.1_3.7.5.7z",
+      "desc": "New features & Bug fixed."
+    },
+    {
+      "from": "3.7.3",
+      "to": "3.7.5",
+      "platform": "win32",
+      "arch": "x64",
+      "url": "https://github.com/krimeshu/front-custos-gui/raw/master/patches/patch_3.7.3_3.7.5.7z",
       "desc": "New features & Bug fixed."
     }
   ]
