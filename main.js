@@ -6,6 +6,7 @@ const app = electron.app;
 const globalShortcut = electron.globalShortcut;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+const Menu = electron.Menu;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -69,9 +70,38 @@ function createWindow() {
     });
 }
 
+// 设置应用菜单（修复 Mac OS 内常用编辑快捷键）
+function setAppMenu() {
+    var template = [{
+        label: "Application",
+        submenu: [
+            { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+            { label: "DevTools", selector: "CmdOrCtrl+Alt+D", click: () => mainWindow.webContents.openDevTools() },
+            { type: "separator" },
+            { label: "Quit", accelerator: "CmdOrCtrl+Q", click: () => app.quit() }
+        ]
+    }, {
+        label: "Edit",
+        submenu: [
+            { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+            { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+            { type: "separator" },
+            { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+            { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+            { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+            { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+        ]
+    }];
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on('ready', createWindow);
+app.on('ready', function () {
+    createWindow();
+    setAppMenu();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

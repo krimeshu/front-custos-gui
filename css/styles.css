@@ -311,6 +311,7 @@ fieldset {
 
 .log-box a {
   color: #ffffff;
+  cursor: pointer;
 }
 
 .log-box hr {
