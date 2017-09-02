@@ -26,8 +26,8 @@ module.exports = {
     execPlugin: function (pluginName, pluginPath) {
         try {
             var pluginScript = fs.readFileSync(pluginPath);
-            var wrapper = new Function('console', 'require', 'return function () {\n' + pluginScript + '\n};');
-            var invoker = wrapper(this.console, require);
+            var wrapper = new Function('_console','console', 'require', 'return function () {\n' + pluginScript + '\n};');
+            var invoker = wrapper(console, this.console, require);
             invoker();
         } catch (ex) {
             this.console.error('插件 [' + pluginName + '] 执行异常：', ex);
