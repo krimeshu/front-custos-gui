@@ -28,6 +28,10 @@ function createWindow() {
         transparent: true,
         frame: false
     });
+    
+    mainWindow.on('closed', function () {
+        app.quit();
+    });
 
     // and load the index.html of the app.
     mainWindow.loadURL('file://' + __dirname + '/index.html');
