@@ -225,7 +225,8 @@
                                                   ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)">
                                         <md-checkbox aria-label="{{item.desc}}"
                                                      ng-checked="item.locked || exists(item.name, curProj.tasks)"
-                                                     ng-disabled="item.disabled || item.locked || curProj.id === null"></md-checkbox>
+                                                     ng-disabled="item.disabled || item.locked || curProj.id === null"
+                                                     ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)"></md-checkbox>
                                         <p flex>
                                             <strong ng-bind="item.name">..</strong>
                                             <small class="weak-text" ng-bind="item.desc">..</small>

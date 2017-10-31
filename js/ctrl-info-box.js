@@ -34,6 +34,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 任务勾选相关
     $scope.toggle = function (item, list) {
+        // console.log('toggle');
         var idx = list.indexOf(item);
         if (idx > -1) list.splice(idx, 1);
         else {
