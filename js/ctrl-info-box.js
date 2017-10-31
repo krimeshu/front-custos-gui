@@ -95,32 +95,38 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         var smOpt = Model.curProj.smOpt || (Model.curProj.smOpt = {});
         $scope.showAceDialog('sourceMappingUrl 函数', smOpt.mappingUrl, ev).then(function (text) {
             Model.curProj.smOpt.mappingUrl = text;
-        }, function () { });
+        }, function () {
+        });
     };
     $scope.editPreprocessing = function (ev) {
         $scope.showAceDialog('预处理脚本', Model.curProj.preprocessing, ev).then(function (text) {
             Model.curProj.preprocessing = text;
-        }, function () { });
+        }, function () {
+        });
     };
     $scope.editPostprocessing = function (ev) {
         $scope.showAceDialog('后处理脚本', Model.curProj.postprocessing, ev).then(function (text) {
             Model.curProj.postprocessing = text;
-        }, function () { });
+        }, function () {
+        });
     };
     $scope.editUploadFilter = function (ev) {
         $scope.showAceDialog('上传过滤', Model.curProj.upOpt.filter, ev).then(function (text) {
             Model.curProj.upOpt.filter = text;
-        }, function () { });
+        }, function () {
+        });
     };
     $scope.editUploadForm = function (ev) {
         $scope.showAceDialog('上传表单字段', Model.curProj.upOpt.form, ev).then(function (text) {
             Model.curProj.upOpt.form = text;
-        }, function () { });
+        }, function () {
+        });
     };
     $scope.editUploadResult = function (ev) {
         $scope.showAceDialog('上传结果判断', Model.curProj.upOpt.judge, ev).then(function (text) {
             Model.curProj.upOpt.judge = text;
-        }, function () { });
+        }, function () {
+        });
     };
 
     // 保存项目配置

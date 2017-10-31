@@ -1,10 +1,13 @@
 /**
  * Created by krimeshu on 2016/3/13.
  */
+const remote = require('electron').remote;
 
 var console = {
     _logList: null,
     _jsonViewer: null,
+    _pluginMenuItems: [],
+    _menu: null,
     nextId: null,
     clear: function () {
         var logList = this._logList;
@@ -175,19 +178,40 @@ var console = {
             theme: 'dark'
         });
 
-        const remote = require('electron').remote;
-        const Menu = remote.Menu;
-
         // 右键菜单
-        const menu = Menu.buildFromTemplate([
-            { label: '查看日历', click: () => { this.log('<hr/>'); this._showCalendar(); } },
-            { type: 'separator' },
-            { label: '清空', click: () => { this.clear(); } }
-        ]);
-        $box.on('contextmenu', function (ev) {
-            menu.popup(remote.getCurrentWindow())
+        this._generateMenu();
+        $box.on('contextmenu', (ev) => {
+            this._menu.popup(remote.getCurrentWindow())
         });
         this._showCalendar();
+    },
+    _generateMenu: function () {
+        const Menu = remote.Menu;
+        let template = [];
+        template.push({
+            label: '查看日历',
+            click: () => {
+                this.log('<hr/>');
+                this._showCalendar();
+            }
+        });
+        let pluginMenuItems = this._pluginMenuItems;
+        if (pluginMenuItems.length) {
+            template.push({type: 'separator'});
+            template = template.concat(pluginMenuItems);
+        }
+        template.push({type: 'separator'});
+        template.push({
+            label: '清空',
+            click: () => {
+                this.clear();
+            }
+        });
+        this._menu = Menu.buildFromTemplate(template);
+    },
+    registerMenuItem: function (label, click) {
+        this._pluginMenuItems.push({label, click});
+        this._generateMenu();
     }
 };
 

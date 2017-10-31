@@ -18,9 +18,20 @@ var Logger = require('./logger.js'),
 var _fs = require('fs'),
     _path = require('path');
 
-module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog) {
+module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope, $mdDialog, $mdToast) {
     $scope.curProj = Model.curProj;
     $scope.projList = Model.projList;
+
+    // 弹个消息
+    $scope.toastMsg = function (msg) {
+        $mdToast.show(
+            $mdToast.simple()
+                .parent(angular.element(document.querySelector('.window-box .info-box')))
+                .textContent(msg)
+                .position('top right')
+                .hideDelay(2000)
+        );
+    };
 
     // 判断是否当前选中的项目
     $scope.isCurrent = function (id) {
@@ -87,7 +98,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
 
         setTimeout(function () {
             var menu = Menu.buildFromTemplate(template);
-            menu.popup(remote.getCurrentWindow);
+            menu.popup(remote.getCurrentWindow());
         }, 100);
     };
 
@@ -242,6 +253,10 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
         console.log('Drop file:', filePath);
         if (state.isDirectory()) {
             $scope.importProj(filePath, ev);
+
+            setTimeout(function () {
+                $scope.$apply();
+            }, 200);
         }
     };
 
@@ -347,7 +362,7 @@ module.exports = ['$scope', '$mdDialog', function ListBoxCtrl($scope, $mdDialog)
     // 上次关闭时的工作项目ID
     var lastWorkingId = Model.config.lastWorkingId;
     lastWorkingId && $scope.setCurrent(lastWorkingId);
-    
+
     // 自动检查更新
     if (Model.config.autoCheckUpdate) {
         Updater.checkForUpdate({

@@ -629,13 +629,19 @@
             });
         },
         bindPageShortCut: function (key, func) {
+            var _os = require('os'),
+                isMac = _os.platform() === 'darwin';
             var listeners = this.pageShortCutListeners,
                 specKeys = { '38': 'up', '40': 'down' };
             if (!listeners) {
                 listeners = this.pageShortCutListeners = [];
                 window.addEventListener('keydown', function (e) {
                     var keys = [], key;
-                    e.ctrlKey && keys.push('ctrl');
+                    if (isMac) {
+                        e.metaKey && keys.push('ctrl');
+                    } else {
+                        e.ctrlKey && keys.push('ctrl');
+                    }
                     e.shiftKey && keys.push('shift');
                     e.altKey && keys.push('alt');
                     keys.push(specKeys[e.keyCode] || String.fromCharCode(e.keyCode).toLowerCase());

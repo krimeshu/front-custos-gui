@@ -82,7 +82,12 @@ angular.module('FrontCustosGUI', [
         setTimeout(function () {
             PluginLoader.console = Logger;
             PluginLoader.loadPlugins();
+
+            setTimeout(function () {
+                document.querySelector('md-input-container input').focus();
+            }, 100);
         }, 100);
+
     }])
     .controller('HeaderCtrl', HeaderCtrl)
     .controller('ListBoxCtrl', ListBoxCtrl)
