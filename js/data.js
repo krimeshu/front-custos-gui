@@ -154,7 +154,7 @@ module.exports = {
             pkg = {
                 name: projName,
                 version: '0.1.0',
-                fcOpt: null
+                fcOpts: {}
             };
         if (!_fs.existsSync(pkgPath)) {
             this.saveProjPackage(pkg, projDir);
@@ -162,6 +162,7 @@ module.exports = {
             try {
                 var content = _fs.readFileSync(pkgPath).toString();
                 pkg = angular.fromJson(content);
+                Utils.upgradeOpts(pkg);
             } catch (e) {
                 console.log('readProjPackage 时发生异常: ', e);
                 this.saveProjPackage(pkg, projDir);
@@ -181,15 +182,18 @@ module.exports = {
     },
     // 获取默认项目配置
     getNewOpt: function () {
-        var opt = Utils.deepCopy(this.initOpt);
+        var opt = {};
         opt.id = null;
         opt.projName = '';
         opt.projDir = '';
+        opt.version = '';
+        opt.mode = '__default';
+        opt.fcOpts = {'__default': Utils.deepCopy(this.initOpt)};
         return opt;
     },
     // 读取模板列表
     getTemplates: function () {
-        var templates = [{ name: '空白模板', path: null }],
+        var templates = [{name: '空白模板', path: null}],
             templateDir = Utils.configDir('./fc-template');
         if (!_fs.existsSync(templateDir)) {
             _fs.mkdirSync(templateDir, 511); // 511:dec = 0777:hex
@@ -198,7 +202,7 @@ module.exports = {
             var filePath = _path.resolve(templateDir, file),
                 extName = _path.extname(file),
                 baseName = _path.basename(filePath, extName);
-            templates.push({ name: baseName, path: filePath });
+            templates.push({name: baseName, path: filePath});
         });
         return templates;
     }

@@ -187,15 +187,26 @@
                                         </div>
                                     </md-input-container>
                                     <div layout="row">
+                                        <md-input-container class="md-block" flex>
+                                            <label>任务模式</label>
+                                            <md-select ng-model="curProj.mode" name="mode" ng-change="updateCurOpt()">
+                                                <md-option ng-repeat="item in curProjModeList"
+                                                           value="{{item}}" ng-selected="item === curProj.mode">
+                                                    {{item === '__default' ? '默认配置' : item}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+                                    <div layout="row">
                                         <md-input-container class="md-block" flex="50">
                                             <label>内部源目录（选填）</label>
-                                            <input ng-model="curProj.innerSrcDir" name="innerSrcDir"
+                                            <input ng-model="curProjOpt.innerSrcDir" name="innerSrcDir"
                                                    ng-disabled="curProj.id === null"
                                                    placeholder="处理子目录时填写，如：“./src”"/>
                                         </md-input-container>
                                         <md-input-container class="md-block" flex="50">
                                             <label>内部输出目录（选填）</label>
-                                            <input ng-model="curProj.innerDistDir" name="innerDistDir"
+                                            <input ng-model="curProjOpt.innerDistDir" name="innerDistDir"
                                                    ng-disabled="curProj.id === null"
                                                    placeholder="输出到子目录时填写，如：“./dist”"/>
                                         </md-input-container>
@@ -205,12 +216,12 @@
 
                             <div layout="row">
                                 <md-switch class="middle-width"
-                                           ng-checked="curProj.watchToRebuilding"
+                                           ng-checked="curProjOpt.watchToRebuilding"
                                            ng-click="!(curProj.id === null) && toggleCurWatching()"
                                            ng-disabled="curProj.id === null">监听自动构建
                                 </md-switch>
                                 <md-switch class="middle-width"
-                                           ng-model="curProj.upOpt.uploadAll"
+                                           ng-model="curProjOpt.upOpt.uploadAll"
                                            ng-disabled="curProj.id === null">全量上传
                                 </md-switch>
                             </div>
@@ -222,11 +233,11 @@
                                 <md-list>
                                     <md-list-item ng-repeat="item in allTasks"
                                                   aria-label="{{item.desc}}"
-                                                  ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)">
+                                                  ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProjOpt.tasks)">
                                         <md-checkbox aria-label="{{item.desc}}"
-                                                     ng-checked="item.locked || exists(item.name, curProj.tasks)"
+                                                     ng-checked="item.locked || exists(item.name, curProjOpt.tasks)"
                                                      ng-disabled="item.disabled || item.locked || curProj.id === null"
-                                                     ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProj.tasks)"></md-checkbox>
+                                                     ng-click="!(item.locked || curProj.id === null) && toggle(item.name, curProjOpt.tasks)"></md-checkbox>
                                         <p flex>
                                             <strong ng-bind="item.name">..</strong>
                                             <small class="weak-text" ng-bind="item.desc">..</small>
@@ -247,9 +258,9 @@
                                 </md-card-title>
                                 <md-card-content layout="column">
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.smOpt.enable" flex="50"
+                                        <md-switch ng-model="curProjOpt.smOpt.enable" flex="50"
                                                    ng-disabled="curProj.id === null">
-                                                   生成 sourcemap 文件
+                                            生成 sourcemap 文件
                                         </md-switch>
                                         <md-button ng-click="editMappingUrl($event)">MAP URL 处理函数</md-button>
                                     </div>
@@ -266,16 +277,17 @@
                                     <div layout="row">
                                         <md-input-container class="md-block" flex>
                                             <label>入口脚本（一行一个）</label>
-                                            <textarea ng-model="curProj.jsOpt.bundleEntry" 
-                                                name="jsBundleEntry" row="5"
-                                                ng-disabled="curProj.id === null"
-                                                placeholder="相对项目源目录的路径，如：js/index.js">
+                                            <textarea ng-model="curProjOpt.jsOpt.bundleEntry"
+                                                      name="jsBundleEntry" row="5"
+                                                      ng-disabled="curProj.id === null"
+                                                      placeholder="相对项目源目录的路径，如：js/index.js">
                                             </textarea>
                                         </md-input-container>
                                     </div>
                                     <div layout="row">
                                         <p style="margin-top: -20px;">
-                                            <small>* 若不想手动配置，可尝试使用 find_bundle_entry 任务，html 页面直接引用的 js 文件将被自动识别为脚本入口。</small>
+                                            <small>* 若不想手动配置，可尝试使用 find_bundle_entry 任务，html 页面直接引用的 js 文件将被自动识别为脚本入口。
+                                            </small>
                                         </p>
                                     </div>
                                 </md-card-content>
@@ -289,21 +301,21 @@
                                 </md-card-title>
                                 <md-card-content layout="column">
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.brOpt.babelify"
+                                        <md-switch ng-model="curProjOpt.brOpt.babelify"
                                                    ng-disabled="curProj.id === null">
-                                                   启用 babelify transform (babel + react)
+                                            启用 babelify transform (babel + react)
                                         </md-switch>
                                     </div>
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.brOpt.vueify"
+                                        <md-switch ng-model="curProjOpt.brOpt.vueify"
                                                    ng-disabled="curProj.id === null">
-                                                   启用 vueify transform (babel + vue)
+                                            启用 vueify transform (babel + vue)
                                         </md-switch>
                                     </div>
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.brOpt.lessModulesify"
+                                        <md-switch ng-model="curProjOpt.brOpt.lessModulesify"
                                                    ng-disabled="curProj.id === null">
-                                                   启用 less-modulesify bundle (less + css modules)
+                                            启用 less-modulesify bundle (less + css modules)
                                         </md-switch>
                                     </div>
                                 </md-card-content>
@@ -319,54 +331,54 @@
                                     <fieldset>
                                         <legend>启用插件</legend>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.nodeResolve" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    node-resolve
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.nodeResolve" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                node-resolve
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.commonJS" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    common-js
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.commonJS" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                common-js
                                             </md-checkbox>
-                                        </div>                                            
+                                        </div>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.vue" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    vue
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.vue" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                vue
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.postcssModules" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    postcss + modules
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.postcssModules" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                postcss + modules
                                             </md-checkbox>
-                                        </div>                                            
+                                        </div>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.babel" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    babel + react
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.babel" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                babel + react
                                             </md-checkbox>
-                                            <md-checkbox ng-model="curProj.ruOpt.plugins.uglify" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    uglify
+                                            <md-checkbox ng-model="curProjOpt.ruOpt.plugins.uglify" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                uglify
                                             </md-checkbox>
                                         </div>
                                     </fieldset>
                                     <div layout="row" style="padding-top: 10px;">
                                         <md-input-container class="md-block" flex>
                                             <label>打包格式</label>
-                                            <md-select ng-model="curProj.ruOpt.format">
+                                            <md-select ng-model="curProjOpt.ruOpt.format">
                                                 <md-option value="es"
-                                                        ng-selected="curProj.ruOpt.format == 'es'  || !curProj.ruOpt.format">
+                                                           ng-selected="curProjOpt.ruOpt.format == 'es'  || !curProjOpt.ruOpt.format">
                                                     ES
                                                 </md-option>
                                                 <md-option value="cjs"
-                                                        ng-selected="curProj.ruOpt.format == 'cjs'">
+                                                           ng-selected="curProjOpt.ruOpt.format == 'cjs'">
                                                     CJS
                                                 </md-option>
                                                 <md-option value="iife"
-                                                        ng-selected="curProj.ruOpt.format == 'iife'">
+                                                           ng-selected="curProjOpt.ruOpt.format == 'iife'">
                                                     IIFE
                                                 </md-option>
                                                 <md-option value="umd"
-                                                        ng-selected="curProj.ruOpt.format == 'umd'">
+                                                           ng-selected="curProjOpt.ruOpt.format == 'umd'">
                                                     UMD
                                                 </md-option>
                                             </md-select>
@@ -385,10 +397,10 @@
                                     <div layout="row">
                                         <md-input-container class="md-block" flex="50">
                                             <label>设备像素密度</label>
-                                            <input ng-model="curProj.scOpt.useRatio" name="scRatio"
-                                                ng-disabled="curProj.id === null"
-                                                ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                                required placeholder="1=普通 大于1=Retina"/>
+                                            <input ng-model="curProjOpt.scOpt.useRatio" name="scRatio"
+                                                   ng-disabled="curProj.id === null"
+                                                   ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                                   required placeholder="1=普通 大于1=Retina"/>
                                             <div ng-messages="curProjForm.scRatio.$error">
                                                 <div ng-message="required">请输入一个普通数值</div>
                                                 <div ng-message="pattern">请输入一个有效的数值</div>
@@ -396,10 +408,10 @@
                                         </md-input-container>
                                         <md-input-container class="md-block" flex="50">
                                             <label>Rem像素比</label>
-                                            <input ng-model="curProj.scOpt.useRem" name="scRem"
-                                                ng-disabled="curProj.id === null"
-                                                ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
-                                                required placeholder="1=不转为Rem 其它=1rem/1px"/>
+                                            <input ng-model="curProjOpt.scOpt.useRem" name="scRem"
+                                                   ng-disabled="curProj.id === null"
+                                                   ng-pattern="/^[0-9]*(\.[0-9]*)?$/"
+                                                   required placeholder="1=不转为Rem 其它=1rem/1px"/>
                                             <div ng-messages="curProjForm.scRem.$error">
                                                 <div ng-message="required">请输入一个普通数值</div>
                                                 <div ng-message="pattern">请输入一个有效的数值</div>
@@ -408,7 +420,7 @@
                                     </div>
                                     <md-input-container class="md-block" flex>
                                         <label>输出目录</label>
-                                        <input ng-model="curProj.scOpt.outputDir" name="scOutput"
+                                        <input ng-model="curProjOpt.scOpt.outputDir" name="scOutput"
                                                ng-disabled="curProj.id === null"
                                                placeholder="保存合并后的雪碧图的目录，相对于项目根目录的路径"/>
                                     </md-input-container>
@@ -425,15 +437,15 @@
                                     <fieldset>
                                         <legend>启用插件</legend>
                                         <div layout="row">
-                                            <md-checkbox ng-model="curProj.pcOpt.cssnano" flex="50"
-                                                    ng-disabled="curProj.id === null">
-                                                    cssnano
+                                            <md-checkbox ng-model="curProjOpt.pcOpt.cssnano" flex="50"
+                                                         ng-disabled="curProj.id === null">
+                                                cssnano
                                             </md-checkbox>
                                         </div>
                                     </fieldset>
                                     <md-input-container class="md-block" flex>
                                         <label>目标浏览器范围</label>
-                                        <input ng-model="curProj.pcOpt.browsers" name="pcBrowsers" required
+                                        <input ng-model="curProjOpt.pcOpt.browsers" name="pcBrowsers" required
                                                ng-disabled="curProj.id === null"
                                                placeholder="参数形式可参考 autoprefixer 相关文档"/>
                                         <div ng-messages="curProjForm.pcBrowsers.$error">
@@ -451,49 +463,49 @@
                                 </md-card-title>
                                 <md-card-content layout="column">
                                     <div layout="row">
-                                        <md-switch ng-model="curProj.alOpt.flatten" flex="100"
+                                        <md-switch ng-model="curProjOpt.alOpt.flatten" flex="100"
                                                    ng-disabled="curProj.id === null">简化目录结构（分发时，根据文件类型放入对应目录）
                                         </md-switch>
                                     </div>
                                     <md-input-container>
                                         <label>文件指纹处理</label>
-                                        <md-select ng-model="curProj.alOpt.hashLink">
+                                        <md-select ng-model="curProjOpt.alOpt.hashLink">
                                             <md-option value="NO_HASH"
-                                                    ng-selected="curProj.alOpt.hashLink == 'NO_HASH'  || !curProj.alOpt.hashLink">
+                                                       ng-selected="curProjOpt.alOpt.hashLink == 'NO_HASH'  || !curProjOpt.alOpt.hashLink">
                                                 不处理文件指纹
                                             </md-option>
                                             <md-option value="AS_QUERY_STRING"
-                                                    ng-selected="curProj.alOpt.hashLink == 'AS_QUERY_STRING'">
+                                                       ng-selected="curProjOpt.alOpt.hashLink == 'AS_QUERY_STRING'">
                                                 文件指纹作为链接参数
                                             </md-option>
                                             <md-option value="IN_FILE_NAME"
-                                                    ng-selected="curProj.alOpt.hashLink == 'IN_FILE_NAME'">
+                                                       ng-selected="curProjOpt.alOpt.hashLink == 'IN_FILE_NAME'">
                                                 文件指纹加入文件名内
                                             </md-option>
                                         </md-select>
                                     </md-input-container>
                                     <div layout="row">
-                                    <md-input-container class="md-block" flex="50">
-                                        <label>页面文件分发目录</label>
-                                        <input ng-model="curProj.alOpt.pageDir" name="alPageDir"
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="页面文件将放到此目录中"/>
-                                    </md-input-container>
-                                    <md-input-container class="md-block" flex="50">
-                                        <label>静态文件分发目录</label>
-                                        <input ng-model="curProj.alOpt.staticDir" name="alStaticDir"
-                                               ng-disabled="curProj.id === null"
-                                               placeholder="静态资源文件将放到此目录中"/>
-                                    </md-input-container>
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>页面文件分发目录</label>
+                                            <input ng-model="curProjOpt.alOpt.pageDir" name="alPageDir"
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="页面文件将放到此目录中"/>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex="50">
+                                            <label>静态文件分发目录</label>
+                                            <input ng-model="curProjOpt.alOpt.staticDir" name="alStaticDir"
+                                                   ng-disabled="curProj.id === null"
+                                                   placeholder="静态资源文件将放到此目录中"/>
+                                        </md-input-container>
                                     </div>
                                     <div layout="row">
                                         <md-input-container class="md-block" flex="80">
                                             <label>静态文件链接前缀</label>
-                                            <input ng-model="curProj.alOpt.staticUrlHead" name="alStaticUrlHead"
+                                            <input ng-model="curProjOpt.alOpt.staticUrlHead" name="alStaticUrlHead"
                                                    ng-disabled="curProj.id === null"
                                                    placeholder="静态文件与页面在不同域时，可以指定一个链接前缀"/>
                                         </md-input-container>
-                                        <md-switch ng-model="curProj.alOpt.useStaticUrlHead" flex="20"
+                                        <md-switch ng-model="curProjOpt.alOpt.useStaticUrlHead" flex="20"
                                                    ng-disabled="curProj.id === null">启用
                                         </md-switch>
                                     </div>
@@ -508,9 +520,9 @@
                                 </md-card-title>
                                 <md-card-content layout="column">
                                     <md-input-container class="md-block" flex>
-                                        <label>目标页面地址</label>		
-                                        <input ng-model="curProj.upOpt.page" name="uploadPage"		
-                                               ng-disabled="curProj.id === null"		
+                                        <label>目标页面地址</label>
+                                        <input ng-model="curProjOpt.upOpt.page" name="uploadPage"
+                                               ng-disabled="curProj.id === null"
                                                placeholder="处理项目文件上传的页面地址"/>
                                     </md-input-container>
                                     <div layout="row">
@@ -590,13 +602,15 @@
             // 修复 Tab 坐标问题
             var fixTabPosition = function () {
                 $('md-tabs-content-wrapper')
-                        .css({'position': 'relative'})
-                        .each(new Function('this.clientWidth'))
-                        .css({'position': 'absolute'});
+                    .css({'position': 'relative'})
+                    .each(new Function('this.clientWidth'))
+                    .css({'position': 'absolute'});
             };
             // 修复 ACE 编辑器点击乱跳问题（减缓症状）
             var fixAceScroll = function () {
-                $('.ace_editor').on('mousedown', function () { this.scrollIntoView(); });
+                $('.ace_editor').on('mousedown', function () {
+                    this.scrollIntoView();
+                });
             };
             window.setTimeout(function () {
                 document.querySelector('.shadow-box').classList.add('in');
@@ -633,7 +647,7 @@
             var _os = require('os'),
                 isMac = _os.platform() === 'darwin';
             var listeners = this.pageShortCutListeners,
-                specKeys = { '38': 'up', '40': 'down' };
+                specKeys = {'38': 'up', '40': 'down'};
             if (!listeners) {
                 listeners = this.pageShortCutListeners = [];
                 window.addEventListener('keydown', function (e) {

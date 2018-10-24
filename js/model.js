@@ -22,27 +22,66 @@ TaskList.forEach((task) => {
     }
 });
 
+// 从默认配置中补全到当前配置
+function fillCurOpts(defaultOpts, currentOpts = {}) {
+    for (var key of Object.keys(defaultOpts)) {
+        if (currentOpts.hasOwnProperty(key)) continue;
+
+        var value = defaultOpts[key];
+        if (value === undefined || value === null) continue;
+
+        if (typeof value === 'object') fillCurOpts(value, currentOpts[key] = {});
+        else currentOpts[key] = value;
+    }
+}
+
+// 从当前配置中剔除默认配置
+function diffCurOpts(defaultOpts, currentOpts) {
+    for (var key of Object.keys(defaultOpts)) {
+        if (!defaultOpts.hasOwnProperty(key)) continue;
+
+        var defValue = defaultOpts[key];
+        var curValue = currentOpts[key];
+
+        if (typeof defValue === 'object') diffCurOpts(defValue, curValue || {});
+        else if (curValue === defValue) delete curValue[key];
+    }
+}
+
 var _this = module.exports = {
     allTasks: TaskList,
     _DEFAULT_THEME: 'Modern',
     allThemes: {
-        'Modern': { primary: 'blue-grey', accent: 'red' },
-        'Girl': { primary: 'pink', accent: 'red' },
+        'Modern': {primary: 'blue-grey', accent: 'red'},
+        'Girl': {primary: 'pink', accent: 'red'},
         // 'Spring': { primary: 'teal', accent: 'green' },
-        'Industry': { primary: 'indigo', accent: 'red' },
-        'Orange': { primary: 'deep-orange', accent: 'blue' },
-        'Coffee': { primary: 'brown', accent: 'deep-orange' },
-        'Evil': { primary: 'deep-purple', accent: 'purple' }
+        'Industry': {primary: 'indigo', accent: 'red'},
+        'Orange': {primary: 'deep-orange', accent: 'blue'},
+        'Coffee': {primary: 'brown', accent: 'deep-orange'},
+        'Evil': {primary: 'deep-purple', accent: 'purple'}
     },
     templates: Data.getTemplates(),
     config: Data.loadConfig(),
     projList: Data.loadProjList(),
     curProj: Data.getNewOpt(),
+    get curProjModeList() {
+        return Object.keys(this.curProj.fcOpts || {});
+    },
+    get curProjOpt() {
+        var mode = this.curProj.mode || '__default';
+        var opts = this.curProj.fcOpts || {};
+        var curOpt = Utils.deepCopy(opts[mode] || {});
+        if (mode !== '__default') {
+            var defOpt = this.curProj.fcOpts['__default'] || {};
+            fillCurOpts(defOpt, curOpt);
+        }
+        return curOpt;
+    },
     watchingProjIds: [],
     watchTaskRanges: {
-        '': { name: '无限制' },
-        'prepare_build': { name: '跳转构建之前' },
-        'do_upload': { name: '开始上传之前' }
+        '': {name: '无限制'},
+        'prepare_build': {name: '跳转构建之前'},
+        'do_upload': {name: '开始上传之前'}
     },
     getTasksInRange: function (tasks, limit) {
         var pos = tasks.indexOf(limit);
@@ -53,10 +92,9 @@ var _this = module.exports = {
         }
     },
     selectCurProj: function (proj) {
-        var id = proj.id,
-            projName = proj.projName,
-            projDir = proj.projDir;
-        this.loadProj(proj, this.curProj);
+        this.loadProjOptions(proj);
+        const {id, projName, projDir} = proj;
+        proj.mode = '__default';
 
         Logger.log('<hr/>');
         Logger.info('[时间: %s]', Utils.formatTime('HH:mm:ss.fff yyyy-MM-dd', new Date()));
@@ -72,34 +110,30 @@ var _this = module.exports = {
             scrollToItem(id);
         }, 100);
     },
-    loadProj: function (proj, target) {
-        target = target || {};
-        var opts = this.loadProjOptions(proj);
-        Utils.upgradeOpts(opts);
-        Utils.clearObj(target);
-        Utils.deepCopy(opts, target);
-        Utils.deepCopy(proj, target);
-        return target;
-    },
     loadProjOptions: function (proj) {
         var projName = proj.projName,
             projDir = proj.projDir,
-            pkg = Data.loadProjPackage(projName, projDir),
-            opts = pkg.fcOpt || {},
+            pkg = Data.loadProjPackage(projName, projDir);
+
+        var opts = pkg.fcOpts || {},
             needsFields = Data.initOpt;
-        Utils.fillObj(needsFields, opts);
-        opts.version = pkg.version;
-        opts.watchToRebuilding = !!pkg.watchToRebuilding;
-        return opts;
+        Utils.fillObj(needsFields, opts['__default']);
+
+        proj.fcOpts = opts;
+
+        proj.version = pkg.version;
+        proj.watchToRebuilding = !!pkg.watchToRebuilding;
+
+        Utils.deepCopy(proj, this.curProj);
     },
     getProjById: function (id) {
         var proj = null;
         this.projList && this.projList.forEach &&
-            this.projList.forEach(function (_proj) {
-                if (_proj.id === id) {
-                    proj = _proj;
-                }
-            });
+        this.projList.forEach(function (_proj) {
+            if (_proj.id === id) {
+                proj = _proj;
+            }
+        });
         return proj;
     },
     removeProjById: function (id, selectNext) {
@@ -138,8 +172,8 @@ var _this = module.exports = {
                 projDir = projWithOpts.projDir,
                 version = projWithOpts.version,
                 watchToRebuilding = projWithOpts.watchToRebuilding,
-                fcOpt = this.extractFcOpt(projWithOpts);
-            this.updatePkg(projName, projDir, version, watchToRebuilding, fcOpt);
+                fcOpts = projWithOpts.fcOpts;
+            this.updatePkg(projName, projDir, version, watchToRebuilding, fcOpts);
 
             var projList = this.projList,
                 justProj = this.getProjById(id);
@@ -152,19 +186,11 @@ var _this = module.exports = {
             return false;
         }
     },
-    extractFcOpt: function (proj, _excludeFields) {
-        var fcOpt = Utils.deepCopy(proj),
-            excludeFields = _excludeFields || ['id', 'projName', 'projDir', 'srcDir', 'version', 'watchToRebuilding'];
-        excludeFields && excludeFields.forEach(function (field) {
-            delete fcOpt[field];
-        });
-        return fcOpt;
-    },
-    updatePkg: function (projName, projDir, version, watchToRebuilding, fcOpt) {
+    updatePkg: function (projName, projDir, version, watchToRebuilding, fcOpts) {
         var pkg = Data.loadProjPackage(projName, projDir);
         pkg.version = version;
         pkg.watchToRebuilding = watchToRebuilding;
-        pkg.fcOpt = fcOpt;
+        pkg.fcOpts = fcOpts;
         Data.saveProjPackage(pkg, projDir);
     }
 };

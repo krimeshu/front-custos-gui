@@ -85,15 +85,43 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
         }
 
         var template = [
-            { label: '移到顶部', click: () => { $scope.orderProj(id, ev, 'top'); } },
-            { label: '移到底部', click: () => { $scope.orderProj(id, ev, 'bottom'); } },
-            { label: '上移一项', accelerator: "CmdOrCtrl+Up", click: () => { $scope.orderProj(id, ev, -1); } },
-            { label: '下移一项', accelerator: "CmdOrCtrl+Down", click: () => { $scope.orderProj(id, ev, 1); } },
-            { type: 'separator' },
-            { label: '打开源目录', accelerator: "CmdOrCtrl+R", click: () => { $scope.openSrcDir(id, ev); } },
-            { label: '打开生成目录', accelerator: "CmdOrCtrl+D", click: () => { $scope.openDistDir(id, ev); } },
-            { type: 'separator' },
-            { label: '从列表中移除', click: () => { $scope.removeProj(id, ev); } }
+            {
+                label: '移到顶部', click: () => {
+                    $scope.orderProj(id, ev, 'top');
+                }
+            },
+            {
+                label: '移到底部', click: () => {
+                    $scope.orderProj(id, ev, 'bottom');
+                }
+            },
+            {
+                label: '上移一项', accelerator: "CmdOrCtrl+Up", click: () => {
+                    $scope.orderProj(id, ev, -1);
+                }
+            },
+            {
+                label: '下移一项', accelerator: "CmdOrCtrl+Down", click: () => {
+                    $scope.orderProj(id, ev, 1);
+                }
+            },
+            {type: 'separator'},
+            {
+                label: '打开源目录', accelerator: "CmdOrCtrl+R", click: () => {
+                    $scope.openSrcDir(id, ev);
+                }
+            },
+            {
+                label: '打开生成目录', accelerator: "CmdOrCtrl+D", click: () => {
+                    $scope.openDistDir(id, ev);
+                }
+            },
+            {type: 'separator'},
+            {
+                label: '从列表中移除', click: () => {
+                    $scope.removeProj(id, ev);
+                }
+            }
         ];
 
         setTimeout(function () {
@@ -296,21 +324,21 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
             clickOutsideToClose: true,
             targetEvent: ev
         }).then(function (tempPath) {
+            var pkg = Data.loadProjPackage(projName, projDir)
             // 读取模板设定初始配置
-            var pkg = Data.loadProjPackage(projName, projDir),
-                content = tempPath ?
-                    _fs.readFileSync(tempPath).toString() :
-                    Data.initOpt,
-                temp = angular.fromJson(content),
-                fcOpt = Model.extractFcOpt(temp);
-            pkg.fcOpt = Utils.deepCopy(fcOpt);
+            if (tempPath) {
+                var content = _fs.readFileSync(tempPath).toString(),
+                    fcOpt = angular.fromJson(content);
+                pkg.fcOpts = {__default: Utils.deepCopy(fcOpt)};
+            } else {
+                pkg.fcOpts = {__default: Utils.deepCopy(Data.initOpt)};
+            }
             Data.saveProjPackage(pkg, projDir);
             $scope.addProj(projName, projDir);
         }, function () {
             // 不取模板，直接按默认配置
-            var pkg = Data.loadProjPackage(projName, projDir),
-                fcOpt = Data.initOpt;
-            pkg.fcOpt = Utils.deepCopy(fcOpt);
+            var pkg = Data.loadProjPackage(projName, projDir);
+            pkg.fcOpts = {__default: Utils.deepCopy(Data.initOpt)};
             Data.saveProjPackage(pkg, projDir);
             $scope.addProj(projName, projDir);
         });

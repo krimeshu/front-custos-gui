@@ -32,6 +32,14 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     $scope.optionsConfirmTemplate = _fs.readFileSync(tempPath).toString();
     $scope.optionsConfirmTemplate = $scope.optionsConfirmTemplate.replace(/\n/g, '');
 
+    $scope.updateCurOpt = function () {
+        // console.log('Mode change!');
+        $scope.curProjOpt = Model.curProjOpt;
+        $scope.curProjModeList = Model.curProjModeList;
+    };
+
+    $scope.updateCurOpt();
+
     // 任务勾选相关
     $scope.toggle = function (item, list) {
         // console.log('toggle');
@@ -93,39 +101,39 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         });
     };
     $scope.editMappingUrl = function (ev) {
-        var smOpt = Model.curProj.smOpt || (Model.curProj.smOpt = {});
+        var smOpt = Model.curProjOpt.smOpt || (Model.curProjOpt.smOpt = {});
         $scope.showAceDialog('sourceMappingUrl 函数', smOpt.mappingUrl, ev).then(function (text) {
-            Model.curProj.smOpt.mappingUrl = text;
+            Model.curProjOpt.smOpt.mappingUrl = text;
         }, function () {
         });
     };
     $scope.editPreprocessing = function (ev) {
-        $scope.showAceDialog('预处理脚本', Model.curProj.preprocessing, ev).then(function (text) {
-            Model.curProj.preprocessing = text;
+        $scope.showAceDialog('预处理脚本', Model.curProjOpt.preprocessing, ev).then(function (text) {
+            Model.curProjOpt.preprocessing = text;
         }, function () {
         });
     };
     $scope.editPostprocessing = function (ev) {
-        $scope.showAceDialog('后处理脚本', Model.curProj.postprocessing, ev).then(function (text) {
-            Model.curProj.postprocessing = text;
+        $scope.showAceDialog('后处理脚本', Model.curProjOpt.postprocessing, ev).then(function (text) {
+            Model.curProjOpt.postprocessing = text;
         }, function () {
         });
     };
     $scope.editUploadFilter = function (ev) {
-        $scope.showAceDialog('上传过滤', Model.curProj.upOpt.filter, ev).then(function (text) {
-            Model.curProj.upOpt.filter = text;
+        $scope.showAceDialog('上传过滤', Model.curProjOpt.upOpt.filter, ev).then(function (text) {
+            Model.curProjOpt.upOpt.filter = text;
         }, function () {
         });
     };
     $scope.editUploadForm = function (ev) {
-        $scope.showAceDialog('上传表单字段', Model.curProj.upOpt.form, ev).then(function (text) {
-            Model.curProj.upOpt.form = text;
+        $scope.showAceDialog('上传表单字段', Model.curProjOpt.upOpt.form, ev).then(function (text) {
+            Model.curProjOpt.upOpt.form = text;
         }, function () {
         });
     };
     $scope.editUploadResult = function (ev) {
-        $scope.showAceDialog('上传结果判断', Model.curProj.upOpt.judge, ev).then(function (text) {
-            Model.curProj.upOpt.judge = text;
+        $scope.showAceDialog('上传结果判断', Model.curProjOpt.upOpt.judge, ev).then(function (text) {
+            Model.curProjOpt.upOpt.judge = text;
         }, function () {
         });
     };
@@ -137,7 +145,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             return;
         }
         // 补充任务
-        CustosProxy.fillTasks(Model.curProj.tasks);
+        CustosProxy.fillTasks(Model.curProjOpt.tasks);
 
         var proj = $scope.curProj,
             res = Model.updateProj(proj),
