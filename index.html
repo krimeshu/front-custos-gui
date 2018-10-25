@@ -147,6 +147,13 @@
                     </md-tooltip>
                     <md-icon class="material-icons">backup</md-icon>
                 </md-button>
+                <md-button class="md-raised btn-change-mode"
+                           ng-click="showModeDialog($event)">
+                    <md-tooltip md-direction="bottom">
+                        切换任务模式
+                    </md-tooltip>
+                    {{curProj.mode === '__default' ? '默认' : curProj.mode}}
+                </md-button>
                 <md-button class="md-fab md-raised btn-save"
                            ng-disabled="curProj.id === null"
                            ng-click="saveProj($event)">
@@ -161,7 +168,7 @@
                             <md-card>
                                 <md-card-content layout="column">
                                     <div layout="row">
-                                        <md-input-container class="md-block" flex="70">
+                                        <md-input-container class="md-block" flex="80">
                                             <label>显示名称</label>
                                             <input ng-model="curProj.projName" name="projName" required
                                                    ng-disabled="curProj.id === null"
@@ -170,7 +177,7 @@
                                                 <div ng-message="required">请输入项目名称</div>
                                             </div>
                                         </md-input-container>
-                                        <md-input-container class="md-block" flex="30">
+                                        <md-input-container class="md-block" flex="20">
                                             <label>版本</label>
                                             <input ng-model="curProj.version" name="version"
                                                    ng-disabled="curProj.id === null"
@@ -186,17 +193,6 @@
                                             <div ng-message="required">请选择项目所在位置</div>
                                         </div>
                                     </md-input-container>
-                                    <div layout="row">
-                                        <md-input-container class="md-block" flex>
-                                            <label>任务模式</label>
-                                            <md-select ng-model="curProj.mode" name="mode" ng-change="updateCurOpt()">
-                                                <md-option ng-repeat="item in curProjModeList"
-                                                           value="{{item}}" ng-selected="item === curProj.mode">
-                                                    {{item === '__default' ? '默认配置' : item}}
-                                                </md-option>
-                                            </md-select>
-                                        </md-input-container>
-                                    </div>
                                     <div layout="row">
                                         <md-input-container class="md-block" flex="50">
                                             <label>内部源目录（选填）</label>
@@ -215,11 +211,11 @@
                             </md-card>
 
                             <div layout="row">
-                                <md-switch class="middle-width"
-                                           ng-checked="curProjOpt.watchToRebuilding"
-                                           ng-click="!(curProj.id === null) && toggleCurWatching()"
-                                           ng-disabled="curProj.id === null">监听自动构建
-                                </md-switch>
+                                <!--<md-switch class="middle-width"-->
+                                <!--ng-checked="curProjOpt.watchToRebuilding"-->
+                                <!--ng-click="!(curProj.id === null) && toggleCurWatching()"-->
+                                <!--ng-disabled="curProj.id === null">监听自动构建-->
+                                <!--</md-switch>-->
                                 <md-switch class="middle-width"
                                            ng-model="curProjOpt.upOpt.uploadAll"
                                            ng-disabled="curProj.id === null">全量上传

@@ -1,0 +1,26 @@
+<md-dialog aria-label="切换处理模式" md-theme="{{theme}}">
+    <form>
+        <md-dialog-content class="mode-dialog-box">
+            <div style="padding: 20px 20px 5px; width: 300px;">
+                <div layout="row">
+                    <md-input-container class="md-block" flex>
+                        <label>任务模式</label>
+                        <md-select ng-model="curMode" name="mode" ng-change="updateCurOpt()">
+                            <md-option ng-repeat="item in curProjModeList"
+                                       value="{{item}}" ng-selected="item === curMode">
+                                {{item === '__default' ? '-- 默认配置 --' : item}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div layout="row" ng-if="curMode === NEW_MODE">
+                    <md-input-container class="md-block" flex>
+                        <label>新模式名字</label>
+                        <input placeholder="如：开发、测试、预览、上线"
+                               ng-keypress="checkKeyPress($event)"/>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

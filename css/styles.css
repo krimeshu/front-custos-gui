@@ -24,14 +24,14 @@ fieldset {
   color: rgba(0, 0, 0, .54);
 }
 
-.list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-build, .info-box .btn-build-upload, .info-box .btn-open, .info-box .btn-save, .info-box .btn-delete {
+.list-box .btn-add-proj, .list-box .btn-reload, .info-box .btn-build, .info-box .btn-build-upload, .info-box .btn-change-mode, .info-box .btn-open, .info-box .btn-save, .info-box .btn-delete {
   position: absolute;
   z-index: 5;
   transition: opacity 400ms ease;
   opacity: .8;
 }
 
-.list-box .btn-add-proj:hover, .list-box .btn-reload:hover, .info-box .btn-build:hover, .info-box .btn-build-upload:hover, .info-box .btn-open:hover, .info-box .btn-save:hover, .info-box .btn-delete:hover {
+.list-box .btn-add-proj:hover, .list-box .btn-reload:hover, .info-box .btn-build:hover, .info-box .btn-build-upload:hover, .info-box .btn-change-mode:hover, .info-box .btn-open:hover, .info-box .btn-save:hover, .info-box .btn-delete:hover {
   opacity: 1;
 }
 
@@ -277,6 +277,13 @@ fieldset {
 .info-box .btn-build-upload {
   bottom: 20px;
   left: 80px;
+}
+
+.info-box .btn-change-mode {
+  bottom: 20px;
+  left: 150px;
+  height: 56px;
+  font-size: 18px;
 }
 
 .info-box .btn-open {

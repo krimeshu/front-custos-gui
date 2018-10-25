@@ -25,26 +25,36 @@ TaskList.forEach((task) => {
 // 从默认配置中补全到当前配置
 function fillCurOpts(defaultOpts, currentOpts = {}) {
     for (var key of Object.keys(defaultOpts)) {
-        if (currentOpts.hasOwnProperty(key)) continue;
-
         var value = defaultOpts[key];
         if (value === undefined || value === null) continue;
 
-        if (typeof value === 'object') fillCurOpts(value, currentOpts[key] = {});
-        else currentOpts[key] = value;
+        var hasThis = currentOpts.hasOwnProperty(key);
+
+        if (Array.isArray(value) && !hasThis) currentOpts[key] = value.slice(0);
+        else if (typeof value === 'object') fillCurOpts(value, currentOpts[key] || (currentOpts[key] = {}));
+        else if (!hasThis) currentOpts[key] = value;
     }
 }
 
 // 从当前配置中剔除默认配置
 function diffCurOpts(defaultOpts, currentOpts) {
-    for (var key of Object.keys(defaultOpts)) {
+    for (var key of Object.keys(currentOpts)) {
         if (!defaultOpts.hasOwnProperty(key)) continue;
 
         var defValue = defaultOpts[key];
         var curValue = currentOpts[key];
 
-        if (typeof defValue === 'object') diffCurOpts(defValue, curValue || {});
-        else if (curValue === defValue) delete curValue[key];
+        if (Array.isArray(defValue)) {
+            if (JSON.stringify(defValue) === JSON.stringify(curValue)) {
+                delete currentOpts[key];
+            }
+        } else if (typeof defValue === 'object') {
+            diffCurOpts(defValue, curValue || {});
+            if (Object.keys(curValue).length === 0) {
+                delete currentOpts[key];
+            }
+        }
+        else if (curValue === defValue) delete currentOpts[key];
     }
 }
 
@@ -65,7 +75,10 @@ var _this = module.exports = {
     projList: Data.loadProjList(),
     curProj: Data.getNewOpt(),
     get curProjModeList() {
-        return Object.keys(this.curProj.fcOpts || {});
+        var list = Object.keys(this.curProj.fcOpts || {});
+        list.splice(list.indexOf('__default'), 1);
+        list.unshift('__default');
+        return list;
     },
     get curProjOpt() {
         var mode = this.curProj.mode || '__default';
@@ -173,6 +186,14 @@ var _this = module.exports = {
                 version = projWithOpts.version,
                 watchToRebuilding = projWithOpts.watchToRebuilding,
                 fcOpts = projWithOpts.fcOpts;
+
+            var defOpt = fcOpts['__default'];
+            for (var mode of Object.keys(fcOpts)) {
+                if (mode === '__default') continue;
+                var curOpt = fcOpts[mode];
+                diffCurOpts(defOpt, curOpt);
+            }
+
             this.updatePkg(projName, projDir, version, watchToRebuilding, fcOpts);
 
             var projList = this.projList,

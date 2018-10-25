@@ -17,8 +17,8 @@ input, textarea {
 }
 
 fieldset {
-    border-width: 1px;
-    border-color: #fff;
+  border-width: 1px;
+  border-color: #fff;
 }
 
 .weak-text {
@@ -153,7 +153,7 @@ fieldset {
     .title {
       line-height: 80px;
       font-size: 20px;
-      text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
+      text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
     }
 
     .spacer {
@@ -209,7 +209,7 @@ fieldset {
         color: #fff;
 
         .proj-name {
-          text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
+          text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4);
         }
       }
 
@@ -238,8 +238,8 @@ fieldset {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
-      
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
+
       cursor: initial;
     }
   }
@@ -306,6 +306,14 @@ fieldset {
     @extend %float-btn;
     bottom: 20px;
     left: 80px;
+  }
+
+  .btn-change-mode {
+    @extend %float-btn;
+    bottom: 20px;
+    left: 150px;
+    height: 56px;
+    font-size: 20px;
   }
 
   .btn-open {
@@ -403,7 +411,7 @@ fieldset {
 
 .editor-dialog-box {
   &, .editor-in-dialog {
-    width: 480px; 
+    width: 480px;
     height: 400px;
   }
 

@@ -183,8 +183,12 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
             return;
         }
 
-        var projWithOptions = Model.loadProj(proj),
-            srcDir = CustosProxy.FrontCustos.getSrcDir(projWithOptions);
+        var opt = Model.curProjOpt;
+        if (proj.id !== Model.curProj.id) {
+            Model.loadProjOptions(proj);
+            opt = proj.fcOpts['__default'];
+        }
+        var srcDir = CustosProxy.FrontCustos.getSrcDir(proj, opt);
         Utils.makeSureDir(srcDir);
         shell.openItem(srcDir);
     };
@@ -198,8 +202,12 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
             return;
         }
 
-        var projWithOptions = Model.loadProj(proj),
-            distDir = CustosProxy.FrontCustos.getDistDir(projWithOptions, Model.config.outputDir);
+        var opt = Model.curProjOpt;
+        if (proj.id !== Model.curProj.id) {
+            Model.loadProjOptions(proj);
+            opt = proj.fcOpts['__default'];
+        }
+        var distDir = CustosProxy.FrontCustos.getDistDir(proj, opt, Model.config.outputDir);
         Utils.makeSureDir(distDir);
         shell.openItem(distDir);
     };
