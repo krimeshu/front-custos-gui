@@ -28,6 +28,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     //     }
     // };
 
+    Model.onCurrentChanged(() => {
+        $scope.updateCurOpt();
+    });
+
     var tempPath = _path.resolve(_path.dirname(pagePath), './templates/options-confirm.html');
     $scope.optionsConfirmTemplate = _fs.readFileSync(tempPath).toString();
     $scope.optionsConfirmTemplate = $scope.optionsConfirmTemplate.replace(/\n/g, '');
@@ -116,7 +120,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                 $scope.NEW_MODE = '-- 新建配置 --';
                 $scope.curProjModeList = [...curProjModeList, $scope.NEW_MODE];
 
-                $scope.updateCurOpt = function () {
+                $scope.changeCurMode = function () {
                     if ($scope.curMode === $scope.NEW_MODE) {
                         return;
                     }

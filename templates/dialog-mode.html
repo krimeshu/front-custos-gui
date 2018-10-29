@@ -5,7 +5,7 @@
                 <div layout="row">
                     <md-input-container class="md-block" flex>
                         <label>任务模式</label>
-                        <md-select ng-model="curMode" name="mode" ng-change="updateCurOpt()">
+                        <md-select ng-model="curMode" name="mode" ng-change="changeCurMode()">
                             <md-option ng-repeat="item in curProjModeList"
                                        value="{{item}}" ng-selected="item === curMode">
                                 {{item === '__default' ? '-- 默认配置 --' : item}}

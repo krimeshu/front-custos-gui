@@ -256,7 +256,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
             var id = proj.id,
                 projName = proj.projName,
                 selectNext = id == ($scope.curProj.id);
-            CustosProxy.unwatch(proj);
+            // CustosProxy.unwatch(proj);
             var res = Model.removeProjById(id, selectNext),
                 msg = res ?
                     '项目 ' + projName + ' 已被移除' :
@@ -336,8 +336,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
             // 读取模板设定初始配置
             if (tempPath) {
                 var content = _fs.readFileSync(tempPath).toString(),
-                    fcOpt = angular.fromJson(content);
-                pkg.fcOpts = {__default: Utils.deepCopy(fcOpt)};
+                    fcOpts = angular.fromJson(content);
+                pkg.fcOpts = Utils.deepCopy(fcOpts);
             } else {
                 pkg.fcOpts = {__default: Utils.deepCopy(Data.initOpt)};
             }

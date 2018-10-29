@@ -154,7 +154,8 @@ module.exports = {
             pkg = {
                 name: projName,
                 version: '0.1.0',
-                fcOpts: {}
+                mode: '__default',
+                fcOpts: {'__default': Utils.deepCopy(this.initOpt)}
             };
         if (!_fs.existsSync(pkgPath)) {
             this.saveProjPackage(pkg, projDir);
