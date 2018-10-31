@@ -237,9 +237,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 本地构建
     $scope.buildLocally = function () {
-        var {projName, projDir, version} = $scope.curProj;
+        var {projName, projDir, version, mode} = $scope.curProj;
+        var env = mode === '__default' ? '默认' : mode;
         var fcOpt = Utils.deepCopy($scope.curProjOpt);
-        fcOpt.proj = {projName, projDir, version};
+        fcOpt.proj = {projName, projDir, version, env, mode};
         if (CustosProxy.FrontCustos.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
@@ -254,9 +255,10 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
 
     // 构建上传
     $scope.buildUpload = function () {
-        var {projName, projDir, version} = $scope.curProj;
+        var {projName, projDir, version, mode} = $scope.curProj;
+        var env = mode === '__default' ? '默认' : mode;
         var fcOpt = Utils.deepCopy($scope.curProjOpt);
-        fcOpt.proj = {projName, projDir, version};
+        fcOpt.proj = {projName, projDir, version, env, mode};
         if (CustosProxy.FrontCustos.isRunning()) {
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
