@@ -34,10 +34,10 @@ function loadFrontCustos() {
 
 // 补充可能缺少的默认任务参数
 function fillTasks(tasks) {
-    var uploadPos = tasks.indexOf('do_upload');
-    if (uploadPos >= 0) {
-        tasks.splice(uploadPos, 1);
-    }
+    // var uploadPos = tasks.indexOf('do_upload');
+    // if (uploadPos >= 0) {
+    //     tasks.splice(uploadPos, 1);
+    // }
     self.FrontCustos.fillAndOrderTasks(tasks);
 }
 

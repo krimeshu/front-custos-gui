@@ -131,25 +131,25 @@
         <md-content class="info-box" ng-controller="InfoBoxCtrl as ctrl">
             <form class="info-form"
                   name="curProjForm">
-                <md-button class="md-fab btn-build md-raised"
+                <md-button class="md-fab btn-build md-raised md-primary"
                            ng-disabled="curProj.id === null"
-                           ng-click="buildLocally()">
-                    <md-tooltip md-direction="bottom">
-                        本地构建 ({{cmdOrCtrl}}+Alt+B)
+                           ng-click="buildUpload()">
+                    <md-tooltip md-direction="top">
+                        开始构建 ({{cmdOrCtrl}}+Alt+B)
                     </md-tooltip>
                     <md-icon class="material-icons">build</md-icon>
                 </md-button>
-                <md-button class="md-fab btn-build-upload md-primary"
-                           ng-disabled="curProj.id === null"
-                           ng-click="buildUpload()">
-                    <md-tooltip md-direction="bottom">
-                        构建并上传 ({{cmdOrCtrl}}+Alt+U)
-                    </md-tooltip>
-                    <md-icon class="material-icons">backup</md-icon>
-                </md-button>
+                <!--<md-button class="md-fab btn-build-upload"-->
+                           <!--ng-disabled="curProj.id === null"-->
+                           <!--ng-click="buildUpload()">-->
+                    <!--<md-tooltip md-direction="top">-->
+                        <!--构建并上传 ({{cmdOrCtrl}}+Alt+U)-->
+                    <!--</md-tooltip>-->
+                    <!--<md-icon class="material-icons">backup</md-icon>-->
+                <!--</md-button>-->
                 <md-button class="md-raised btn-change-mode"
                            ng-click="showModeDialog($event)">
-                    <md-tooltip md-direction="bottom">
+                    <md-tooltip md-direction="top">
                         切换任务模式
                     </md-tooltip>
                     {{curProj.mode === '__default' ? '默认' : curProj.mode}}
@@ -157,7 +157,7 @@
                 <md-button class="md-fab md-raised btn-save"
                            ng-disabled="curProj.id === null"
                            ng-click="saveProj($event)">
-                    <md-tooltip md-direction="bottom">
+                    <md-tooltip md-direction="top">
                         保存项目配置 ({{cmdOrCtrl}}+S)
                     </md-tooltip>
                     <md-icon class="material-icons">save</md-icon>

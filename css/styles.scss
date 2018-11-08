@@ -299,19 +299,20 @@ fieldset {
   .btn-build {
     @extend %float-btn;
     bottom: 20px;
-    left: 10px;
+    right: 10px;
   }
 
   .btn-build-upload {
     @extend %float-btn;
     bottom: 20px;
-    left: 80px;
+    right: 80px;
   }
 
   .btn-change-mode {
     @extend %float-btn;
     bottom: 20px;
-    left: 150px;
+    //left: 150px;
+    right: 80px;
     height: 56px;
     font-size: 20px;
   }
@@ -327,7 +328,7 @@ fieldset {
     @extend %float-btn;
     bottom: 20px;
     // right: 10px;
-    right: 10px;
+    left: 10px;
   }
 
   .btn-delete {

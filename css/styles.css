@@ -271,17 +271,17 @@ fieldset {
 
 .info-box .btn-build {
   bottom: 20px;
-  left: 10px;
+  right: 10px;
 }
 
 .info-box .btn-build-upload {
   bottom: 20px;
-  left: 80px;
+  right: 10px;
 }
 
 .info-box .btn-change-mode {
   bottom: 20px;
-  left: 150px;
+  right: 80px;
   height: 56px;
   font-size: 18px;
 }
@@ -293,7 +293,7 @@ fieldset {
 
 .info-box .btn-save {
   bottom: 20px;
-  right: 10px;
+  left: 10px;
 }
 
 .info-box .btn-delete {

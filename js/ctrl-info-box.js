@@ -117,10 +117,20 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             controller: function configDialogController($scope, $mdDialog) {
                 $scope.theme = Model.config.theme;
                 $scope.curMode = curMode;
-                $scope.NEW_MODE = '-- 新建配置 --';
+                $scope.NEW_MODE = '< 新建配置 >';
+                $scope.DELETE_MODE = '< 删除配置 >';
                 $scope.curProjModeList = [...curProjModeList, $scope.NEW_MODE];
+                if (curMode !== '__default') {
+                    $scope.curProjModeList.push($scope.DELETE_MODE);
+                }
 
                 $scope.changeCurMode = function () {
+                    if ($scope.curMode === $scope.DELETE_MODE) {
+                        delete Model.curProj.fcOpts[curMode];
+                        curMode = '__default';
+                        $mdDialog.hide();
+                        return;
+                    }
                     if ($scope.curMode === $scope.NEW_MODE) {
                         return;
                     }
@@ -132,8 +142,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                     if (ev.charCode !== 13) return;
 
                     var newModeName = ev.target.value;
-                    if (/^\s*-/.test(newModeName)) {
-                        toastMsg('任务模式名字不能用“-”起头');
+                    if (/^\s*[\-<\[_]/.test(newModeName)) {
+                        toastMsg('任务模式名字不能用特殊符号起头');
                         return;
                     }
 
@@ -151,7 +161,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         }).finally(function () {
             self.isLocking = false;
             if ($scope.curProj.mode !== curMode) {
-                $scope.curProj.mode = curMode;
+                $scope.curProj.mode = Model.curProj.mode = curMode;
                 $scope.updateCurOpt();
             }
         });
@@ -204,7 +214,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             return;
         }
         // 补充任务
-        CustosProxy.fillTasks(Model.curProjOpt.tasks);
+        CustosProxy.fillTasks($scope.curProjOpt.tasks);
 
         var proj = Utils.deepCopy($scope.curProj);
         proj.fcOpts[proj.mode] = Utils.deepCopy($scope.curProjOpt);
@@ -234,24 +244,25 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
                 .hideDelay(2000)
         );
     };
-
-    // 本地构建
-    $scope.buildLocally = function () {
-        var {projName, projDir, version, mode} = $scope.curProj;
-        var env = mode === '__default' ? '默认' : mode;
-        var fcOpt = Utils.deepCopy($scope.curProjOpt);
-        fcOpt.proj = {projName, projDir, version, env, mode};
-        if (CustosProxy.FrontCustos.isRunning()) {
-            $scope.toastMsg('有未完成的任务，请稍后再试');
-            return;
-        }
-        CustosProxy.fillTasks(fcOpt.tasks);
-        CustosProxy.doBuild(fcOpt, function () {
-            $scope.$apply(function () {
-                $scope.toastMsg('任务执行完毕');
-            });
-        });
-    };
+    //
+    // // 本地构建
+    // $scope.buildLocally = function () {
+    //     var {projName, projDir, version, mode} = $scope.curProj;
+    //     var env = mode === '__default' ? '默认' : mode;
+    //     var fcOpt = Utils.deepCopy($scope.curProjOpt);
+    //     fcOpt.proj = {projName, projDir, version, env, mode};
+    //     if (CustosProxy.FrontCustos.isRunning()) {
+    //         $scope.toastMsg('有未完成的任务，请稍后再试');
+    //         return;
+    //     }
+    //     $scope.toastMsg('任务开始……');
+    //     CustosProxy.fillTasks(fcOpt.tasks);
+    //     CustosProxy.doBuild(fcOpt, function () {
+    //         $scope.$apply(function () {
+    //             $scope.toastMsg('任务执行完毕');
+    //         });
+    //     });
+    // };
 
     // 构建上传
     $scope.buildUpload = function () {
@@ -263,10 +274,19 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
             $scope.toastMsg('有未完成的任务，请稍后再试');
             return;
         }
+        var uploadPos = fcOpt.tasks.indexOf('do_upload');
+        var hasUpload = uploadPos >= 0;
+        if (hasUpload) {
+            fcOpt.tasks.splice(uploadPos, 1);
+        }
         $scope.toastMsg('任务开始……');
         CustosProxy.fillTasks(fcOpt.tasks);
         CustosProxy.doBuild(fcOpt, function (params) {
             $scope.$apply(function () {
+                if (!hasUpload) {
+                    $scope.toastMsg('任务执行完毕');
+                    return;
+                }
                 remindErrorAndUpload(params, '构建过程中发生了一些错误，是否要继续上传？', function () {
                     CustosProxy.doUpload(params, function () {
                         $scope.$apply(function () {
@@ -309,7 +329,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
     ipcRenderer.on('global-shortcut', function (ev, keys) {
         switch (keys) {
             case 'ctrl+alt+b':
-                $scope.buildLocally();
+                $scope.buildUpload();
                 break;
             case 'ctrl+alt+u':
                 $scope.buildUpload();

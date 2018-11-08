@@ -10,8 +10,9 @@ var Data = require('./data.js'),
 
     TaskList = require('../front-custos/script/task-list.js');
 
-var lockedTasks = ['prepare_build', 'do_dist'],
-    disabledTasks = ['do_upload'];
+var lockedTasks = ['prepare_build', 'do_dist'];
+// var disabledTasks = ['do_upload'];
+var disabledTasks = [];
 
 TaskList.forEach((task) => {
     if (lockedTasks.indexOf(task.name) >= 0) {
