@@ -85,15 +85,19 @@ fieldset {
 
 .shadow-box {
   position: absolute;
-  top: 5px;
-  bottom: 5px;
-  left: 5px;
-  right: 5px;
+  //top: 5px;
+  //bottom: 5px;
+  //left: 5px;
+  //right: 5px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   width: auto;
   height: auto;
   overflow: hidden;
 
-  box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+  //box-shadow: 0 0 8px rgba(0, 0, 0, .5);
 
   transition: transform 500ms ease, opacity 500ms ease;
   transform: translateZ(0) rotateX(180deg) scale(0.1);

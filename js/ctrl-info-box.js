@@ -231,6 +231,8 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         //     CustosProxy.watch(proj);
         // }
 
+        Utils.deepCopy(proj, Model.curProj);
+
         $scope.toastMsg(msg);
     };
 
