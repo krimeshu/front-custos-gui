@@ -300,9 +300,9 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function ListBoxCtrl($scope
     $scope.importProj = function (projDir, ev) {
         var projName = _path.basename(projDir),
             pkg = Data.loadProjPackage(projName, projDir),
-            opts = pkg.fcOpt;
+            hasOpts = !!(pkg.fcOpts || pkg.fcOpt);
         $scope._importEv = ev;
-        if (!opts) {
+        if (!hasOpts) {
             $scope.showTemplates(projName, projDir);
         } else {
             $scope.addProj(projName, projDir);
