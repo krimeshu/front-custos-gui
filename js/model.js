@@ -31,9 +31,11 @@ function fillCurOpts(defaultOpts, currentOpts = {}) {
 
         var hasThis = currentOpts.hasOwnProperty(key);
 
-        if (Array.isArray(value) && !hasThis) currentOpts[key] = value.slice(0);
-        else if (typeof value === 'object') fillCurOpts(value, currentOpts[key] || (currentOpts[key] = {}));
-        else if (!hasThis) currentOpts[key] = value;
+        if (Array.isArray(value)) {
+            if (!hasThis) currentOpts[key] = value.slice(0);
+        } else if (typeof value === 'object') {
+            fillCurOpts(value, currentOpts[key] || (currentOpts[key] = {}));
+        } else if (!hasThis) currentOpts[key] = value;
     }
 }
 
@@ -54,8 +56,7 @@ function diffCurOpts(defaultOpts, currentOpts) {
             if (Object.keys(curValue).length === 0) {
                 delete currentOpts[key];
             }
-        }
-        else if (curValue === defValue) delete currentOpts[key];
+        } else if (curValue === defValue) delete currentOpts[key];
     }
 }
 
