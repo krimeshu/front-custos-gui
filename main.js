@@ -26,7 +26,10 @@ function createWindow() {
         useContentSize: true,
         hasShadow: false,
         transparent: true,
-        frame: false
+        frame: false,
+        webPreferences: {
+            nodeIntegration: true,
+        },
     });
     
     mainWindow.on('closed', function () {

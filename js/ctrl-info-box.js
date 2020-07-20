@@ -32,7 +32,7 @@ module.exports = ['$scope', '$mdDialog', '$mdToast', function InfoBoxCtrl($scope
         $scope.updateCurOpt();
     });
 
-    var tempPath = _path.resolve(_path.dirname(pagePath), './templates/options-confirm.html');
+    var tempPath = _path.resolve(__appPath, './templates/options-confirm.html');
     $scope.optionsConfirmTemplate = _fs.readFileSync(tempPath).toString();
     $scope.optionsConfirmTemplate = $scope.optionsConfirmTemplate.replace(/\n/g, '');
 
